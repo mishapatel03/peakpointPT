@@ -1,0 +1,5 @@
+export const address = [
+    "FIRST CLASS PHYSICAL THERAPY, PC 225 Broadway, Suite 1420,New York, NY 10007 Tel. (212) 571-5000,Fax (212) 571-5001",
+    "ABSOLUTE CARE PHYSICAL THERAPY GROUP, PLLC3065 Brighto",
+    "FIRST CLASS PHYSICAL THERAPY, PC 3514 Mermaid Ave., Suite 003,Brooklyn, NY 11224 Tel. (718) 996-1100,Fax (718) 676-9511"
+]
