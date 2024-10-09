@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-export default function Select({ options, validation = false, customValidation, onChange }) {
+export default function Select({ options, validation = false, customValidation, onChange, size }) {
     const [selectedValue, setSelectedValue] = useState(options[0] || '');
     const [error, setError] = useState('');
 
@@ -24,9 +24,9 @@ export default function Select({ options, validation = false, customValidation, 
     };
 
     return (
-        <div>
+        <React.Fragment>
             <select
-                className="select select-bordered w-full max-w-xs"
+                className={`select select-bordered w-full ${size !== undefined ? size : "max-w-lg"}`}
                 value={selectedValue}
                 onChange={handleChange}
             >
@@ -38,6 +38,6 @@ export default function Select({ options, validation = false, customValidation, 
                 ))}
             </select>
             {error && <span className="error">{error}</span>}
-        </div>
+        </React.Fragment>
     );
 }

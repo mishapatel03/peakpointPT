@@ -28,39 +28,61 @@ export default function HeaderFields() {
     return (
         <React.Fragment>
             <div className="flex flex-col items-center mt-4">
-                <form onSubmit={handleSubmit} className="p-6 rounded-lg shadow-md w-full max-w-md space-y-4">
-                    <Select
-                        options={address}
-                        validation={true}
-                        onChange={handleChange('address')}
-                    />
-                    <TextInput
-                        type={'text'}
-                        placeholder={`Enter Patient's Name`}
-                        onBlur={handleBlur}
-                        inputBox={TEXT_INPUT}
-                        validation={true}
-                        onChange={handleChange('patientName')}
-                    />
-                    <div className="flex space-x-2">
-                        <TextInput
-                            type={'date'}
-                            placeholder={'Select a DOB'}
-                            onBlur={handleBlur}
-                            inputBox={TEXT_INPUT}
+                <form onSubmit={handleSubmit} className="p-6 rounded-lg w-full max-w-2xl">
+                    <div>
+                        <div className='p-2'>Select Clinic's Address</div>
+                        <Select
+                            options={address}
                             validation={true}
-                            onChange={handleChange('patientDOB')}
-                        />
-                        <TextInput
-                            type={'date'}
-                            placeholder={`Select today's date`}
-                            onBlur={handleBlur}
-                            inputBox={TEXT_INPUT}
-                            validation={true}
-                            onChange={handleChange('currentDate')}
+                            onChange={handleChange('address')}
                         />
                     </div>
-                    <button type="submit" className="btn w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
+
+
+
+                    <div>
+                        <p className='p-2'>
+                            Patient Name
+                        </p>
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter Patient's Name`}
+                            onBlur={handleBlur}
+                            inputBox={TEXT_INPUT}
+                            validation={true}
+                            onChange={handleChange('patientName')}
+                        />
+                    </div>
+
+
+                    <div className="">
+                        <div>
+                            <p className='p-2'>
+                                Patient DOB
+                            </p>
+                            <TextInput
+                                type={'date'}
+                                placeholder={'Select a DOB'}
+                                onBlur={handleBlur}
+                                inputBox={TEXT_INPUT}
+                                validation={true}
+                                onChange={handleChange('patientDOB')}
+                            />
+                        </div>
+                        <div>
+                            <p className='p-2'>
+                                Today's Date
+                            </p>
+                            <TextInput
+                                type={'date'}
+                                placeholder={`Select today's date`}
+                                onBlur={handleBlur}
+                                inputBox={TEXT_INPUT}
+                                validation={true}
+                                onChange={handleChange('currentDate')}
+                            />
+                        </div>
+                    </div>
                 </form>
             </div>
 
