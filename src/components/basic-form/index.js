@@ -18,14 +18,21 @@ export default function BasicForm() {
     overflowY: "auto"
   };
 
+  const colorStyle = {
+    color: 'black',
+    backgroundColor: 'white'
+  }
+
   return (
     <React.Fragment>
       <div>
         <div style={containerStyle}>
-          <div style={{ ...columnStyle, backgroundColor: "#f2f2f2" }}>
+          <div style={{ ...columnStyle, ...colorStyle }}>
             <h1 className="text-2xl text-black text-center">PEAK POINT PT</h1>
             <HeaderFields />
+            <hr class="border-t border-1 border-black border-1 my-2" />
             <CommonDetailsFields />
+            <hr class="border-t border-1 border-black border-1 my-2" />
             <ObjectiveFormFields />
             {/* <button type="submit" className="btn w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button> */}
           </div>

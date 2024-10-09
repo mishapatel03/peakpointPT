@@ -1,12 +1,13 @@
 import React from 'react'
 import { MVMT, balance, days, duration, functionalStatus, gait, goals, specialTest, testResult, yesNo } from '../../constants/data'
 import Select from '../../shared-components/Select'
+import { TEXT_AREA, TEXT_INPUT } from '../../constants'
+import TextInput from '../../shared-components/TextInput'
 
 export default function ObjectiveFormFields() {
     return (
         <React.Fragment>
-            <div className="text-2xl font-bold mt-2">OBJECTIVE</div>
-            <hr />
+            <div className="text-xl font-bold mt-2">OBJECTIVE</div>
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">Gait</div>
                 <Select
@@ -16,7 +17,11 @@ export default function ObjectiveFormFields() {
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">Posture</div>
-                <input type="text" placeholder="Enter Posture details" className="input input-bordered w-full max-w-lg" />
+                <TextInput
+                    type={'text'}
+                    placeholder={`Enter Posture details`}
+                    inputBox={TEXT_INPUT}
+                />
             </div>
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">AROM / ACTIVE MVMT</div>
@@ -35,11 +40,31 @@ export default function ObjectiveFormFields() {
                             <Select options={MVMT} className="w-24" />
                         </div>
                         <div className='grid grid-cols-1 gap-4'>
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
                         </div>
                         <div className='grid grid-cols-1 gap-4'>
                             <Select options={MVMT} className="w-24" />
@@ -49,11 +74,31 @@ export default function ObjectiveFormFields() {
                             <Select options={MVMT} className="w-24" />
                         </div>
                         <div className='grid grid-cols-1 gap-4'>
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
                         </div>
                         <div className='grid grid-cols-1 gap-4'>
                             <Select options={MVMT} className="w-24" />
@@ -63,11 +108,31 @@ export default function ObjectiveFormFields() {
                             <Select options={MVMT} className="w-24" />
                         </div>
                         <div className='grid grid-cols-1 gap-4'>
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                            <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
+                            <TextInput
+                                type={'text'}
+                                placeholder={`Enter something`}
+                                inputBox={TEXT_INPUT}
+                            />
                         </div>
                     </div>
 
@@ -88,48 +153,96 @@ export default function ObjectiveFormFields() {
                         <Select options={MVMT} />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
                         <Select options={MVMT} />
                         <Select options={MVMT} />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
                         <Select options={MVMT} />
                         <Select options={MVMT} />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
                         <Select options={MVMT} />
                         <Select options={MVMT} />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                     <div className='grid grid-cols-1 gap-4'>
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
-                        <input type="text" placeholder="Enter something" className="input input-bordered w-full max-w-md" />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
+                        <TextInput
+                            type={'text'}
+                            placeholder={`Enter something`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">JOINT MOBS</div>
-                <input type="text" placeholder="Enter Posture details" className="input input-bordered w-full" />
+                <TextInput
+                    type={'text'}
+                    placeholder={`Enter Posture details`}
+                    inputBox={TEXT_INPUT}
+                />
             </div>
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">STRENGTH</div>
-                <textarea className="textarea textarea-primary textarea-lg w-full" placeholder="HX"></textarea>
+                <TextInput
+                    type={'date'}
+                    placeholder={`Enter HX`}
+                    inputBox={TEXT_AREA}
+                />
             </div>
 
             <div className='mt-2'>
@@ -164,12 +277,20 @@ export default function ObjectiveFormFields() {
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">PALPATION</div>
-                <textarea className="textarea textarea-primary textarea-lg w-full" placeholder="HX"></textarea>
+                <TextInput
+                    type={'date'}
+                    placeholder={`Enter PALPATION`}
+                    inputBox={TEXT_AREA}
+                />
             </div>
 
             <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">Tone</div>
-                <textarea className="textarea textarea-primary textarea-lg w-full" placeholder="HX"></textarea>
+                <div className="text-lg font-bold mb-2">TONE</div>
+                <TextInput
+                    type={'date'}
+                    placeholder={`Enter Tone`}
+                    inputBox={TEXT_AREA}
+                />
             </div>
 
             <div className='mt-2'>
@@ -235,12 +356,20 @@ export default function ObjectiveFormFields() {
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">PRIOR FUNCTIONAL STATUS</div>
-                <textarea className="textarea textarea-primary textarea-lg w-full" placeholder="HX"></textarea>
+                <TextInput
+                    type={'date'}
+                    placeholder={`Enter PRIOR FUNCTIONAL STATUS`}
+                    inputBox={TEXT_AREA}
+                />
             </div>
 
             <div className='mt-2'>
                 <div className="text-lg font-bold mb-2">ASSESSMENT</div>
-                <textarea className="textarea textarea-primary textarea-lg w-full" placeholder="HX"></textarea>
+                <TextInput
+                    type={'date'}
+                    placeholder={`Enter ASSESSMENT`}
+                    inputBox={TEXT_AREA}
+                />
             </div>
 
             <div className='mt-2'>
@@ -248,12 +377,20 @@ export default function ObjectiveFormFields() {
                 <div className='grid grid-cols-2 gap-4'>
                     <div className='grid grid-cols-3 items-center gap-4'>
                         <div className="flex items-center text-lg font-bold mb-2">Short Term</div>
-                        <input type="number" placeholder="" className="input input-bordered w-full" />
+                        <TextInput
+                            type={'number'}
+                            placeholder={`Enter Posture details`}
+                            inputBox={TEXT_INPUT}
+                        />
                         <Select options={days} />
                     </div>
                     <div className='grid grid-cols-3 items-center gap-4'>
                         <div className="flex items-center text-lg font-bold mb-2">Long Term</div>
-                        <input type="number" placeholder="" className="input input-bordered w-full" />
+                        <TextInput
+                            type={'number'}
+                            placeholder={`Enter Posture details`}
+                            inputBox={TEXT_INPUT}
+                        />
                         <Select options={days} />
                     </div>
                 </div>
@@ -310,12 +447,19 @@ export default function ObjectiveFormFields() {
 
                     <div className='grid grid-cols-1 items-center gap-4'>
                         <div className="text-lg font-bold mb-2">PHYSICIAN CERTIFICATION</div>
-                        <input type="date" placeholder="Enter Posture details" className="input input-bordered w-full max-w-lg" />
-
+                        <TextInput
+                            type={'date'}
+                            placeholder={`Enter Posture details`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                     <div className='grid grid-cols-1 items-center gap-4'>
                         <div className="text-lg font-bold mb-2">THERAPIST'S SIGNATURE</div>
-                        <input type="text" placeholder="Enter Posture details" className="input input-bordered w-full max-w-lg" />
+                        <TextInput
+                            type={'date'}
+                            placeholder={`Enter Posture details`}
+                            inputBox={TEXT_INPUT}
+                        />
                     </div>
                 </div>
             </div>

@@ -27,22 +27,19 @@ export default function HeaderFields() {
 
     return (
         <React.Fragment>
-            <div className="flex flex-col items-center mt-4">
-                <form onSubmit={handleSubmit} className="p-6 rounded-lg w-full max-w-2xl">
-                    <div>
-                        <div className='p-2'>Select Clinic's Address</div>
+            <div className="flex flex-col mt-4 mb-4">
+                <form onSubmit={handleSubmit} className="rounded-lg w-full max-w-2xl">
+                    <div className='mt-2'>
+                        <div className='text-lg font-bold mb-2'>SELECT CLINIC'S ADDRESS</div>
                         <Select
                             options={address}
                             validation={true}
                             onChange={handleChange('address')}
                         />
                     </div>
-
-
-
-                    <div>
-                        <p className='p-2'>
-                            Patient Name
+                    <div className='mt-2'>
+                        <p className='text-lg font-bold mb-2'>
+                            PATIENT NAME
                         </p>
                         <TextInput
                             type={'text'}
@@ -53,12 +50,10 @@ export default function HeaderFields() {
                             onChange={handleChange('patientName')}
                         />
                     </div>
-
-
-                    <div className="">
+                    <div className='mt-2'>
                         <div>
-                            <p className='p-2'>
-                                Patient DOB
+                            <p className='text-lg font-bold mb-2'>
+                                PATIENT DOB
                             </p>
                             <TextInput
                                 type={'date'}
@@ -69,9 +64,9 @@ export default function HeaderFields() {
                                 onChange={handleChange('patientDOB')}
                             />
                         </div>
-                        <div>
-                            <p className='p-2'>
-                                Today's Date
+                        <div className='mt-2'>
+                            <p className='text-lg font-bold mb-2'>
+                                TODAY'S DATE
                             </p>
                             <TextInput
                                 type={'date'}

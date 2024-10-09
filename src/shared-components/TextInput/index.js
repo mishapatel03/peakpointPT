@@ -39,17 +39,17 @@ export default function TextInput({ type, placeholder, onChange, onBlur, inputBo
                     value={value}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="input input-bordered w-full max-w-lg"
+                    className="input border-solid border-2 border-gray-400 bg-white input-bordered w-full max-w-lg"
                 /> :
                 inputBox === TEXT_AREA ?
                     <textarea
-                        className="textarea textarea-bordered"
+                        className="textarea textarea-bordered border-solid border-2 border-gray-400 bg-white w-full max-w-lg"
                         placeholder={placeholder}
                         value={value}
                         onChange={handleChange}
                         onBlur={handleBlur}
                     ></textarea> : null}
-            {error && <span className="error">{error}</span>}
+            {/* {error && <span className="error">{error}</span>} */}
         </React.Fragment>
     );
 }

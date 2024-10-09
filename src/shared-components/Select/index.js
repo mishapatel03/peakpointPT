@@ -26,7 +26,7 @@ export default function Select({ options, validation = false, customValidation, 
     return (
         <React.Fragment>
             <select
-                className={`select select-bordered w-full ${size !== undefined ? size : "max-w-lg"}`}
+                className={`select border-solid border-2 border-gray-400 bg-white select-bordered w-full ${size !== undefined ? size : "max-w-lg"}`}
                 value={selectedValue}
                 onChange={handleChange}
             >
@@ -37,7 +37,7 @@ export default function Select({ options, validation = false, customValidation, 
                     </option>
                 ))}
             </select>
-            {error && <span className="error">{error}</span>}
+            {/* {error && <span className="error">{error}</span>} */}
         </React.Fragment>
     );
 }
