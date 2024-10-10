@@ -26,7 +26,7 @@ export default function Select({ options, validation = false, customValidation, 
     return (
         <React.Fragment>
             <select
-                className={`select border-solid border-2 border-gray-400 bg-white select-bordered w-full ${size !== undefined ? size : "max-w-lg"}`}
+                className={`select border-solid mt-5 border-2 border-gray-400 bg-white select-bordered w-full ${size !== undefined ? size : "w-full"}`}
                 value={selectedValue}
                 onChange={handleChange}
             >

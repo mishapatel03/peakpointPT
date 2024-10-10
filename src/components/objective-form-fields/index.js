@@ -7,30 +7,30 @@ import TextInput from '../../shared-components/TextInput'
 export default function ObjectiveFormFields() {
     return (
         <React.Fragment>
-            <div className="text-xl font-bold mt-2">OBJECTIVE</div>
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">Gait</div>
+            <div className="text-xl font-bold mt-5">OBJECTIVE</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">Gait</div>
                 <Select
                     options={gait}
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">Posture</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">Posture</div>
                 <TextInput
                     type={'text'}
                     placeholder={`Enter Posture details`}
                     inputBox={TEXT_INPUT}
                 />
             </div>
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">AROM / ACTIVE MVMT</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">AROM / ACTIVE MVMT</div>
                 <div className='grid grid-cols-3 gap-4'>
                     <Select options={gait} />
                     <Select options={gait} />
                     <Select options={gait} />
                 </div>
-                <div className='mt-2'>
+                <div className='mt-5'>
                     <div className='grid grid-cols-6 gap-4'>
                         <div className='grid grid-cols-1 gap-4'>
                             <Select options={MVMT} className="w-24" />
@@ -138,15 +138,15 @@ export default function ObjectiveFormFields() {
 
                 </div>
             </div>
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">PROM</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">PROM</div>
                 <div className='grid grid-cols-2 gap-4'>
                     <Select options={gait} />
                     <Select options={gait} />
                 </div>
             </div>
 
-            <div className='mt-2'>
+            <div className='mt-5'>
                 <div className='grid grid-cols-9 gap-4'>
                     <div className='grid grid-cols-1 gap-4'>
                         <Select options={MVMT} />
@@ -227,8 +227,8 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">JOINT MOBS</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">JOINT MOBS</div>
                 <TextInput
                     type={'text'}
                     placeholder={`Enter Posture details`}
@@ -236,8 +236,8 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">STRENGTH</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">STRENGTH</div>
                 <TextInput
                     type={'date'}
                     placeholder={`Enter HX`}
@@ -245,8 +245,8 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">SPECIAL TEST</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">SPECIAL TEST</div>
                 <div className='grid grid-cols-6 gap-4'>
                     <div className='grid grid-cols-1 gap-4'>
                         <Select options={specialTest} />
@@ -275,8 +275,8 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">PALPATION</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">PALPATION</div>
                 <TextInput
                     type={'date'}
                     placeholder={`Enter PALPATION`}
@@ -284,8 +284,8 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">TONE</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">TONE</div>
                 <TextInput
                     type={'date'}
                     placeholder={`Enter Tone`}
@@ -293,50 +293,50 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">COORDINATION / BALANCE</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">COORDINATION / BALANCE</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">REFLEXES</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">REFLEXES</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">SENSATION</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">SENSATION</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">SKIN</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">SKIN</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">PULSES</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">PULSES</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">GIRTH</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">GIRTH</div>
                 <div className=''>
                     <Select options={balance} />
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">FUNCTIONAL STATUS - (i.e. Bed Mobility, Transfers, Balance, Gait, Endurance)
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">FUNCTIONAL STATUS - (i.e. Bed Mobility, Transfers, Balance, Gait, Endurance)
                     Patient has difficulties with functional activities such as</div>
                 <div className='grid grid-cols-3 gap-4'>
                     <div className='grid grid-cols-1 gap-4'>
@@ -354,8 +354,8 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">PRIOR FUNCTIONAL STATUS</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">PRIOR FUNCTIONAL STATUS</div>
                 <TextInput
                     type={'date'}
                     placeholder={`Enter PRIOR FUNCTIONAL STATUS`}
@@ -363,8 +363,8 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">ASSESSMENT</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">ASSESSMENT</div>
                 <TextInput
                     type={'date'}
                     placeholder={`Enter ASSESSMENT`}
@@ -372,11 +372,11 @@ export default function ObjectiveFormFields() {
                 />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">GOALS</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">GOALS</div>
                 <div className='grid grid-cols-2 gap-4'>
                     <div className='grid grid-cols-3 items-center gap-4'>
-                        <div className="flex items-center text-lg font-bold mb-2">Short Term</div>
+                        <div className="flex items-center text-lg font-bold ">Short Term</div>
                         <TextInput
                             type={'number'}
                             placeholder={`Enter Posture details`}
@@ -385,7 +385,7 @@ export default function ObjectiveFormFields() {
                         <Select options={days} />
                     </div>
                     <div className='grid grid-cols-3 items-center gap-4'>
-                        <div className="flex items-center text-lg font-bold mb-2">Long Term</div>
+                        <div className="flex items-center text-lg font-bold ">Long Term</div>
                         <TextInput
                             type={'number'}
                             placeholder={`Enter Posture details`}
@@ -394,7 +394,7 @@ export default function ObjectiveFormFields() {
                         <Select options={days} />
                     </div>
                 </div>
-                <div className='grid grid-cols-2 gap-4 mt-2'>
+                <div className='grid grid-cols-2 gap-4 mt-5'>
                     <div className='grid grid-cols-1 items-center gap-4'>
                         <Select options={goals} />
                         <Select options={goals} />
@@ -412,9 +412,9 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">PLAN</div>
-                <div className='grid grid-cols-2 gap-4 mt-2'>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">PLAN</div>
+                <div className='grid grid-cols-2 gap-4 mt-5'>
                     <div className='grid grid-cols-1 items-center gap-4'>
                         <Select options={goals} />
                         <Select options={goals} />
@@ -432,21 +432,21 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">FREQUENCY OF TREATMENT </div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">FREQUENCY OF TREATMENT </div>
                 <Select options={duration} />
             </div>
 
-            <div className='mt-2'>
-                <div className="text-lg font-bold mb-2">Patient /Family advised of findings and has agreed to participate in Treatment Plan:</div>
+            <div className='mt-5'>
+                <div className="text-lg font-bold ">Patient /Family advised of findings and has agreed to participate in Treatment Plan:</div>
                 <Select options={yesNo} />
             </div>
 
-            <div className='mt-2'>
-                <div className='grid grid-cols-2 gap-4 mt-2'>
+            <div className='mt-5'>
+                <div className='grid grid-cols-2 gap-4 mt-5'>
 
                     <div className='grid grid-cols-1 items-center gap-4'>
-                        <div className="text-lg font-bold mb-2">PHYSICIAN CERTIFICATION</div>
+                        <div className="text-lg font-bold ">PHYSICIAN CERTIFICATION</div>
                         <TextInput
                             type={'date'}
                             placeholder={`Enter Posture details`}
@@ -454,7 +454,7 @@ export default function ObjectiveFormFields() {
                         />
                     </div>
                     <div className='grid grid-cols-1 items-center gap-4'>
-                        <div className="text-lg font-bold mb-2">THERAPIST'S SIGNATURE</div>
+                        <div className="text-lg font-bold ">THERAPIST'S SIGNATURE</div>
                         <TextInput
                             type={'date'}
                             placeholder={`Enter Posture details`}
