@@ -1,43 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { setDXValues, setFormField } from '../../slices/formSlice';
 
-export default function Select({ options, validation = false, customValidation, onChange, size }) {
-    const [selectedValue, setSelectedValue] = useState(options[0] || '');
-    const [error, setError] = useState('');
+export default function Select({ options, field, value, onChange, size }) {
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
-        const value = event.target.value;
-        setSelectedValue(value);
-
-        if (validation) {
-            if (customValidation && !customValidation(value)) {
-                setError('Invalid selection');
-            } else if (!customValidation && value === 'Select an option') {
-                setError('Please select a valid option');
-            } else {
-                setError('');
-            }
-        }
-
+        const selectedValue = event.target.value;
         if (onChange) {
-            onChange(value);
+            onChange(selectedValue);
         }
     };
+
 
     return (
         <React.Fragment>
             <select
-                className={`select border-solid mt-5 border-2 border-gray-400 bg-white select-bordered w-full ${size !== undefined ? size : "w-full"}`}
-                value={selectedValue}
+                className={`select border-solid border-2 border-gray-400 bg-white select-bordered w-full ${size || 'w-full'}`}
+                value={value || ''}
                 onChange={handleChange}
             >
-                <option disabled>Select an option</option>
+                <option value="" disabled>Select an option</option>
                 {options.map((option, index) => (
                     <option key={index} value={option}>
                         {option}
                     </option>
                 ))}
             </select>
-            {/* {error && <span className="error">{error}</span>} */}
         </React.Fragment>
     );
 }

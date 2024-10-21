@@ -69,16 +69,22 @@ export const patientData = {
   },
   patient_info: {
     dx: [
-      { name: "LBP (M54.50)", desc: "Lumbar radiculopathy (M54.16)" },
+      { name: "LBP (M54.50)" },
       {
-        name: "Muscle Spasms (M62.830)",
-        desc: "Lumbar Disc herniation (M51.26)",
+        name: "Muscle Spasms (M62.830)"
+      },
+      {
+        name: "Muscle Spasms (M62.830)"
+      },
+      { name: "Lumbar Disc herniation (M51.26)" },
+      {
+        name: "Muscle Spasms (M62.830)"
       },
     ],
-    hx: "Returning patient c/o increasing low back pain and stiffness with numbness and tingling traveling down left leg.",
+    hx: "Returning patient c/o increasing low back pain and stiffness with numbness and tingling traveling down left leg. ",
     allergies: "Penicillin",
     medications: "Please see attachment",
-    pmh: "Depression with nerve impingement. PCP recommended patient to see pain management.",
+    pmh: "Depression",
     psh: "Stomach Sx",
     social: "53 y.o. male, lives with family and works as a school bus driver.",
     test_results: "Oswestry ~ 68%",

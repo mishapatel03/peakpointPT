@@ -39,11 +39,11 @@ export default function TextInput({ type, placeholder, onChange, onBlur, inputBo
                     value={value}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="input border-solid mt-5 border-2 border-gray-400 bg-white input-bordered w-full max-w-lg"
+                    className="input border-solid border-2 border-gray-400 bg-white input-bordered w-full max-w-lg"
                 /> :
                 inputBox === TEXT_AREA ?
                     <textarea
-                        className="textarea mt-5 textarea-bordered border-solid border-2 border-gray-400 bg-white w-full max-w-lg"
+                        className="textarea textarea-bordered border-solid border-2 border-gray-400 bg-white w-full max-w-lg"
                         placeholder={placeholder}
                         value={value}
                         onChange={handleChange}
