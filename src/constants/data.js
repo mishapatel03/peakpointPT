@@ -4,6 +4,60 @@ export const address = [
   "FIRST CLASS PHYSICAL THERAPY, PC 3514 Mermaid Ave., Suite 003,Brooklyn, NY 11224 Tel. (718) 996-1100,Fax (718) 676-9511",
 ];
 
+export const DX = [
+  "Knee Pain(719.46)", "Knee OA", "Cervicalgia (723.1)", "Lumbar Radiculopathy (724.4)", "Gait Abnormality (781.2)"
+]
+export const gait = [
+  "mod to sev guarded with antalgic gait and decreased cadence",
+  "Antalgic, slow and guarding",
+  "Normal",
+  "Not available to demonstrate"
+]
+
+export const MVMT = [
+  "Flex", "Ext", "SB", "Rot", "Add", "Abd", "Supin", "Pron"
+]
+
+export const specialTest = [
+  "SLR", "McMurray", "Slump", "McMurray", "Empty Can", "Neer"
+]
+
+export const testResult = [
+  "P", "N"
+]
+
+export const balance = [
+  "Normal", "Good", "Fair", "Poor"
+]
+
+export const functionalStatus = [
+  "Sitting > 25 min till Pain^", "Twisting/Turning> sev-mod diff", ""
+]
+
+export const days = [
+  "days", "week"
+]
+
+export const yesNo = [
+  "Yes", "No"
+]
+
+export const duration = [
+  "1 time/week",
+  "2 times/week",
+  "3 times/week",
+  "4 times/week",
+  "5 times/week"
+]
+
+export const goals = [
+  "Increase ROM to WFL with Pain 2/10",
+  "Increase Strength in LB & BLE by 1 grade",
+  "Increase pushing/pulling > mod diff",
+  "Increase Transfers -->  mod diff",
+  "Increase bed mobility -->  mod diff"
+]
+
 export const patientData = {
   header: {
     clinic_name: "PEAK POINT PHYSICAL THERAPY, PC",
@@ -11,20 +65,26 @@ export const patientData = {
     contact: "Tel. (732) 771-9023, Fax (732) 444-4326",
     date: "Sep 18, 2024",
     dob: "1969-05-10",
-    patientName : "Augustine Rex"
+    patientName: "Augustine Rex"
   },
   patient_info: {
     dx: [
-      { name: "LBP (M54.50)", desc: "Lumbar radiculopathy (M54.16)" },
+      { name: "LBP (M54.50)" },
       {
-        name: "Muscle Spasms (M62.830)",
-        desc: "Lumbar Disc herniation (M51.26)",
+        name: "Muscle Spasms (M62.830)"
+      },
+      {
+        name: "Muscle Spasms (M62.830)"
+      },
+      { name: "Lumbar Disc herniation (M51.26)" },
+      {
+        name: "Muscle Spasms (M62.830)"
       },
     ],
-    hx: "Returning patient c/o increasing low back pain and stiffness with numbness and tingling traveling down left leg.",
+    hx: "Returning patient c/o increasing low back pain and stiffness with numbness and tingling traveling down left leg. ",
     allergies: "Penicillin",
     medications: "Please see attachment",
-    pmh: "Depression with nerve impingement. PCP recommended patient to see pain management.",
+    pmh: "Depression",
     psh: "Stomach Sx",
     social: "53 y.o. male, lives with family and works as a school bus driver.",
     test_results: "Oswestry ~ 68%",

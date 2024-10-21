@@ -4,26 +4,53 @@ import {
   Text,
   View,
   Document,
-  StyleSheet,
-  Image,
+  StyleSheet
 } from "@react-pdf/renderer";
 
-import header_image from "../../assets/peak-point-pt-logo-landscape-min.png"
-
 export default function PatinetData({ data }) {
-  // Create styles
-  // Define the styles
+  const dxRows = [];
+  for (let i = 0; i < data.patient_info.dx.length; i += 2) {
+    dxRows.push(data.patient_info.dx.slice(i, i + 2));
+  }
+
   const styles = StyleSheet.create({
+    container: {
+      backgroundColor: '#e5e7eb',
+      flexDirection: 'row',
+      padding: 10,
+      alignItems: 'center',
+    },
+    headerSection: {
+      alignItems: 'center',
+      fontSize: 10,
+      flex: 1,
+      paddingRight: 10,
+    },
+    detailsSection: {
+      flex: 1,
+      paddingLeft: 10,
+    },
+    divider: {
+      width: 1,
+      backgroundColor: '#000',
+      height: '100%',
+    },
+    historySection: {
+      borderBottomWidth: 0,
+      borderWidth: 1,
+      borderColor: '#000',
+      borderRadius: 1,
+    },
+    labelContainer: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#000',
+      paddingBottom: 2,
+    },
     page: {
       padding: 20,
     },
-    // logo: {
-    //     width: 20, // Adjust the size of your logo
-    //     height: 20,
-    //     marginBottom: 10,
-    //   },
     header: {
-      fontSize: 14,
+      fontSize: 10,
       marginBottom: 10,
       textAlign: "center",
     },
@@ -31,13 +58,23 @@ export default function PatinetData({ data }) {
       fontWeight: "bold",
       fontSize: 10,
       marginBottom: 2,
-      color : "#020617"
-
+      color: "#020617"
+    },
+    headerFieldLabel: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 10,
+      marginBottom: 4,
+      color: "#020617"
     },
     fieldValue: {
       fontSize: 9,
       marginBottom: 5,
-      color : "#374151"
+      color: "#374151"
+    },
+    nameField: {
+      fontSize: 12,
+      alignItems: "center"
     },
     section: {
       marginBottom: 10,
@@ -109,109 +146,155 @@ export default function PatinetData({ data }) {
       marginBottom: 5,
     },
     certificationColumn: {
-      width: "48%", // Adjust width for proper alignment
+      width: "48%",
     },
-    //   row: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between',
-    //     borderBottom: '1px solid #eee',
-    //     marginBottom: 5,
-    //   },
-    //   column: {
-    //     width: '50%',
-    //     paddingRight: 10,
-    //   },
+    row: {
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: '#000',
+    },
+    lastRow: {
+      flexDirection: 'row',
+      borderColor: '#000',
+    },
+    cell: {
+      flex: 1,
+      borderColor: '#000',
+      padding: 5,
+      justifyContent: 'center',
+    },
+    cellHeader: {
+      fontSize: 10,
+      minWidth: 40,
+      padding: 5,
+      justifyContent: 'center',
+      borderRightWidth: 1
+    },
+    cellText: {
+      textAlign: 'left',
+      fontSize: 10,
+    },
   });
 
   return (
     <Document title={data.header.patientName}>
       <Page style={styles.page}>
-        {/* Header Section */}
-        <View style={styles.header}>
-          {/* <Image
-            style={styles.logo}
-            src={header_image}
-          /> */}
-          {/* Dummy logo path */}
-          <Text>{data.header.clinic_name}</Text>
-          <Text>{data.header.address}</Text>
-          <Text>{data.header.contact}</Text>
-        </View>
 
-        {/* Date and DOB */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>
-            NAME:{" "}
-            <Text style={styles.fieldValue}>{data.header.patientName}</Text>
-          </Text>
-          <Text style={styles.fieldLabel}>
-            DATE: <Text style={styles.fieldValue}>{data.header.date}</Text>
-          </Text>
-          <Text style={styles.fieldLabel}>
-            DOB: <Text style={styles.fieldValue}>{data.header.dob}</Text>
-          </Text>
-        </View>
+        <View style={styles.container}>
+          <View style={styles.headerSection}>
 
-        {/* DX Section */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>DX:</Text>
-          {data.patient_info.dx.map((dxItem, index) => (
-            <Text key={index} style={styles.fieldValue}>
-              {dxItem.name} - {dxItem.desc}
+            <Text>{data.header.clinic_name}</Text>
+            <Text>{data.header.address}</Text>
+            <Text>{data.header.contact}</Text>
+          </View>
+
+          <View style={styles.divider} />
+          <View style={styles.detailsSection}>
+            <Text style={styles.headerFieldLabel}>
+              <Text style={styles.nameField}>{data.header.patientName}</Text>
             </Text>
-          ))}
-        </View>
-
-        {/* HX Section */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>HX:</Text>
-          <Text style={styles.fieldValue}>{data.patient_info.hx}</Text>
-        </View>
-
-        {/* Allergies */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>ALLERGIES:</Text>
-          <Text style={styles.fieldValue}>{data.patient_info.allergies}</Text>
-        </View>
-
-        {/* Medications */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>MEDICATIONS:</Text>
-          <Text style={styles.fieldValue}>{data.patient_info.medications}</Text>
-        </View>
-
-        {/* PMH and PSH */}
-        <View style={styles.section}>
-          <View style={styles.row}>
-            <View style={styles.leftColumn}>
-              <Text style={styles.fieldLabel}>PMH:</Text>
-              <Text style={styles.fieldValue}>{data.patient_info.pmh}</Text>
-            </View>
-            <View style={styles.rightColumn}>
-              <Text style={styles.fieldLabel}>PSH:</Text>
-              <Text style={styles.fieldValue}>{data.patient_info.psh}</Text>
-            </View>
+            <Text style={styles.headerFieldLabel}>
+              DOB: <Text style={styles.fieldValue}>{data.header.dob}</Text>
+            </Text>
+            <Text style={styles.headerFieldLabel}>
+              DATE: <Text style={styles.fieldValue}>{data.header.date}</Text>
+            </Text>
           </View>
         </View>
+        <View style={styles.historySection}>
+          <View>
+            {dxRows.map((row, index) => (
+              <View key={index} style={styles.row}>
+                {index === 0 ? (
+                  <View style={styles.cellHeader}>
+                    <Text style={styles.headerText}>DX</Text>
+                  </View>
+                ) : (
+                  <View style={styles.cellHeader} />
+                )}
+                {row.map((item, cellIndex) => (
+                  <View key={cellIndex} style={styles.cell}>
+                    <Text style={styles.cellText}>{item.name}</Text>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </View>
 
-        {/* Social Section */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>SOCIAL:</Text>
-          <Text style={styles.fieldValue}>{data.patient_info.social}</Text>
-        </View>
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>HX</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.hx}</Text>
+            </View>
+          </View>
 
-        {/* Test Results Section */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>TEST RESULTS:</Text>
-          <Text style={styles.fieldValue}>
-            {data.patient_info.test_results}
-          </Text>
-        </View>
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>ALLERGIES:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.allergies}</Text>
+            </View>
+          </View>
 
-        {/* Subjective Section */}
-        <View style={styles.section}>
-          <Text style={styles.fieldLabel}>SUBJECTIVE:</Text>
-          <Text style={styles.fieldValue}>{data.patient_info.subjective}</Text>
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>MEDICATIONS:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.medications}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>PMH:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.pmh}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>PSH:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.psh}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>SOCIAL:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.social}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>TEST RESULTS:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.test_results}</Text>
+            </View>
+          </View>
+
+
+          {/* Subjective Section */}
+
+          <View style={styles.lastRow}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>SUBJECTIVE:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.patient_info.subjective}</Text>
+            </View>
+          </View>
         </View>
 
         {/* Pain Scale Section */}

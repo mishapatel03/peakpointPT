@@ -1,39 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import HeaderFields from "../header-fields";
-import PatinetData from "../../shared-components/PatientData";
-import { PDFDownloadLink, Document, Page } from "@react-pdf/renderer";
+import PatientData from "../../shared-components/PatientData";
 import { PDFViewer } from "@react-pdf/renderer";
 import { patientData } from "../../constants/data";
+import CommonDetailsFields from "../common-details-fields";
+import ObjectiveFormFields from "../objective-form-fields";
+import AppHeader from "../app-header";
+import { useDispatch, useSelector } from "react-redux";
+import { validateForm } from "../../slices/formSlice";
 
 export default function BasicForm() {
-  const containerStyle = {
-    display: "flex",
-    height: "100vh", // Full height of the viewport
+  const [isPreviewVisible, setPreviewVisible] = useState(false);
+  const dispatch = useDispatch();
+  const { formData } = useSelector((state) => state.form);
+
+  const handleSubmit = (event) => {
+    console.log(formData);
+    event.preventDefault();
+    dispatch(validateForm());
   };
 
-  const columnStyle = {
-    flex: 1, // Each column takes up equal space
-    padding: "20px", // Optional padding for spacing
-  };
   return (
     <React.Fragment>
       <div>
-        {/* <HeaderFields />
-        <div className="mx-auto w-full bg-white">
-   
-          <PDFViewer style={{width:"100%", height:"60vh"}}>
-            <PatinetData data = {patientData}/>
-          </PDFViewer>
-        </div> */}
-        <div style={containerStyle}>
-          <div style={{ ...columnStyle, backgroundColor: "#f2f2f2" }}>
-          <HeaderFields />
+        <AppHeader />
+        <div className="flex h-[87vh]">
+          <div className="mt-5 mx-20 flex-1 p-5 overflow-y-auto relative bg-white text-black">
+            <HeaderFields />
+            <hr className="border-t border-2 border-gray-200 my-5" />
+            <CommonDetailsFields />
+            <hr className="border-t border-2 border-gray-200 my-5" />
+            <ObjectiveFormFields />
+            <div className="flex sticky bottom-[-20px] justify-center bg-white p-2">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn w-48 bg-slate-800 mr-2 text-white p-2 rounded hover:bg-black"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewVisible(true)}
+                className="btn w-48 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+              >
+                Preview
+              </button>
+            </div>
           </div>
-          <div style={{ ...columnStyle, backgroundColor: "#d9d9d9" }}>
-          <PDFViewer style={{width:"100%", height:"95vh"}}>
-            <PatinetData data = {patientData}/>
-          </PDFViewer>
-          </div>
+          {isPreviewVisible && (
+            <div className="mt-5 mx-10 flex-1 p-5 overflow-y-auto relative bg-gray-300">
+              <div className="flex justify-end mb-2.5">
+                <button
+                  type="button"
+                  onClick={() => setPreviewVisible(false)}
+                  className="btn w-48 bg-red-700 text-white p-2 rounded hover:bg-red-900"
+                >
+                  Close
+                </button>
+              </div>
+              <PDFViewer className="w-full h-[82vh]">
+                <PatientData data={patientData} />
+              </PDFViewer>
+            </div>
+          )}
         </div>
       </div>
     </React.Fragment>
