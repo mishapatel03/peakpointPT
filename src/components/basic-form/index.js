@@ -22,7 +22,7 @@ export default function BasicForm() {
 
   return (
     <React.Fragment>
-      <div>
+      <div data-theme="light">
         <AppHeader />
         <div className="flex h-[87vh]">
           <div className="mt-5 mx-20 flex-1 p-5 overflow-y-auto relative bg-white text-black">
@@ -30,7 +30,6 @@ export default function BasicForm() {
             <hr className="border-t border-2 border-gray-200 my-5" />
             <CommonDetailsFields />
             <hr className="border-t border-2 border-gray-200 my-5" />
-            <ObjectiveFormFields />
             <div className="flex sticky bottom-[-20px] justify-center bg-white p-2">
               <button
                 type="submit"
@@ -42,7 +41,7 @@ export default function BasicForm() {
               <button
                 type="button"
                 onClick={() => setPreviewVisible(true)}
-                className="btn w-48 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                className="btn w-48  text-black border-black p-2 rounded"
               >
                 Preview
               </button>

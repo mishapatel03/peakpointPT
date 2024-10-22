@@ -7,6 +7,11 @@ const initialState = {
         patientName: "",
         patientDOB: "",
         currentDate: "",
+        patientHistoryName : "",
+        patientHistoryAge : "",
+        patientHistoryCondition : "",
+        patientHistoryDuration : "",
+        patientHistoryValue : "",
         dxValues: ['']
     },
     errors: {},
