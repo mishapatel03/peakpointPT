@@ -19,4 +19,8 @@ export const validationRules = {
         required: true,
         errorMessage: "Current date is required",
     },
+    patientHistoryName: {
+        required: true,
+        errorMessage: "Patient Histpry Name is required",
+    },
 }
