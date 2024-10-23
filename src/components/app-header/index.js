@@ -8,14 +8,14 @@ export default function AppHeader() {
         <div className="flex-1">
             <img className="w-56" src={logo}></img>
         </div>
-        <div className="flex-none">
+        {/* <div className="flex-none">
           <ul className="menu menu-horizontal px-1 cursor-pointer text-xl">
             <li>
               <a>Logout</a>
             </li>
           
           </ul>
-        </div>
+        </div> */}
       </div>
     </React.Fragment>
   );

@@ -8,6 +8,7 @@ import ObjectiveFormFields from "../objective-form-fields";
 import AppHeader from "../app-header";
 import { useDispatch, useSelector } from "react-redux";
 import { validateForm } from "../../slices/formSlice";
+import CustomPDFParser from "../pdf-parser";
 
 export default function BasicForm() {
   const [isPreviewVisible, setPreviewVisible] = useState(false);
@@ -43,8 +44,11 @@ export default function BasicForm() {
                 onClick={() => setPreviewVisible(true)}
                 className="btn w-48  text-black border-black p-2 rounded"
               >
-                Preview
+                Preview 
               </button>
+              <div>
+                <CustomPDFParser/>
+              </div>
             </div>
           </div>
           {isPreviewVisible && (

@@ -191,13 +191,13 @@ export default function PatinetData({ data }) {
           <View style={styles.divider} />
           <View style={styles.detailsSection}>
             <Text style={styles.headerFieldLabel}>
-              <Text style={styles.nameField}>{data.header.patientName}</Text>
+              NAME <Text style={styles.nameField}>{data.header.patientName}</Text>
             </Text>
             <Text style={styles.headerFieldLabel}>
-              DOB: <Text style={styles.fieldValue}>{data.header.dob}</Text>
+              DOB <Text style={styles.fieldValue}>{data.header.dob}</Text>
             </Text>
             <Text style={styles.headerFieldLabel}>
-              DATE: <Text style={styles.fieldValue}>{data.header.date}</Text>
+              DATE <Text style={styles.fieldValue}>{data.header.date}</Text>
             </Text>
           </View>
         </View>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { TEXT_AREA, TEXT_INPUT } from '../../constants';
 
-export default function TextInput({ type, placeholder, onChange, onBlur, inputBox, validation = false, customValidation }) {
-    const [value, setValue] = useState('');
+export default function TextInput({ type, placeholder, onChange, onBlur, inputBox, validation = false, value, customValidation}) {
+    const [formValue, setValue] = useState('');
     const [error, setError] = useState('');
+
+    console.log("Called textinput " + value + " "+type);
 
     const handleChange = (event) => {
         const value = event.target.value;
