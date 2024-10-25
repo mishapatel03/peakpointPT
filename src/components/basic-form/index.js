@@ -63,7 +63,7 @@ export default function BasicForm() {
                 </button>
               </div>
               <PDFViewer className="w-full h-[82vh]">
-                <PatientData data={patientData} />
+                <PatientData data={formData} />
               </PDFViewer>
             </div>
           )}

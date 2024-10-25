@@ -9,7 +9,6 @@ import { setFormField, updateField } from "../../slices/formSlice";
 export default function HeaderFields() {
   const dispatch = useDispatch();
   const { formData, errors } = useSelector((state) => state.form);
-  console.log(formData);
   const handleChange = (value, field) => {
     dispatch(setFormField({ field, value }));
   };

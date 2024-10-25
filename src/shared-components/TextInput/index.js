@@ -5,8 +5,6 @@ export default function TextInput({ type, placeholder, onChange, onBlur, inputBo
     const [formValue, setValue] = useState('');
     const [error, setError] = useState('');
 
-    console.log("Called textinput " + value + " "+type);
-
     const handleChange = (event) => {
         const value = event.target.value;
         setValue(value);

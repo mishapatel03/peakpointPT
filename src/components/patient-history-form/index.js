@@ -17,8 +17,6 @@ export default function PatientHistoryForm() {
     const value = `Patient ${formData.patientHistoryName}, aged ${formData.patientHistoryAge}, is suffering from ${formData.patientHistoryCondition} for ${formData.patientHistoryDuration}.`;
     const field = "patientHistoryValue";
     dispatch(setFormField({ field, value }));
-    console.log(formData);
-
     //return patientHistory;
   };
 

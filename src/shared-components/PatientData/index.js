@@ -9,8 +9,8 @@ import {
 
 export default function PatinetData({ data }) {
   const dxRows = [];
-  for (let i = 0; i < data.patient_info.dx.length; i += 2) {
-    dxRows.push(data.patient_info.dx.slice(i, i + 2));
+  for (let i = 0; i < data?.dxValues.length; i += 2) {
+    dxRows.push(data?.dxValues?.slice(i, i + 2));
   }
 
   const styles = StyleSheet.create({
@@ -165,7 +165,7 @@ export default function PatinetData({ data }) {
     },
     cellHeader: {
       fontSize: 10,
-      minWidth: 40,
+      minWidth: 90,
       padding: 5,
       justifyContent: 'center',
       borderRightWidth: 1
@@ -176,28 +176,30 @@ export default function PatinetData({ data }) {
     },
   });
 
+  const getTodayDate = () => new Date().toISOString().split('T')[0];
+
   return (
-    <Document title={data.header.patientName}>
+    <Document title={data.patientName}>
       <Page style={styles.page}>
 
         <View style={styles.container}>
           <View style={styles.headerSection}>
 
-            <Text>{data.header.clinic_name}</Text>
-            <Text>{data.header.address}</Text>
-            <Text>{data.header.contact}</Text>
+            <Text>{data.address}</Text>
+            {/* <Text>{data.header.address}</Text>
+            <Text>{data.header.contact}</Text> */}
           </View>
 
           <View style={styles.divider} />
           <View style={styles.detailsSection}>
             <Text style={styles.headerFieldLabel}>
-              NAME <Text style={styles.nameField}>{data.header.patientName}</Text>
+              NAME <Text style={styles.nameField}>{data.patientName}</Text>
             </Text>
             <Text style={styles.headerFieldLabel}>
-              DOB <Text style={styles.fieldValue}>{data.header.dob}</Text>
+              DOB <Text style={styles.fieldValue}>{data.patientDOB}</Text>
             </Text>
             <Text style={styles.headerFieldLabel}>
-              DATE <Text style={styles.fieldValue}>{data.header.date}</Text>
+              DATE <Text style={styles.fieldValue}>{data.currentDate || getTodayDate()}</Text>
             </Text>
           </View>
         </View>
@@ -214,7 +216,7 @@ export default function PatinetData({ data }) {
                 )}
                 {row.map((item, cellIndex) => (
                   <View key={cellIndex} style={styles.cell}>
-                    <Text style={styles.cellText}>{item.name}</Text>
+                    <Text style={styles.cellText}>{item}</Text>
                   </View>
                 ))}
               </View>
@@ -226,7 +228,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>HX</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.hx}</Text>
+              <Text style={styles.cellText}>{data.patientHistoryValue}</Text>
             </View>
           </View>
 
@@ -235,7 +237,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>ALLERGIES:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.allergies}</Text>
+              <Text style={styles.cellText}>{data.allergies}</Text>
             </View>
           </View>
 
@@ -244,7 +246,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>MEDICATIONS:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.medications}</Text>
+              <Text style={styles.cellText}>{data.medications}</Text>
             </View>
           </View>
 
@@ -253,7 +255,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>PMH:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.pmh}</Text>
+              <Text style={styles.cellText}>{data.pmh}</Text>
             </View>
           </View>
 
@@ -262,7 +264,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>PSH:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.psh}</Text>
+              <Text style={styles.cellText}>{data.psh}</Text>
             </View>
           </View>
 
@@ -271,7 +273,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>SOCIAL:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.social}</Text>
+              <Text style={styles.cellText}>{data.social}</Text>
             </View>
           </View>
 
@@ -280,33 +282,33 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>TEST RESULTS:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.test_results}</Text>
+              <Text style={styles.cellText}>{data.test_results}</Text>
             </View>
           </View>
 
 
           {/* Subjective Section */}
 
-          <View style={styles.lastRow}>
+          {/* <View style={styles.lastRow}>
             <View style={styles.cellHeader}>
               <Text style={styles.headerText}>SUBJECTIVE:</Text>
             </View>
             <View style={styles.cell}>
               <Text style={styles.cellText}>{data.patient_info.subjective}</Text>
             </View>
-          </View>
+          </View> */}
         </View>
 
         {/* Pain Scale Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.painScaleLabel}>PAIN SCALE:</Text>
           <View style={styles.painScale}>
             <Text style={styles.scaleValue}>7/10</Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Observation Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>OBSERVATION:</Text>
           <Text style={styles.fieldValue}>
             Gait: {data.physical?.observation.gait}
@@ -314,10 +316,10 @@ export default function PatinetData({ data }) {
           <Text style={styles.fieldValue}>
             Posture: {data.physical?.observation.posture}
           </Text>
-        </View>
+        </View> */}
 
         {/* AROM / Active Movement */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>AROM / ACTIVE MVMT:</Text>
           <View style={styles.tableHeader}>
             <Text style={styles.fieldValue}>
@@ -333,10 +335,10 @@ export default function PatinetData({ data }) {
             </Text>
             <Text style={styles.fieldValue}>SB: {data.physical?.arom.sb}</Text>
           </View>
-        </View>
+        </View> */}
 
         {/* PROM Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>PROM:</Text>
           <Text style={styles.fieldValue}>
             Lx spine: {data.physical?.prom.lx_spine}
@@ -344,22 +346,22 @@ export default function PatinetData({ data }) {
           <Text style={styles.fieldValue}>
             Shoulder: {data.physical?.prom.shoulder}
           </Text>
-        </View>
+        </View> */}
 
         {/* Joint Mobs Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>JOINT MOBS:</Text>
           <Text style={styles.fieldValue}>{data.physical?.joint_mobs}</Text>
-        </View>
+        </View> */}
 
         {/* Strength Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>STRENGTH:</Text>
           <Text style={styles.fieldValue}>{data.physical?.strength}</Text>
-        </View>
+        </View> */}
 
         {/* Special Test Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>SPECIAL TEST:</Text>
           <View style={styles.tableHeader}>
             <Text style={styles.fieldValue}>
@@ -377,30 +379,30 @@ export default function PatinetData({ data }) {
               VA: {data.physical?.special_test.va}
             </Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Palpation Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>PALPATION:</Text>
           <Text style={styles.fieldValue}>{data.physical?.palpation}</Text>
-        </View>
+        </View> */}
 
         {/* Tone Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.fieldLabel}>TONE:</Text>
           <Text style={styles.fieldValue}>{data.physical?.tone}</Text>
-        </View>
+        </View> */}
         {/* Coordination/Balance Section */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>COORDINATION / BALANCE</Text>
           <View style={styles.row}>
             <Text style={styles.fieldLabel}>Dynamic balance:</Text>
             <Text style={styles.fieldValue}>{data.coordination_balance}</Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Reflexes, Sensation, Skin, Girth */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>REFLEXES</Text>
           <Text style={styles.fieldValue}>{data.reflexes}</Text>
 
@@ -412,10 +414,10 @@ export default function PatinetData({ data }) {
 
           <Text style={styles.sectionTitle}>GIRTH</Text>
           <Text style={styles.fieldValue}>{data.girth}</Text>
-        </View>
+        </View> */}
 
         {/* Functional Status */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>FUNCTIONAL STATUS</Text>
           <Text style={styles.fieldValue}>{data.functional_status.note}</Text>
           {data.functional_status.activities.map((activity, index) => (
@@ -423,22 +425,22 @@ export default function PatinetData({ data }) {
               - {activity}
             </Text>
           ))}
-        </View>
+        </View> */}
 
         {/* Prior Functional Status */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>PRIOR FUNCTIONAL STATUS</Text>
           <Text style={styles.fieldValue}>{data.prior_functional_status}</Text>
-        </View>
+        </View> */}
 
         {/* Assessment */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>ASSESSMENT</Text>
           <Text style={styles.fieldValue}>{data.assessment}</Text>
-        </View>
+        </View> */}
 
         {/* Goals */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>GOALS</Text>
           <Text style={styles.fieldLabel}>Short Term (6 Weeks)</Text>
           {data.goals.short_term.map((goal, index) => (
@@ -452,26 +454,26 @@ export default function PatinetData({ data }) {
               {goal}
             </Text>
           ))}
-        </View>
+        </View> */}
 
         {/* Plan */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>PLAN</Text>
           {data.plan.details.map((planDetail, index) => (
             <Text key={index} style={styles.fieldValue}>
               {planDetail}
             </Text>
           ))}
-        </View>
+        </View> */}
 
         {/* Frequency of Treatment */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>FREQUENCY OF TREATMENT</Text>
           <Text style={styles.fieldValue}>{data.frequency}</Text>
-        </View>
+        </View> */}
 
         {/* Certification */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionTitle}>CERTIFICATION</Text>
           <Text style={styles.fieldLabel}>Patient Certification:</Text>
           <Text style={styles.fieldValue}>
@@ -493,7 +495,7 @@ export default function PatinetData({ data }) {
               <Text style={styles.fieldValue}>{data.certification.date}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </Page>
     </Document>
   );
