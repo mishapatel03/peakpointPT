@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setDXValues, setFormField } from '../../slices/formSlice';
 
 export default function Select({ options, field, value, onChange, size }) {
     const dispatch = useDispatch();

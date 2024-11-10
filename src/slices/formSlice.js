@@ -39,20 +39,6 @@ const formSlice = createSlice({
 
             state.errors = errors;
         },
-        setDXValues: (state, action) => {
-            const { index, value } = action.payload;
-
-            if (Array.isArray(action.payload)) {
-                state.formData.dxValues = action.payload;
-            } else {
-                const updatedDXValues = [...state.formData.dxValues];
-                if (index !== undefined) {
-                    updatedDXValues[index] = value;
-                }
-                state.formData.dxValues = updatedDXValues;
-            }
-        },
-
         validateField: (state, field, value) => {
             const rules = validationRules[field];
             const errors = { ...state.errors };
@@ -88,5 +74,5 @@ const formSlice = createSlice({
     },
 });
 
-export const { setFormField, setDXValues, validateField, validateForm, clearErrors } = formSlice.actions;
+export const { setFormField, validateField, validateForm, clearErrors } = formSlice.actions;
 export default formSlice.reducer;

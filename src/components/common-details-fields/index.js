@@ -6,68 +6,43 @@ import TextInput from "../../shared-components/TextInput";
 import { MdDelete } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { setDXValues } from "../../slices/formSlice";
 import PatientHistory from "../pateint-history";
+import CreatableSelect from 'react-select/creatable';
+import { setFormField } from "../../slices/formSlice";
 
 export default function CommonDetailsFields() {
   const dispatch = useDispatch();
   const dxValues = useSelector((state) => state.form.formData.dxValues || [""]);
-  const [selectCount, setSelectCount] = useState(dxValues.length || 1);
+  const [selectedDXOptions, setSelectedDXOptions] = useState([]);
   const formData = useSelector((state) => state.form.formData || [""]);
-  const handleAddDX = () => {
-    if (selectCount < 6) {
-      dispatch(setDXValues({ index: dxValues.length, value: "" }));
-      setSelectCount((prevCount) => prevCount + 1);
-    }
-  };
 
-  const handleChangeDX = (value, index) => {
-    dispatch(setDXValues({ index, value }));
-  };
-
-  const handleDeleteDX = (index) => {
-    const newDXValues = dxValues.filter((_, i) => i !== index);
-    dispatch(setDXValues(newDXValues));
-    setSelectCount((prevCount) => Math.max(prevCount - 1, 1));
+  const handleDXChange = (selected) => {
+    setSelectedDXOptions(selected);
+    const formattedValues = selected.map(option => option.value);
+    dispatch(setFormField({ field: 'DX', value: formattedValues }));
   };
 
   return (
     <React.Fragment>
       <div className="mb-4">
         <div className="mt-5">
-        <button
-            type="button mb-2"
-            onClick={handleAddDX}
-            className="btn mt-2  text-black p-2 rounded "
-            disabled={selectCount >= 6}
-          >
-            <FaPlus size={15} />
-            DX
-          </button>
+          <div className="text-lg font-bold mb-2 ">DX</div>
           <div className="grid grid-cols-2 gap-4 mt-2">
             {dxValues.length &&
               dxValues.map((value, index) => (
                 <div key={index} className="flex items-center">
-                  <Select
-                    field={`dxValues[${index}]`}
-                    options={DX}
-                    value={value}
-                    onChange={(value) => handleChangeDX(value, index)}
+                  <CreatableSelect
+                    isMulti
+                    placeholder={"Select or Add new DX"}
+                    options={DX.map(option => ({ label: option, value: option }))}
+                    value={selectedDXOptions}
+                    className="w-96 border-2 border-gray-400 rounded-[5px]"
+                    onChange={handleDXChange}
                   />
-                  {selectCount > 1 && (
-                    <button
-                      type="button"
-                      className="ml-2 flex items-center justify-center"
-                      onClick={() => handleDeleteDX(index)}
-                      disabled={selectCount <= 1}
-                    >
-                      <MdDelete color="#cb0f0f" size={32} />
-                    </button>
-                  )}
                 </div>
               ))}
           </div>
-          
+
         </div>
         <div className="mt-5">
           <PatientHistory />
