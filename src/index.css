@@ -15,3 +15,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom modal styling */
+.custom-modal .modal-box {
+  width: 90%; /* Adjust width as needed */
+  max-width: 1200px; /* Limit the max width */
+  height: 33vh; /* Adjust height as needed */
+  overflow-y: auto; /* Add scrolling for content overflow */
+}
+
+/* Grid layout for the form */
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 fields per row */
+  gap: 1rem; /* Spacing between fields */
+  padding: 1rem; /* Add some padding */
+  box-sizing: border-box; /* Ensure padding doesn't affect size */
+}
+
+/* Individual input fields styling */
+.form-container > * {
+  min-width: 0; /* Prevents overflow issues */
+  width: 100%; /* Ensures fields stretch within grid cells */
+}

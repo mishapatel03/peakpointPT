@@ -21,8 +21,9 @@ export default function PatientHistory() {
         )}
         History
       </button>
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
+      <dialog id="my_modal_1" className="modal ">
+        <div className="modal-box w-full max-w-4xl">
+          {/* Form */}
           <PatientHistoryForm />
         </div>
       </dialog>
