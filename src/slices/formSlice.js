@@ -12,7 +12,8 @@ const initialState = {
         patientHistoryCondition : "",
         patientHistoryDuration : "",
         patientHistoryValue : "",
-        dxValues: ['']
+        dxValues: [''],
+        social:""
     },
     errors: {},
 };

@@ -4,9 +4,58 @@ export const address = [
   "FIRST CLASS PHYSICAL THERAPY, PC 3514 Mermaid Ave., Suite 003,Brooklyn, NY 11224 Tel. (718) 996-1100,Fax (718) 676-9511",
 ];
 
-export const DX = [
-  "Knee Pain(719.46)", "Knee OA", "Cervicalgia (723.1)", "Lumbar Radiculopathy (724.4)", "Gait Abnormality (781.2)"
+export const PMH = [
+  'Hypertension', 'Asthma',
+  'Diabetes', 'Thyroid disorder',
+  'High', 'Cholesterol', 'Arthritis'
 ]
+
+export const GENDER = [
+  { label: "Men", value: "Men" },
+  { label: "Women", value: "Women" }
+]
+
+export const HTYPE = [
+  { label: "House", value: "House" },
+  { label: "Appartment", value: "Appartment" }
+]
+
+export const DX = [
+  "Low back pain	M54.50", "Lumbar radiculopathy	M54.16", "Lumbar disc displacement	M51.26", "Lumbar Radiculopathy (724.4)", "Gait Abnormality (781.2)",
+  "Lumbar strain	S39.012D",
+  "Lumbar spondylosis	M43.06",
+  "Gait abnormality	R26.89",
+  "Multiple arthritis	M15.9",
+  "S / p Orthopedic aftercare	Z47.89",
+  "History of fall	Z91.81",
+  "Other muscle spasm	M62.838",
+  "Muscle spasm of back	M62.830",
+  "Muscle weakness specific	R53.1",
+  "Muscle weakness General	M62.81",
+  "Parasythesia	R20.2",
+  "Stroke	I63.9",
+  "Lt hip pain	M25.552",
+  "Rt hip pain	M25.551",
+  "Unspeicified ITB Syndrome	M76.30",
+  "Lt ITB Syndrome	M76.32",
+  "Rt ITB Syndrome	M76.31",
+  "Lt knee pain	M25.562",
+  "Rt knee pain	M25.561",
+  "BL knee OA	M17.0",
+  "Rt knee OA	M17.11",
+  "Lt knee OA	M17.12",
+  "Rt knee sprain	S83.91XD",
+  "Lt knee sprain	S83.92XD",
+  "Lt ankle / foot pain	M25.572",
+  "Rt ankle / foot pain	M25.571",
+  "Plantar fasciitis 	M72.2",
+  "Mid back pain	M54.6",
+  "Neck pain	M54.2",
+  "Cervical radiculopathy	M54.12",
+  "Cervical disc displacement	M50.20",
+  "Dizziness/ Vertigo	R42"
+]
+
 export const gait = [
   "mod to sev guarded with antalgic gait and decreased cadence",
   "Antalgic, slow and guarding",
