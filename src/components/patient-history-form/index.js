@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Checkbox } from "@mui/material";
 import Select from "react-select";
 
 export default function PatientHistoryForm() {
+  const [sentence, setSentence] = useState("");
+
   const [inputs, setInputs] = useState({
     bodyPart: null,
     radiatingArea: null,
@@ -71,17 +73,49 @@ export default function PatientHistoryForm() {
   ];
 
   const handleChange = (field, value) => {
-    setInputs((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    if (field === "bodyPart" || field === "symptom") {
+      setInputs((prev) => ({
+        ...prev,
+        [field]: value.map((item) => item.value), // Save array of selected values
+      }));
+    } else {
+      setInputs((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
+
+    const fieldToCheckboxMap = {
+      line1: ["bodyPart", "symptom", "radiatingArea"],
+      line2: ["durationValue", "durationUnit"],
+      line3: ["cause", "jerkOn"],
+      line4: ["imaging", "imagingReason"],
+      line5: ["careon", "careonReason"],
+      line6: ["treatment", "treatmentType", "treatmentEffect"],
+    };
+
+    Object.keys(fieldToCheckboxMap).forEach((checkboxKey) => {
+      if (fieldToCheckboxMap[checkboxKey].includes(field)) {
+        setCheckboxes((prev) => ({
+          ...prev,
+          [checkboxKey]: fieldToCheckboxMap[checkboxKey].some(
+            (key) => inputs[key] || key === field && value
+          ),
+        }));
+      }
+    });
+
   };
 
+  useEffect(() => {
+    generateSentence();
+  }, [inputs, checkboxes]);
+
   const handleCheckboxChange = (line) => {
-    setCheckboxes((prev) => ({
-      ...prev,
-      [line]: !prev[line], // Toggle only the specific checkbox
-    }));
+    setCheckboxes((prev) => {
+      const updatedCheckboxes = { ...prev, [line]: !prev[line] };
+      return updatedCheckboxes;
+    });
   };
 
   const generateSentence = () => {
@@ -101,39 +135,56 @@ export default function PatientHistoryForm() {
       treatment,
       treatmentDate,
       treatmentEffect,
-      treatmentType
+      treatmentType,
     } = inputs;
 
     let sentence = "";
 
     if (checkboxes.line1) {
-      sentence += `Patient presents with ${bodyPart || "___"} ${radiatingArea ? `along with radiating to ${radiatingArea}` : ""
-        } with ${symptom || "___"}. `;
+      let bodyPartsText = bodyPart?.length
+        ? bodyPart.length === 1
+          ? bodyPart[0]
+          : `${bodyPart.slice(0, -1).join(", ")} and ${bodyPart[bodyPart.length - 1]}`
+        : "___";
+
+      let symptomsPartsText = symptom?.length
+        ? symptom.length === 1
+          ? symptom[0]
+          : `${symptom.slice(0, -1).join(", ")} and ${symptom[symptom.length - 1]}`
+        : "___";
+
+      sentence += `Patient presents with ${bodyPartsText} ${radiatingArea ? `along with radiating to ${radiatingArea}` : ""
+        } with ${symptomsPartsText}. `;
     }
 
     if (checkboxes.line2) {
       sentence += `Pain has been present since ${durationValue || "___"} ${durationUnit || "___"
-        }`;
+        }. `;
     }
 
     if (checkboxes.line3) {
-      sentence += ` due to ${cause} without any injury. `
+      sentence += `Due to ${cause || "___"} ${inputs.jerkOn ? `getting a jerk on ${inputs.jerkOn}` : "without any injury"
+        }. `;
     }
 
     if (checkboxes.line4) {
-      sentence += `Patient did take Xray/MRI on ${imaging}, which shows ${imagingReason}`;
+      sentence += `Patient did take Xray/MRI on ${imaging || "___"}, which shows ${imagingReason || "___"
+        }. `;
     }
 
     if (checkboxes.line5) {
-      sentence += `Patient went to ER/Urgent care on ${careon} due to ${careonReason}`;
+      sentence += `Patient went to ER/Urgent care on ${careon || "___"} due to ${careonReason || "___"
+        }. `;
     }
 
     if (checkboxes.line6) {
-      sentence += `Pt has taken ${treatment} on ${treatmentType} which has helped ${treatmentEffect}.`
+      sentence += `Patient has taken ${treatment || "___"} on ${treatmentType || "___"
+        }, which has helped ${treatmentEffect || "___"}. `;
     }
 
-    return sentence.trim();
+    setSentence(sentence.trim());
   };
+
 
   const customSelectStyles = {
     menu: (provided) => ({
@@ -158,8 +209,9 @@ export default function PatientHistoryForm() {
         <span className="text-lg font-medium">Patient presents with:</span>
         <div className="grid grid-cols-2 gap-4 mt-2">
           <Select
+            isMulti={true}
             options={bodyParts.map((part) => ({ value: part, label: part }))}
-            onChange={(selected) => handleChange("bodyPart", selected?.value)}
+            onChange={(selected) => handleChange("bodyPart", selected)}
             placeholder="Body Part"
             styles={customSelectStyles}
           />
@@ -179,7 +231,8 @@ export default function PatientHistoryForm() {
               value: symptom,
               label: symptom,
             }))}
-            onChange={(selected) => handleChange("symptom", selected?.value)}
+            isMulti={true}
+            onChange={(selected) => handleChange("symptom", selected)}
             placeholder="Symptom"
             styles={customSelectStyles}
           />
@@ -317,75 +370,17 @@ export default function PatientHistoryForm() {
         />
       </div>
 
-      {/* Line 4 */}
-      {/* <div>
-        <Checkbox
-          style={{ paddingLeft: 0 }}
-          checked={checkboxes.line4}
-          onChange={() => handleCheckboxChange("line4")}
-        />
-        <span className="text-lg font-medium">Imaging Details:</span>
-        <TextField
-          label="Date"
-          type="date"
-          variant="outlined"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          onChange={(e) => handleChange("imagingDate", e.target.value)}
-        />
-      </div> */}
-
-      {/* Line 5 */}
-      {/* <div>
-        <Checkbox
-          style={{ paddingLeft: 0 }}
-          checked={checkboxes.line5}
-          onChange={() => handleCheckboxChange("line5")}
-        />
-        <span className="text-lg font-medium">ER Visit and Treatment:</span>
-        <div className="grid grid-cols-2 gap-4 mt-2">
-          <TextField
-            label="ER Visit Date"
-            type="date"
-            variant="outlined"
-            InputLabelProps={{ shrink: true }}
-            onChange={(e) => handleChange("erVisitDate", e.target.value)}
-          />
-          <TextField
-            label="Reason"
-            variant="outlined"
-            fullWidth
-            onChange={(e) => handleChange("erReason", e.target.value)}
-          />
-          <Select
-            options={treatments.map((treatment) => ({
-              value: treatment,
-              label: treatment,
-            }))}
-            onChange={(selected) => handleChange("treatment", selected?.value)}
-            placeholder="Treatment"
-            styles={customSelectStyles}
-          />
-          <TextField
-            label="Treatment Date"
-            type="date"
-            variant="outlined"
-            InputLabelProps={{ shrink: true }}
-            onChange={(e) => handleChange("treatmentDate", e.target.value)}
-          />
-          <TextField
-            label="Effect"
-            variant="outlined"
-            fullWidth
-            onChange={(e) => handleChange("treatmentEffect", e.target.value)}
-          />
-        </div>
-      </div> */}
-
       {/* Display Sentence */}
       <div className="pt-4">
         <strong>Generated Sentence:</strong>
-        <p className="mt-2 bg-gray-100 p-4 rounded-md">{generateSentence()}</p>
+        <textarea
+          className="mt-2 bg-gray-100 p-4 rounded-md"
+          value={sentence}
+          onChange={(e) => setSentence(e.target.value)}
+          placeholder="Generated sentence will appear here"
+          style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+        />
+
       </div>
     </div>
   );
