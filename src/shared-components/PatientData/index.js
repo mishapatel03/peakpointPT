@@ -7,10 +7,10 @@ import {
   StyleSheet
 } from "@react-pdf/renderer";
 
-export default function PatinetData({ data }) {
+export default function PatientData({ data }) {
   const dxRows = [];
-  for (let i = 0; i < data?.dxValues.length; i += 2) {
-    dxRows.push(data?.dxValues?.slice(i, i + 2));
+  for (let i = 0; i < data?.DX?.length; i += 2) {
+    dxRows.push(data?.DX?.slice(i, i + 2));
   }
 
   const styles = StyleSheet.create({
@@ -255,7 +255,13 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>PMH:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.pmh}</Text>
+              <Text style={styles.cellText}>
+                {data.pmh?.length > 0
+                  ? data.pmh.length === 1
+                    ? data.pmh[0]
+                    : `${data.pmh.slice(0, -1).join(', ')} and ${data.pmh[data.pmh.length - 1]}`
+                  : ''}
+              </Text>
             </View>
           </View>
 
@@ -282,21 +288,21 @@ export default function PatinetData({ data }) {
               <Text style={styles.headerText}>TEST RESULTS:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.test_results}</Text>
+              <Text style={styles.cellText}>{data.testResults}</Text>
             </View>
           </View>
 
 
           {/* Subjective Section */}
 
-          {/* <View style={styles.lastRow}>
+          <View style={styles.lastRow}>
             <View style={styles.cellHeader}>
               <Text style={styles.headerText}>SUBJECTIVE:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.patient_info.subjective}</Text>
+              <Text style={styles.cellText}>{data.subjective}</Text>
             </View>
-          </View> */}
+          </View>
         </View>
 
         {/* Pain Scale Section */}

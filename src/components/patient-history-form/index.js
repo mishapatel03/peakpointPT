@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Checkbox } from "@mui/material";
 import Select from "react-select";
+import { useSelector, useDispatch } from "react-redux";
+import { setFormField } from "../../slices/formSlice";
+import { bodyParts, causes, durationUnits, radiatingAreas, symptoms } from "../../constants/data";
 
-export default function PatientHistoryForm() {
-  const [sentence, setSentence] = useState("");
-
+export default function PatientHistoryForm({ closeModal }) {
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState({
     bodyPart: null,
     radiatingArea: null,
@@ -24,7 +26,6 @@ export default function PatientHistoryForm() {
     treatmentEffect: null,
     treatmentType: null
   });
-
   const [checkboxes, setCheckboxes] = useState({
     line1: false,
     line2: false,
@@ -33,50 +34,32 @@ export default function PatientHistoryForm() {
     line5: false,
     line6: false
   });
+  const formData = useSelector((state) => state.form.formData || [""]);
+  const [sentence, setSentence] = useState("");
 
-  const bodyParts = [
-    "NECK",
-    "Left Shoulder",
-    "Right Shoulder",
-    "BL Shoulder",
-    "Left Elbow",
-    "Right Elbow",
-    "BL Elbow",
-    "Left Wrist/Hand",
-    "Right Wrist/Hand",
-    "BL Wrist/Hand",
-    "Mid back",
-    "Lower back",
-    "Left Hip",
-    "Right Hip",
-    "BL Hip",
-    "Left Knee",
-    "Right Knee",
-    "BL Knee",
-    "Left Ankle/Foot",
-    "Right Ankle/Foot",
-    "BL Ankle/Foot",
-  ];
-  const radiatingAreas = ["BLE", "BUE", "LLE", "LUE"];
-  const symptoms = ["tingling", "numbness", "burning"];
-  const durationUnits = ["days", "months", "years"];
-  const causes = [
-    "MVA",
-    "Fall",
-    "Lifting heavy weight",
-    "getting a jerk on ____",
-  ];
-  const treatments = [
-    "injection",
-    "chiropractic treatment",
-    "Physical or Occupational Therapy",
-  ];
+  useEffect(() => {
+    if (formData?.patientHistoryValue !== undefined) {
+      setSentence(formData.patientHistoryValue)
+    }
+  }, [formData?.patientHistoryValue]);
+
+  useEffect(() => {
+    console.log("formData:", formData);
+    console.log("formData.patientHistoryValue:", formData?.patientHistoryValue);
+    console.log("Current sentence state:", sentence);
+  }, [formData, sentence]);
+  
+
+  const SendHistoryData = () => {
+    dispatch(setFormField({ field: 'patientHistoryValue', value: sentence }));
+    closeModal();
+  }
 
   const handleChange = (field, value) => {
     if (field === "bodyPart" || field === "symptom") {
       setInputs((prev) => ({
         ...prev,
-        [field]: value.map((item) => item.value), // Save array of selected values
+        [field]: value.map((item) => item.value),
       }));
     } else {
       setInputs((prev) => ({
@@ -104,7 +87,6 @@ export default function PatientHistoryForm() {
         }));
       }
     });
-
   };
 
   useEffect(() => {
@@ -130,10 +112,7 @@ export default function PatientHistoryForm() {
       imagingReason,
       careon,
       careonReason,
-      erVisitDate,
-      erReason,
       treatment,
-      treatmentDate,
       treatmentEffect,
       treatmentType,
     } = inputs;
@@ -184,7 +163,6 @@ export default function PatientHistoryForm() {
 
     setSentence(sentence.trim());
   };
-
 
   const customSelectStyles = {
     menu: (provided) => ({
@@ -375,12 +353,29 @@ export default function PatientHistoryForm() {
         <strong>Generated Sentence:</strong>
         <textarea
           className="mt-2 bg-gray-100 p-4 rounded-md"
-          value={sentence}
+          value={sentence || ""}
           onChange={(e) => setSentence(e.target.value)}
           placeholder="Generated sentence will appear here"
           style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
         />
 
+      </div>
+
+      <div className="flex justify-end mt-4 space-x-2">
+        <button
+          type="button"
+          onClick={closeModal}
+          className="btn bg-gray-300 text-black p-4 rounded"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          onClick={SendHistoryData}
+          className="btn bg-blue-500 text-white p-4 rounded"
+        >
+          Done
+        </button>
       </div>
     </div>
   );

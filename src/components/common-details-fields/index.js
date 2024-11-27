@@ -30,9 +30,15 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 export default function CommonDetailsFields() {
   const dispatch = useDispatch();
   const dxValues = useSelector((state) => state.form.formData.dxValues || [""]);
-  const [selectedDXOptions, setSelectedDXOptions] = useState([]);
   const formData = useSelector((state) => state.form.formData || [""]);
   const [open, setOpen] = React.useState(false);
+  const [selectedDXOptions, setSelectedDXOptions] = useState([]);
+  const [selectedPMHoptions, setSelectedPMHOptions] = useState([]);
+  const [inputs, setInputs] = useState({
+    allergies: null,
+    medications: null,
+    psh: null
+  })
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -41,6 +47,20 @@ export default function CommonDetailsFields() {
     const formattedValues = selected.map(option => option.value);
     dispatch(setFormField({ field: 'DX', value: formattedValues }));
   };
+
+  const handlePMHChange = (selected) => {
+    setSelectedPMHOptions(selected);
+    const formattedValues = selected.map(option => option.value);
+    dispatch(setFormField({ field: 'pmh', value: formattedValues }));
+  };
+
+  const handleChange = (field, value) => {
+    setInputs((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    dispatch(setFormField({ field, value }));
+  }
 
   return (
     <React.Fragment>
@@ -73,6 +93,7 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2 ">Allergies</div>
             <TextInput
+              onChange={(e) => handleChange("allergies", e)}
               type={"text"}
               placeholder={`Enter Allergies`}
               inputBox={TEXT_INPUT}
@@ -81,6 +102,7 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2 ">Medications</div>
             <TextInput
+              onChange={(e) => handleChange("medications", e)}
               type={"text"}
               placeholder={`Enter Medication`}
               inputBox={TEXT_INPUT}
@@ -89,7 +111,8 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2  ">PMH</div>
             <CreatableSelect
-              // defaultValue={[colourOptions[2], colourOptions[3]]}
+              value={selectedPMHoptions}
+              onChange={handlePMHChange}
               isMulti
               name="colors"
               options={PMH.map(option => ({ label: option, value: option }))}
@@ -100,43 +123,41 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2  ">PSH</div>
             <TextInput
+              onChange={(e) => handleChange("psh", e)}
               type={"text"}
               placeholder={`Enter PSH`}
               inputBox={TEXT_INPUT}
             />
           </div>
-          <div>
-            {/* <div className="text-lg font-bold mb-2  ">Social</div>
-            <TextInput
-              type={"text"}
-              placeholder={`Enter Socials`}
-              inputBox={TEXT_INPUT}
-            /> */}
-            <button
-              type="button"
-              onClick={handleOpen}
-              className="btn mt-2 text-black p-2 rounded"
-            >
-              {formData?.social !== "" ? (
-                <FaPencil size={15} />
-              ) : (
-                <FaPlus size={15} />
-              )}
-              Social
-            </button>
-          </div>
-          <div>
-            <div className="text-lg font-bold mb-2  ">Test Results</div>
-            <TextInput
-              type={"text"}
-              placeholder={`Enter Test results`}
-              inputBox={TEXT_INPUT}
-            />
-          </div>
+        </div>
+        <div className="mt-5">
+          <button
+            type="button"
+            onClick={handleOpen}
+            className="btn mt-2 text-black p-2 rounded"
+          >
+            {formData?.social !== "" ? (
+              <FaPencil size={15} />
+            ) : (
+              <FaPlus size={15} />
+            )}
+            Social
+          </button>
+          <div className="mt-2 text-lg">{formData?.social}</div>
+        </div>
+        <div className="mt-5">
+          <div className="text-lg font-bold mb-2  ">Test Results</div>
+          <TextInput
+            onChange={(e) => handleChange("testResults", e)}
+            type={"text"}
+            placeholder={`Enter Test results`}
+            inputBox={TEXT_INPUT}
+          />
         </div>
         <div className="mt-5">
           <div className="text-lg font-bold mb-2 ">Subjective</div>
           <TextInput
+            onChange={(e) => handleChange("subjective", e)}
             type={"date"}
             placeholder={`Enter subjective`}
             inputBox={TEXT_AREA}

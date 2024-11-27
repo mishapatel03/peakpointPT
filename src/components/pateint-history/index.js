@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 export default function PatientHistory() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const formData = useSelector((state) => state.form.formData || [""]);
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -40,27 +39,8 @@ export default function PatientHistory() {
             </h2>
 
             {/* Form */}
-            <PatientHistoryForm />
+            <PatientHistoryForm closeModal={closeModal} />
 
-
-
-            {/* Buttons */}
-            <div className="flex justify-end mt-4 space-x-2">
-              <button
-                type="button"
-                onClick={closeModal}
-                className="btn bg-gray-300 text-black p-4 rounded"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="btn bg-blue-500 text-white p-4 rounded"
-              >
-                Done
-              </button>
-            </div>
           </div>
         </div>
       )}
