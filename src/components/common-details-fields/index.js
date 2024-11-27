@@ -139,7 +139,6 @@ export default function CommonDetailsFields() {
               HTYPE={HTYPE}
             />
           </div>
-          <div className="mt-2 text-lg">{formData?.social}</div>
         </div>
         <div className="mt-5">
           <div className="text-lg font-bold mb-2  ">Test Results</div>
