@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setFormField } from "../../slices/formSlice";
 import { bodyParts, causes, durationUnits, radiatingAreas, symptoms } from "../../constants/data";
 
-export default function PatientHistoryForm({ closeModal }) {
+export default function PatientHistoryForm() {
   const dispatch = useDispatch();
   const [inputs, setInputs] = useState({
     bodyPart: null,
@@ -42,6 +42,11 @@ export default function PatientHistoryForm({ closeModal }) {
       setSentence(formData.patientHistoryValue)
     }
   }, [formData?.patientHistoryValue]);
+  useEffect(() => {
+    if (formData?.patientHistoryValue !== undefined) {
+      setSentence(formData.patientHistoryValue)
+    }
+  }, []);
 
   useEffect(() => {
     console.log("formData:", formData);
@@ -52,7 +57,6 @@ export default function PatientHistoryForm({ closeModal }) {
 
   const SendHistoryData = () => {
     dispatch(setFormField({ field: 'patientHistoryValue', value: sentence }));
-    closeModal();
   }
 
   const handleChange = (field, value) => {
@@ -176,7 +180,7 @@ export default function PatientHistoryForm({ closeModal }) {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 p-4">
+    <div className="grid grid-cols-1 gap-6 mt-4">
       {/* Line 1 */}
       <div>
         <Checkbox
@@ -352,8 +356,9 @@ export default function PatientHistoryForm({ closeModal }) {
       <div className="pt-4">
         <strong>Generated Sentence:</strong>
         <textarea
+         key={sentence}
           className="mt-2 bg-gray-100 p-4 rounded-md"
-          value={sentence || ""}
+          value={sentence}
           onChange={(e) => setSentence(e.target.value)}
           placeholder="Generated sentence will appear here"
           style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
@@ -364,17 +369,10 @@ export default function PatientHistoryForm({ closeModal }) {
       <div className="flex justify-end mt-4 space-x-2">
         <button
           type="button"
-          onClick={closeModal}
-          className="btn bg-gray-300 text-black p-4 rounded"
-        >
-          Close
-        </button>
-        <button
-          type="button"
           onClick={SendHistoryData}
           className="btn bg-blue-500 text-white p-4 rounded"
         >
-          Done
+          Save
         </button>
       </div>
     </div>

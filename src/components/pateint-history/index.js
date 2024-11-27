@@ -4,15 +4,12 @@ import PatientHistoryForm from "../patient-history-form";
 import { useSelector } from "react-redux";
 
 export default function PatientHistory() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const formData = useSelector((state) => state.form.formData || [""]);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
       {/* Button to open the modal */}
-      <button
+      {/* <button
         type="button"
         onClick={openModal}
         className="btn mt-2 text-black p-2 rounded"
@@ -23,27 +20,22 @@ export default function PatientHistory() {
           <FaPlus size={15} />
         )}
         History
-      </button>
+      </button> */}
 
       {/* Modal */}
-      {isModalOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          aria-labelledby="patient-history-modal"
-          role="dialog"
+          className=""
           aria-modal="true"
         >
-          <div className="modal-box w-full max-w-6xl bg-white p-6 rounded-lg">
-            <h2 id="patient-history-modal" className="text-2xl font-bold mb-4">
-              Patient History
-            </h2>
+          <div className=" w-full max-w-screen-xl bg-white rounded-lg">
+          <div className="text-lg font-bold  ">Patient Histoy</div>
+
 
             {/* Form */}
-            <PatientHistoryForm closeModal={closeModal} />
+            <PatientHistoryForm />
 
           </div>
         </div>
-      )}
     </>
   );
 }
