@@ -139,6 +139,7 @@ export default function CommonDetailsFields() {
               HTYPE={HTYPE}
             />
           </div>
+          {/* <div className="mt-2 text-lg">{formData?.social}</div> */}
         </div>
         <div className="mt-5">
           <div className="text-lg font-bold mb-2  ">Test Results</div>
@@ -169,7 +170,131 @@ export default function CommonDetailsFields() {
           />
         </div>
       </div>
-      
+      {
+        open && (
+          <SocialForm handleClose={handleClose} GENDER={GENDER} HTYPE={HTYPE} />
+        )
+        // (
+        //   <div
+        //     className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        //     aria-labelledby="patient-history-modal"
+        //     role="dialog"
+        //     aria-modal="true"
+        //   >
+        //     <div className="modal-box w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg">
+        //       <h2 id="patient-history-modal" className="text-2xl font-bold mb-6">
+        //         Social
+        //       </h2>
+
+        //       {/* Main Form */}
+        //       <div className="pl-4 text-lg">Patient Info : </div>
+        //       <div className="grid pl-4 pb-4 grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        //         {/* Age */}
+        //         <div className="flex items-center">
+        //           <TextField
+        //             label="Enter Age"
+        //             variant="standard"
+        //             type="number"
+        //             className="w-32"
+        //           />
+        //         </div>
+
+        //         {/* Gender */}
+        //         <div>
+        //           <label className="block mb-1 text-sm font-medium text-gray-700">
+        //             Gender
+        //           </label>
+        //           <Select
+        //             className="basic-single"
+        //             classNamePrefix="select"
+        //             name="gender"
+        //             options={GENDER}
+        //             placeholder="Select Gender"
+        //           />
+        //         </div>
+
+        //         {/* History Type */}
+        //         <div>
+        //           <label className="block mb-1 text-sm font-medium text-gray-700">
+        //             Building Type
+        //           </label>
+        //           <Select
+        //             className="basic-single"
+        //             classNamePrefix="select"
+        //             name="history-type"
+        //             options={HTYPE}
+        //             placeholder="Select Building"
+        //           />
+        //         </div>
+        //       </div>
+
+        //       {/* Additional Fields */}
+        //       <div className="space-y-4">
+        //         {/* Stairs */}
+        //         <div className="flex items-center space-x-2">
+        //           <Checkbox {...label} />
+        //           <span className="text-lg">Patient has</span>
+        //           <input
+        //             type="number"
+        //             placeholder=""
+        //             className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+        //           />
+        //           <span className="text-lg">stairs to reach the apt</span>
+        //         </div>
+
+        //         {/* Work */}
+        //         <div className="flex items-center space-x-2">
+        //           <Checkbox {...label} />
+        //           <span className="text-lg">Patient works as</span>
+        //           <input
+        //             type="text"
+        //             placeholder=""
+        //             className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+        //           />
+        //           <span className="text-lg">and has to</span>
+        //           <input
+        //             type="text"
+        //             placeholder=""
+        //             className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+        //           />
+        //         </div>
+
+        //         {/* HHA */}
+        //         <div className="flex items-center space-x-2">
+        //           <Checkbox {...label} />
+        //           <span className="text-lg">
+        //             Patient has HHA, who helps with some functional activities, like
+        //           </span>
+        //           <input
+        //             type="text"
+        //             placeholder=""
+        //             className="w-60 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+        //           />
+        //         </div>
+        //       </div>
+
+        //       {/* Buttons */}
+        //       <div className="flex justify-end mt-6 space-x-4">
+        //         <button
+        //           type="button"
+        //           onClick={handleClose}
+        //           className="btn bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-md"
+        //         >
+        //           Close
+        //         </button>
+        //         <button
+        //           type="button"
+        //           onClick={handleClose}
+        //           className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+        //         >
+        //           Done
+        //         </button>
+        //       </div>
+        //     </div>
+        //   </div>
+
+        // )
+      }
     </React.Fragment>
   );
 }

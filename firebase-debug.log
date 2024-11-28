@@ -1,0 +1,42 @@
+[debug] [2024-11-28T16:21:08.837Z] ----------------------------------------------------------------------
+[debug] [2024-11-28T16:21:08.841Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\vidhi\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2024-11-28T16:21:08.842Z] CLI Version:   13.27.0
+[debug] [2024-11-28T16:21:08.842Z] Platform:      win32
+[debug] [2024-11-28T16:21:08.842Z] Node Version:  v20.17.0
+[debug] [2024-11-28T16:21:08.842Z] Time:          Thu Nov 28 2024 11:21:08 GMT-0500 (Eastern Standard Time)
+[debug] [2024-11-28T16:21:08.842Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-28T16:21:08.846Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-11-28T16:21:08.986Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-28T16:21:08.987Z] > authorizing via signed-in user (rishabhgada@gmail.com)
+[debug] [2024-11-28T16:21:08.987Z] [iam] checking project peakpointpt-45b6c for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-11-28T16:21:08.988Z] Checked if tokens are valid: false, expires at: 1732574473689
+[debug] [2024-11-28T16:21:08.988Z] Checked if tokens are valid: false, expires at: 1732574473689
+[debug] [2024-11-28T16:21:08.988Z] > refreshing access token with scopes: []
+[debug] [2024-11-28T16:21:08.990Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-11-28T16:21:08.990Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-11-28T16:21:09.096Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-11-28T16:21:09.097Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-11-28T16:21:09.130Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-11-28T16:21:09.130Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-11-28T16:21:09.140Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/peakpointpt-45b6c:testIamPermissions [none]
+[debug] [2024-11-28T16:21:09.140Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/peakpointpt-45b6c:testIamPermissions x-goog-quota-user=projects/peakpointpt-45b6c
+[debug] [2024-11-28T16:21:09.140Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/peakpointpt-45b6c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-11-28T16:21:09.475Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/peakpointpt-45b6c:testIamPermissions 200
+[debug] [2024-11-28T16:21:09.475Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/peakpointpt-45b6c:testIamPermissions {}
+[debug] [2024-11-28T16:21:09.475Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project peakpointpt-45b6c:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2024-11-28T16:21:09.476Z] Checked if tokens are valid: true, expires at: 1732814468130
+[debug] [2024-11-28T16:21:09.476Z] Checked if tokens are valid: true, expires at: 1732814468130
+[debug] [2024-11-28T16:21:09.477Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/peakpointpt-45b6c [none]
+[debug] [2024-11-28T16:21:09.783Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/peakpointpt-45b6c 403
+[debug] [2024-11-28T16:21:09.783Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/peakpointpt-45b6c {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2024-11-28T16:21:09.784Z] Request to https://firebase.googleapis.com/v1beta1/projects/peakpointpt-45b6c had HTTP Error: 403, The caller does not have permission
+[debug] [2024-11-28T16:21:09.859Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/peakpointpt-45b6c had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\vidhi\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\vidhi\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project peakpointpt-45b6c. Please make sure the project exists and your account has permission to access it.
