@@ -145,7 +145,7 @@ export default function ObjectiveFormFields() {
 
             </div>
 
-            <div className='mt-5'>
+            {/* <div className='mt-5'>
                 <div className="text-lg font-bold ">PROM</div>
                 <div className='grid grid-cols-2 gap-4'>
                     <Select options={gait} />
@@ -232,9 +232,9 @@ export default function ObjectiveFormFields() {
                         />
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <div className='mt-5'>
+            {/* <div className='mt-5'>
                 <div className="text-lg font-bold ">JOINT MOBS</div>
                 <TextInput
                     type={'text'}
@@ -250,9 +250,9 @@ export default function ObjectiveFormFields() {
                     placeholder={`Enter HX`}
                     inputBox={TEXT_AREA}
                 />
-            </div>
+            </div> */}
 
-            <div className='mt-5'>
+            {/* <div className='mt-5'>
                 <div className="text-lg font-bold ">SPECIAL TEST</div>
                 <div className='grid grid-cols-6 gap-4'>
                     <div className='grid grid-cols-1 gap-4'>
@@ -280,9 +280,9 @@ export default function ObjectiveFormFields() {
                         <Select options={testResult} />
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-            <div className='mt-5'>
+            {/* <div className='mt-5'>
                 <div className="text-lg font-bold ">PALPATION</div>
                 <TextInput
                     type={'date'}
@@ -468,8 +468,8 @@ export default function ObjectiveFormFields() {
                             inputBox={TEXT_INPUT}
                         />
                     </div>
-                </div>
-            </div>
+                </div> 
+            </div>*/}
 
         </React.Fragment>
     )

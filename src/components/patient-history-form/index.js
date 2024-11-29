@@ -48,17 +48,6 @@ export default function PatientHistoryForm() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("formData:", formData);
-    console.log("formData.patientHistoryValue:", formData?.patientHistoryValue);
-    console.log("Current sentence state:", sentence);
-  }, [formData, sentence]);
-  
-
-  const SendHistoryData = () => {
-    dispatch(setFormField({ field: 'patientHistoryValue', value: sentence }));
-  }
-
   const handleChange = (field, value) => {
     if (field === "bodyPart" || field === "symptom") {
       setInputs((prev) => ({
@@ -92,6 +81,14 @@ export default function PatientHistoryForm() {
       }
     });
   };
+  
+  useEffect(() => {
+    if (sentence.trim()) {
+      dispatch(setFormField({ field: "patientHistoryValue", value: sentence }));
+    }
+  }, [sentence, dispatch]);
+
+
 
   useEffect(() => {
     generateSentence();
@@ -356,7 +353,7 @@ export default function PatientHistoryForm() {
       <div className="pt-4">
         <strong>Generated Sentence:</strong>
         <textarea
-         key={sentence}
+          key={sentence}
           className="mt-2 bg-gray-100 p-4 rounded-md"
           value={sentence}
           onChange={(e) => setSentence(e.target.value)}
@@ -364,16 +361,6 @@ export default function PatientHistoryForm() {
           style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
         />
 
-      </div>
-
-      <div className="flex justify-end mt-4 space-x-2">
-        <button
-          type="button"
-          onClick={SendHistoryData}
-          className="btn bg-blue-500 text-white p-4 rounded"
-        >
-          Save
-        </button>
       </div>
     </div>
   );
