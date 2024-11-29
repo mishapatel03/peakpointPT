@@ -31,6 +31,7 @@ export default function BasicForm() {
             <hr className="border-t border-2 border-gray-200 my-5" />
             <CommonDetailsFields />
             <hr className="border-t border-2 border-gray-200 my-5" />
+            <ObjectiveFormFields />
             <div className="flex sticky bottom-[-20px] justify-center bg-white p-2">
               <button
                 type="submit"
