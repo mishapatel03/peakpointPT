@@ -120,11 +120,84 @@ export const bodyParts = [
   "BL Ankle/Foot",
 ];
 
+const commonMovementsForSecA = [
+  { movement: "Flexion Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Extension Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Side Bending Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Rotation Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+];
+
+const commonMovementsForSecB = [
+  { movement: "Flexion Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Extension Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Abduction Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Aduction Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+]
+
+const commonMovementsForSecC = [
+  { movement: "Flexion", showPostfix: true, postfixVal: "* > pain ^" },
+  { movement: "Extension", showPostfix: true, postfixVal: "* > pain ^" },
+  { movement: "Abduction", showPostfix: true, postfixVal: "* > pain ^" },
+  { movement: "External Rot.", showPostfix: true, postfixVal: "* > pain ^" },
+  { movement: "Internal Rot.", showPostfix: true, postfixVal: "* > pain ^" },
+]
+
+export const bodyPartConfig = {
+  "Neck": commonMovementsForSecA,
+  "Mid back": commonMovementsForSecA,
+  "LB": commonMovementsForSecA,
+  "Lumbar spine": commonMovementsForSecA,
+  "Cervical spine": commonMovementsForSecA,
+  "Thoracic spine": commonMovementsForSecA,
+  "Finger": commonMovementsForSecB,
+  "Toes": commonMovementsForSecB,
+  "Shoulder": commonMovementsForSecC,
+  "Hip": commonMovementsForSecC,
+  "Knee": [
+    { movement: "Flexion" },
+    { movement: "Extension" }
+  ],
+  "Elbow": [
+    { movement: "Flexion" },
+    { movement: "Extension" },
+    { movement: "Supination" },
+    { movement: "Pronation" }
+  ],
+  "Ankle": [
+    { movement: "Flexion" },
+    { movement: "Extension" },
+    { movement: "Inversion" },
+    { movement: "Eversion" }
+  ],
+  "Wrist": [
+    { movement: "Flexion" },
+    { movement: "Extension" },
+    { movement: "Ulnar deviation" },
+    { movement: "Radial deviation" }
+  ]
+};
+
 export const gait = [
   "mod to sev guarded with antalgic gait and decreased cadence",
   "Antalgic, slow and guarding",
   "Normal",
   "Not available to demonstrate"
+];
+
+export const arom = [
+  "Neck",
+  "LB",
+  "Mid back",
+  "Cervical spine",
+  "Lumbar spine",
+  "Thoracic spine",
+  "Finger",
+  "Toes",
+  "Shoulder", "Hip",
+  "Knee",
+  "Elbow",
+  "Ankle",
+  "Wrist"
 ]
 
 export const MVMT = [

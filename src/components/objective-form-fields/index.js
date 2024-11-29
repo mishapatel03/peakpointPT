@@ -1,10 +1,80 @@
-import React from 'react'
-import { MVMT, balance, days, duration, functionalStatus, gait, goals, specialTest, testResult, yesNo } from '../../constants/data'
-import Select from '../../shared-components/Select'
-import { TEXT_AREA, TEXT_INPUT } from '../../constants'
-import TextInput from '../../shared-components/TextInput'
+import React, { useState } from 'react'
+import { MVMT, arom, balance, bodyPartConfig, days, duration, functionalStatus, gait, goals, specialTest, testResult, yesNo } from '../../constants/data'
+import Select from "react-select";
+import { TEXT_AREA, TEXT_INPUT } from '../../constants';
+import TextInput from '../../shared-components/TextInput';
+import { TextField, Checkbox } from "@mui/material";
+
+const options = [
+    { value: "Mid back", label: "Mid back" },
+    { value: "LB", label: "LB" },
+    { value: "Lumbar spine", label: "Lumbar spine" },
+    { value: "Toes", label: "Toes" },
+    { value: "Shoulder", label: "Shoulder" },
+    { value: "Neck", label: "Neck" },
+    { value: "Cervical spine", label: "Cervical spine" },
+    { value: "Thoracic spine", label: "Thoracic spine" },
+    { value: "Finger", label: "Finger" },
+    { value: "Hip", label: "Hip" },
+    { value: "Knee", label: "Knee" },
+    { value: "Elbow", label: "Elbow" },
+    { value: "Ankle", label: "Ankle" },
+    { value: "Wrist", label: "Wrist" },
+];
+
+
 
 export default function ObjectiveFormFields() {
+    const [selectedValues, setSelectedValues] = useState({
+        0: null,
+        1: null,
+        2: null,
+    });
+
+    const [formData, setFormData] = useState({
+        "Neck": {},
+        "LB": {},
+        "Mid back": {},
+        "Cervical spine": {},
+        "Lumbar spine": {},
+        "Thoracic spine": {},
+        "Finger": {},
+        "Toes": {},
+        "Shoulder": {},
+        "Hip": {},
+        "Knee": {},
+        "Elbow": {},
+        "Ankle": {},
+        "Wrist": {}
+    });
+
+    const handleChange = (index, selected) => {
+        setSelectedValues((prev) => ({ ...prev, [index]: selected?.value || null }));
+    };
+
+    const handleInputChange = (bodyPart, movement, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [bodyPart]: {
+                ...prev[bodyPart],
+                [movement]: value,
+            },
+        }));
+    };
+
+    const handleSave = () => {
+        // Convert formData to the desired format and print to console
+        const output = Object.keys(formData).reduce((result, bodyPart) => {
+            const movements = formData[bodyPart];
+            result[bodyPart] = Object.keys(movements).reduce((movResult, movement) => {
+                movResult[movement] = movements[movement] || "";
+                return movResult;
+            }, {});
+            return result;
+        }, {});
+        console.log(output);
+    };
+
     return (
         <React.Fragment>
             <div className="text-xl font-bold mt-5">OBJECTIVE</div>
@@ -23,121 +93,58 @@ export default function ObjectiveFormFields() {
                     inputBox={TEXT_INPUT}
                 />
             </div>
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">AROM / ACTIVE MVMT</div>
-                <div className='grid grid-cols-3 gap-4'>
-                    <Select options={gait} />
-                    <Select options={gait} />
-                    <Select options={gait} />
-                </div>
-                <div className='mt-5'>
-                    <div className='grid grid-cols-6 gap-4'>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                        </div>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                        </div>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                        </div>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                        </div>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                            <Select options={MVMT} className="w-24" />
-                        </div>
-                        <div className='grid grid-cols-1 gap-4'>
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                            <TextInput
-                                type={'text'}
-                                placeholder={`Enter something`}
-                                inputBox={TEXT_INPUT}
-                            />
-                        </div>
+            <div className="mt-5">
+                <div className="text-lg font-bold">AROM / ACTIVE MVMT</div>
+
+                <div>
+                    <div className="grid grid-cols-3 gap-4">
+                        {Array.from({ length: 3 }).map((_, index) => (
+                            <div key={index} className="space-y-4">
+                                {/* Select Dropdown */}
+                                <Select
+                                    options={options}
+                                    onChange={(selected) => handleChange(index, selected)}
+                                    placeholder="Select Body Part"
+                                />
+
+                                {/* Dynamically Render Sections */}
+                                {selectedValues[index] &&
+                                    bodyPartConfig[selectedValues[index]].map(({ movement, showPostfix, postfixVal }) => (
+                                        <div key={movement} className="flex items-center space-x-2">
+                                            <span className="text-lg font-medium">{movement}</span>
+                                            {showPostfix && (
+                                                <>
+                                                    <input
+                                                        type="number"
+                                                        onChange={(e) =>
+                                                            handleInputChange(
+                                                                selectedValues[index],
+                                                                movement,
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                    />
+                                                    <span className="text-lg font-medium">{postfixVal}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
+                            </div>
+                        ))}
                     </div>
 
+                    {/* Save Button */}
+                    <button
+                        onClick={handleSave}
+                        className="mt-4 p-2 bg-blue-500 text-white rounded"
+                    >
+                        Save
+                    </button>
                 </div>
+
             </div>
+
             <div className='mt-5'>
                 <div className="text-lg font-bold ">PROM</div>
                 <div className='grid grid-cols-2 gap-4'>
