@@ -7,9 +7,9 @@ export default function PatientData({ data }) {
     dxRows.push(data?.DX?.slice(i, i + 2));
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(data);
-  },[])
+  }, []);
 
   const styles = StyleSheet.create({
     container: {
@@ -162,20 +162,19 @@ export default function PatientData({ data }) {
       justifyContent: "center",
     },
     cellArom: {
-      flex: 3, // Adjust as needed for relative size
-      flexDirection: "row",
-      justifyContent: "space-between", // Ensures equidistant spacing
-      alignItems: "center", // Vertical alignment
+      flex: 1, // Each cell will take an equal portion of the row's width
+      alignItems: "center", // Center-align the text horizontally
+      justifyContent: "flex-start", // Align text to the top
+      paddingHorizontal: 10, // Add some padding to the left and right
     },
     cellAromText: {
-      textAlign : "left",
       fontSize: 10,
-      padding: 2
+      padding: 2,
     },
-    cellAromTextValue :{
-      textAlign: "right",
+    cellAromTextValue: {
+      textAlign: "center", // Center-align values
       fontSize: 10,
-      padding: 2
+      padding: 2,
     },
     cellHeader: {
       fontSize: 10,
@@ -183,6 +182,13 @@ export default function PatientData({ data }) {
       padding: 5,
       justifyContent: "center",
       //borderRightWidth: 1
+    },
+    cellAromRow: {
+      flexDirection: "row", // Arrange items in a row
+      justifyContent: "space-between", // Distribute space evenly across the row
+      alignItems: "center", // Vertically align items in the center
+      borderBottomWidth: 1,
+      borderColor: "#000",
     },
     cellText: {
       textAlign: "left",
@@ -244,6 +250,10 @@ export default function PatientData({ data }) {
 
   // Find the maximum number of fields any object has
   const maxFields = Math.max(...filledData.map((item) => item.fields.length));
+  // Extract keys with objects containing fields
+  const keysWithFields = Object.keys(data.arom).filter(
+    (key) => typeof data.arom[key] === "object" && Object.keys(data.arom[key]).length > 0
+  );
 
   const getTodayDate = () => new Date().toISOString().split("T")[0];
 
@@ -380,22 +390,23 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>AROM / ACTIVE MVMT :</Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.cellArom}>
-              <Text style={styles.cellAromText}>Lumbar spine</Text>
-              <Text style={styles.cellAromText}>Cervical Spine</Text>
-              <Text style={styles.cellAromText}>Knee</Text>
-            </View>
+          <View style={styles.cellAromRow}>
+            {keysWithFields.map((key, index) => (
+              <View style={styles.cellArom} key={index}>
+                <Text style={styles.cellAromText}>{key}</Text>
+              </View>
+            ))}
           </View>
           {/* Table Rows */}
 
+          {/* Table Rows */}
           {Array.from({ length: maxFields }).map((_, rowIndex) => (
-            <View style={styles.row} key={rowIndex}>
+            <View style={styles.cellAromRow} key={rowIndex}>
               {filledData.map((item, index) => {
                 const field = item.fields[rowIndex];
                 return (
-                  <View style={styles.cellArom}>
-                    <Text key={index} style={styles.cellAromTextValue}>
+                  <View style={styles.cellArom} key={index}>
+                    <Text style={styles.cellAromTextValue}>
                       {field ? `${field[0]}: ${field[1]}` : ""}
                     </Text>
                   </View>
