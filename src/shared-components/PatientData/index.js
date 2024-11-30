@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet
-} from "@react-pdf/renderer";
+import React, { useEffect } from "react";
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 export default function PatientData({ data }) {
   const dxRows = [];
@@ -13,15 +7,19 @@ export default function PatientData({ data }) {
     dxRows.push(data?.DX?.slice(i, i + 2));
   }
 
+  useEffect(()=>{
+    console.log(data);
+  },[])
+
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#e5e7eb',
-      flexDirection: 'row',
+      backgroundColor: "#e5e7eb",
+      flexDirection: "row",
       padding: 10,
-      alignItems: 'center',
+      alignItems: "center",
     },
     headerSection: {
-      alignItems: 'center',
+      alignItems: "center",
       fontSize: 10,
       flex: 1,
       paddingRight: 10,
@@ -32,18 +30,18 @@ export default function PatientData({ data }) {
     },
     divider: {
       width: 1,
-      backgroundColor: '#000',
-      height: '100%',
+      backgroundColor: "#000",
+      height: "100%",
     },
     historySection: {
       borderBottomWidth: 0,
       borderWidth: 1,
-      borderColor: '#000',
+      borderColor: "#000",
       borderRadius: 1,
     },
     labelContainer: {
       borderBottomWidth: 1,
-      borderBottomColor: '#000',
+      borderBottomColor: "#000",
       paddingBottom: 2,
     },
     page: {
@@ -58,23 +56,23 @@ export default function PatientData({ data }) {
       fontWeight: "bold",
       fontSize: 10,
       marginBottom: 2,
-      color: "#020617"
+      color: "#020617",
     },
     headerFieldLabel: {
       textAlign: "center",
       fontWeight: "bold",
       fontSize: 10,
       marginBottom: 4,
-      color: "#020617"
+      color: "#020617",
     },
     fieldValue: {
       fontSize: 9,
       marginBottom: 5,
-      color: "#374151"
+      color: "#374151",
     },
     nameField: {
       fontSize: 12,
-      alignItems: "center"
+      alignItems: "center",
     },
     section: {
       marginBottom: 10,
@@ -149,42 +147,111 @@ export default function PatientData({ data }) {
       width: "48%",
     },
     row: {
-      flexDirection: 'row',
+      flexDirection: "row",
       borderBottomWidth: 1,
-      borderColor: '#000',
+      borderColor: "#000",
     },
     lastRow: {
-      flexDirection: 'row',
-      borderColor: '#000',
+      flexDirection: "row",
+      borderColor: "#000",
     },
     cell: {
       flex: 1,
-      borderColor: '#000',
+      borderColor: "#000",
       padding: 5,
-      justifyContent: 'center',
+      justifyContent: "center",
+    },
+    cellArom: {
+      flex: 3, // Adjust as needed for relative size
+      flexDirection: "row",
+      justifyContent: "space-between", // Ensures equidistant spacing
+      alignItems: "center", // Vertical alignment
+    },
+    cellAromText: {
+      textAlign : "left",
+      fontSize: 10,
+      padding: 2
+    },
+    cellAromTextValue :{
+      textAlign: "right",
+      fontSize: 10,
+      padding: 2
     },
     cellHeader: {
       fontSize: 10,
       minWidth: 90,
       padding: 5,
-      justifyContent: 'center',
-      borderRightWidth: 1
+      justifyContent: "center",
+      //borderRightWidth: 1
     },
     cellText: {
-      textAlign: 'left',
+      textAlign: "left",
       fontSize: 10,
+    },
+
+    aromtable: {
+      width: "100%",
+      marginTop: 10,
+    },
+    aromrow: {
+      flexDirection: "row",
+      borderBottomWidth: 1,
+      borderColor: "#000",
+      paddingVertical: 5,
+    },
+    aromcell: {
+      flex: 1,
+      paddingHorizontal: 5,
+    },
+    aromheader: {
+      fontWeight: "bold",
+      fontSize: 10,
+    },
+    aromtext: {
+      fontSize: 9,
     },
   });
 
-  const getTodayDate = () => new Date().toISOString().split('T')[0];
+  const test = {
+    Ankle: {},
+    "Cervical Spine": {},
+    " Elbow": {},
+    LB: {
+      "Extension Reduced": "red. 45% > pn/stiff",
+      "Flexion Reduced": "red. 65% > pn/stiff",
+      "Rotation Reduced": "red. 65% > pn/stiff",
+    },
+    Shoulder: {
+      Abduction: 6,
+      Extension: 8,
+      "External Rot": 5,
+      Flexion: 8,
+      "Internal Rot": "9",
+    },
+    Toes: { "Aduction Reduced": "56" },
+  };
+
+  // Process data to extract the fields for each object
+  const filledData = Object.entries(data.arom)
+    .filter(([key, value]) => Object.keys(value).length > 0) // Non-empty objects
+    .map(([key, value]) => {
+      const fields = Object.entries(value); // Get all fields
+      return {
+        category: key,
+        fields: fields, // Store all fields
+      };
+    });
+
+  // Find the maximum number of fields any object has
+  const maxFields = Math.max(...filledData.map((item) => item.fields.length));
+
+  const getTodayDate = () => new Date().toISOString().split("T")[0];
 
   return (
     <Document title={data.patientName}>
       <Page style={styles.page}>
-
         <View style={styles.container}>
           <View style={styles.headerSection}>
-
             <Text>{data.address}</Text>
             {/* <Text>{data.header.address}</Text>
             <Text>{data.header.contact}</Text> */}
@@ -199,7 +266,10 @@ export default function PatientData({ data }) {
               DOB <Text style={styles.fieldValue}>{data.patientDOB}</Text>
             </Text>
             <Text style={styles.headerFieldLabel}>
-              DATE <Text style={styles.fieldValue}>{data.currentDate || getTodayDate()}</Text>
+              DATE{" "}
+              <Text style={styles.fieldValue}>
+                {data.currentDate || getTodayDate()}
+              </Text>
             </Text>
           </View>
         </View>
@@ -259,8 +329,10 @@ export default function PatientData({ data }) {
                 {data.pmh?.length > 0
                   ? data.pmh.length === 1
                     ? data.pmh[0]
-                    : `${data.pmh.slice(0, -1).join(', ')} and ${data.pmh[data.pmh.length - 1]}`
-                  : ''}
+                    : `${data.pmh.slice(0, -1).join(", ")} and ${
+                        data.pmh[data.pmh.length - 1]
+                      }`
+                  : ""}
               </Text>
             </View>
           </View>
@@ -292,10 +364,9 @@ export default function PatientData({ data }) {
             </View>
           </View>
 
-
           {/* Subjective Section */}
 
-          <View style={styles.lastRow}>
+          <View style={styles.row}>
             <View style={styles.cellHeader}>
               <Text style={styles.headerText}>SUBJECTIVE:</Text>
             </View>
@@ -303,6 +374,35 @@ export default function PatientData({ data }) {
               <Text style={styles.cellText}>{data.subjective}</Text>
             </View>
           </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>AROM / ACTIVE MVMT :</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.cellArom}>
+              <Text style={styles.cellAromText}>Lumbar spine</Text>
+              <Text style={styles.cellAromText}>Cervical Spine</Text>
+              <Text style={styles.cellAromText}>Knee</Text>
+            </View>
+          </View>
+          {/* Table Rows */}
+
+          {Array.from({ length: maxFields }).map((_, rowIndex) => (
+            <View style={styles.row} key={rowIndex}>
+              {filledData.map((item, index) => {
+                const field = item.fields[rowIndex];
+                return (
+                  <View style={styles.cellArom}>
+                    <Text key={index} style={styles.cellAromTextValue}>
+                      {field ? `${field[0]}: ${field[1]}` : ""}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          ))}
         </View>
 
         {/* Pain Scale Section */}
