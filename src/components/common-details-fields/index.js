@@ -79,7 +79,6 @@ export default function CommonDetailsFields() {
                       value: option,
                     }))}
                     value={selectedDXOptions}
-                    className="border-2 border-gray-400 rounded-[5px]"
                     onChange={handleDXChange}
                   />
                 </div>
@@ -117,7 +116,7 @@ export default function CommonDetailsFields() {
               isMulti
               name="colors"
               options={PMH.map((option) => ({ label: option, value: option }))}
-              className="max-w-lg basic-multi-select border-2 border-gray-400 rounded-[5px]"
+              className="max-w-lg basic-multi-select"
               classNamePrefix="select"
             />
           </div>

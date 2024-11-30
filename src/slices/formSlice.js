@@ -14,7 +14,8 @@ const initialState = {
         patientHistoryValue: "",
         dxValues: [''],
         social: "",
-        testResults: ""
+        testResults: "",
+        arom:{}
     },
     errors: {},
 };

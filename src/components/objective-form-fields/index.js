@@ -4,6 +4,9 @@ import Select from "react-select";
 import { TEXT_AREA, TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
 import { TextField, Checkbox } from "@mui/material";
+import { useDispatch } from 'react-redux';
+import { setFormField } from '../../slices/formSlice';
+import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const options = [
     { value: "Mid back", label: "Mid back" },
@@ -22,9 +25,14 @@ const options = [
     { value: "Wrist", label: "Wrist" },
 ];
 
-
-
 export default function ObjectiveFormFields() {
+    const dispatch = useDispatch();
+    const [isExpanded, setIsExpanded] = useState(false); // State to toggle visibility
+
+    const toggleExpanded = () => {
+        setIsExpanded(!isExpanded); // Toggle the expanded state
+    };
+
     const [selectedValues, setSelectedValues] = useState({
         0: null,
         1: null,
@@ -53,35 +61,38 @@ export default function ObjectiveFormFields() {
     };
 
     const handleInputChange = (bodyPart, movement, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [bodyPart]: {
-                ...prev[bodyPart],
-                [movement]: value,
-            },
-        }));
-    };
+        setFormData((prev) => {
+            const updatedFormData = {
+                ...prev,
+                [bodyPart]: {
+                    ...prev[bodyPart],
+                    [movement]: value,
+                },
+            };
 
-    const handleSave = () => {
-        // Convert formData to the desired format and print to console
-        const output = Object.keys(formData).reduce((result, bodyPart) => {
-            const movements = formData[bodyPart];
-            result[bodyPart] = Object.keys(movements).reduce((movResult, movement) => {
-                movResult[movement] = movements[movement] || "";
-                return movResult;
+            // Automatically dispatch the updated formData to Redux store
+            const output = Object.keys(updatedFormData).reduce((result, bodyPart) => {
+                const movements = updatedFormData[bodyPart];
+                result[bodyPart] = Object.keys(movements).reduce((movResult, movement) => {
+                    movResult[movement] = movements[movement] || "";
+                    return movResult;
+                }, {});
+                return result;
             }, {});
-            return result;
-        }, {});
-        console.log(output);
+
+            dispatch(setFormField({ field: "arom", value: output }));
+
+            return updatedFormData;
+        });
     };
 
     return (
         <React.Fragment>
-            <div className="text-xl font-bold mt-5">OBJECTIVE</div>
+            <div className="text-xl font-bold bg-gray-200 p-2 rounded-[5px]">OBJECTIVE</div>
             <div className='mt-5'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
-                    options={gait}
+                    options={gait.map((part) => ({ value: part, label: part }))}
                 />
             </div>
 
@@ -93,58 +104,59 @@ export default function ObjectiveFormFields() {
                     inputBox={TEXT_INPUT}
                 />
             </div>
-            <div className="mt-5">
+            <div className="mt-5 border rounded-lg p-4">
+                {/* Header with toggle button */}
                 <div className="text-lg font-bold">AROM / ACTIVE MVMT</div>
 
-                <div>
-                    <div className="grid grid-cols-3 gap-4">
-                        {Array.from({ length: 3 }).map((_, index) => (
-                            <div key={index} className="space-y-4">
-                                {/* Select Dropdown */}
-                                <Select
-                                    options={options}
-                                    onChange={(selected) => handleChange(index, selected)}
-                                    placeholder="Select Body Part"
-                                />
+                {/* Collapsible content with animation */}
 
-                                {/* Dynamically Render Sections */}
-                                {selectedValues[index] &&
-                                    bodyPartConfig[selectedValues[index]].map(({ movement, showPostfix, postfixVal }) => (
-                                        <div key={movement} className="flex items-center space-x-2">
-                                            <span className="text-lg font-medium">{movement}</span>
-                                            {showPostfix && (
-                                                <>
-                                                    <input
-                                                        type="number"
-                                                        onChange={(e) =>
-                                                            handleInputChange(
-                                                                selectedValues[index],
-                                                                movement,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-                                                    />
-                                                    <span className="text-lg font-medium">{postfixVal}</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    ))}
-                            </div>
-                        ))}
-                    </div>
+                <div className="grid grid-cols-3 gap-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <div key={index} className="space-y-4">
+                            {/* Select Dropdown */}
+                            <Select
+                                options={options}
+                                onChange={(selected) => handleChange(index, selected)}
+                                placeholder="Select Body Part"
+                            />
 
-                    {/* Save Button */}
-                    <button
-                        onClick={handleSave}
-                        className="mt-4 p-2 bg-blue-500 text-white rounded"
-                    >
-                        Save
-                    </button>
+                            {/* Dynamically Render Sections */}
+                            {selectedValues[index] &&
+                                bodyPartConfig[selectedValues[index]].map(({ movement, showPostfix, postfixVal }) => (
+                                    <div key={movement} className="flex items-center space-x-2">
+                                        <span className="text-lg font-medium">{movement}</span>
+                                        {showPostfix ? (
+                                            <>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) =>
+                                                        handleInputChange(
+                                                            selectedValues[index],
+                                                            movement,
+                                                            e.target.value + postfixVal
+                                                        )
+                                                    }
+                                                    className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                />
+                                                <span className="text-lg font-medium">{postfixVal}</span>
+                                            </>
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                onChange={(e) =>
+                                                    handleInputChange(selectedValues[index], movement, e.target.value)
+                                                }
+                                                className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+                        </div>
+                    ))}
                 </div>
 
             </div>
-
+            {/* 
             <div className='mt-5'>
                 <div className="text-lg font-bold ">PROM</div>
                 <div className='grid grid-cols-2 gap-4'>
@@ -447,7 +459,7 @@ export default function ObjectiveFormFields() {
             <div className='mt-5'>
                 <div className="text-lg font-bold ">Patient /Family advised of findings and has agreed to participate in Treatment Plan:</div>
                 <Select options={yesNo} />
-            </div>
+            </div> */}
 
             <div className='mt-5'>
                 <div className='grid grid-cols-2 gap-4 mt-5'>

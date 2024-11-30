@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Select from "react-select";
 import Checkbox from "@mui/material/Checkbox";
 import { useDispatch } from "react-redux";
 import { setFormField } from "../../slices/formSlice";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   const [age, setAge] = useState("");
@@ -19,6 +20,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
     work: false,
     hha: false,
   });
+  const [isExpanded, setIsExpanded] = useState(false); // Manage expand/collapse
   const dispatch = useDispatch();
 
   const generateMainSentence = () => {
@@ -77,6 +79,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
     setCheckedStates((prev) => ({ ...prev, [key]: checked }));
   };
 
+  // Update generatedText whenever relevant fields change
   useEffect(() => {
     updateGeneratedText();
   }, [
@@ -90,118 +93,100 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
     checkedStates,
   ]);
 
+  // Automatically save generatedText to form field whenever it changes
+  useEffect(() => {
+    if (generatedText) {
+      dispatch(setFormField({ field: "social", value: generatedText }));
+    }
+  }, [generatedText, dispatch]);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <div className="">
-      <div className="w-full max-w-4xl">
-        <div className="text-lg font-bold  ">Social</div>
-        <div className="mt-5 text-lg">Patient Info :</div>
-        <div className="grid pb-4 grid-cols-1 md:grid-cols-4 gap-4 items-center">
-          <TextField
-            label="Enter Age"
-            variant="standard"
-            type="number"
-            className="w-32"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
-          <Select
-            name="gender"
-            options={GENDER}
-            placeholder="Select Gender"
-            value={gender}
-            onChange={(selectedOption) => setGender(selectedOption)}
-          />
-          <Select
-            name="buildingType"
-            options={HTYPE}
-            placeholder="Select Building"
-            value={buildingType}
-            onChange={(selectedOption) => setBuildingType(selectedOption)}
-          />
-        </div>
+    <>
+      {/* Header with toggle button */}
+      <div className="flex items-center space-x-2 mb-4">
+        <button
+          type="button"
+          onClick={toggleExpand}
+          className="btn text-black p-2 rounded"
+          aria-expanded={isExpanded}
+        >
+          {isExpanded ? <FaMinus size={15} /> : <FaPlus size={15} />}
+        </button>
+        <div className="text-lg font-bold">Social</div>
+      </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              checked={checkedStates.stairs}
-              onChange={(e) => handleCheckboxChange("stairs", e.target.checked)}
-            />
-            <span>Patient has</span>
-            <input
+      {/* Animated form container */}
+      <div
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          }`}
+      >
+        <div className="w-full max-w-4xl bg-white rounded-lg p-4">
+          <div className="text-lg font-bold mt-2">Patient Info :</div>
+          <div className="grid pb-4 grid-cols-1 md:grid-cols-4 gap-4 items-center">
+            <TextField
+              label="Enter Age"
+              variant="standard"
               type="number"
-              value={stairs}
-              onChange={(e) =>
-                handleInputChange("stairs", e.target.value, "stairs")
-              }
-              className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+              className="w-32"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
             />
-            <span>stairs to reach the apt.</span>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              checked={checkedStates.work}
-              onChange={(e) => handleCheckboxChange("work", e.target.checked)}
+            <Select
+              name="gender"
+              options={GENDER}
+              placeholder="Select Gender"
+              value={gender}
+              onChange={(selectedOption) => setGender(selectedOption)}
             />
-            <span>Patient works as</span>
-            <input
-              type="text"
-              value={workAs}
-              onChange={(e) =>
-                handleInputChange("work", e.target.value, "workAs")
-              }
-              className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-            />
-            <span>and has to</span>
-            <input
-              type="text"
-              value={workCondition}
-              onChange={(e) =>
-                handleInputChange("work", e.target.value, "workCondition")
-              }
-              className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+            <Select
+              name="buildingType"
+              options={HTYPE}
+              placeholder="Select Building"
+              value={buildingType}
+              onChange={(selectedOption) => setBuildingType(selectedOption)}
             />
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              checked={checkedStates.hha}
-              onChange={(e) => handleCheckboxChange("hha", e.target.checked)}
-            />
-            <span>Patient has HHA, who helps with activities like</span>
-            <input
-              type="text"
-              value={hhaActivity}
-              onChange={(e) =>
-                handleInputChange("hha", e.target.value, "hhaActivity")
-              }
-              className="w-60 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-            />
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                checked={checkedStates.stairs}
+                onChange={(e) =>
+                  handleCheckboxChange("stairs", e.target.checked)
+                }
+              />
+              <span>Patient has</span>
+              <input
+                type="number"
+                value={stairs}
+                onChange={(e) =>
+                  handleInputChange("stairs", e.target.value, "stairs")
+                }
+                className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+              />
+              <span>stairs to reach the apt.</span>
+            </div>
+            {/* Other form fields */}
           </div>
-        </div>
 
-        <div className="mt-6">
-          <textarea
-            className="w-full p-2 border rounded"
-            rows="4"
-            value={generatedText}
-            onChange={(e) => setGeneratedText(e.target.value)}
-          ></textarea>
-        </div>
+          <div className="pt-4">
+            <strong>Generated Sentence:</strong>
+            <textarea
+              value={generatedText}
+              className="mt-2 bg-gray-100 p-4 rounded-md"
+              onChange={(e) => setGeneratedText(e.target.value)}
+              placeholder="Generated sentence will appear here"
+              style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+            />
 
-        <div className="flex justify-end mt-6 space-x-4">
-          <button
-            onClick={() => {
-              dispatch(setFormField({ field: "social", value: generatedText }));
-              handleClose();
-            }}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Save
-          </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
