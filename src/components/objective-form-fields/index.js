@@ -88,7 +88,7 @@ export default function ObjectiveFormFields() {
 
     return (
         <React.Fragment>
-            <div className="text-xl font-bold bg-gray-300 p-2 rounded-[5px]">OBJECTIVE</div>
+            <div className="text-xl font-bold bg-gray-200 p-2 rounded-[5px]">OBJECTIVE</div>
             <div className='mt-5'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
