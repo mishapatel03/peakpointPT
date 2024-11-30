@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TEXT_AREA, TEXT_INPUT } from '../../constants';
 
-export default function TextInput({ type, placeholder, onChange, onBlur, inputBox, validation = false, value, customValidation}) {
+export default function TextInput({ type, placeholder, onChange, onBlur, inputBox, validation = false, value, customValidation }) {
     const [formValue, setValue] = useState('');
     const [error, setError] = useState('');
 
@@ -39,11 +39,12 @@ export default function TextInput({ type, placeholder, onChange, onBlur, inputBo
                     value={value}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="input border-solid border-2 border-gray-400 bg-white input-bordered w-full max-w-lg"
+                    className="input border-solid border-2 border-gray-200 bg-white input-bordered w-full max-w-lg focus:border-blue-500 focus:outline-none"
+
                 /> :
                 inputBox === TEXT_AREA ?
                     <textarea
-                        className="textarea textarea-bordered border-solid border-2 border-gray-400 bg-white w-full max-w-lg"
+                        className="textarea textarea-bordered border-solid border-2 border-gray-200 bg-white w-full max-w-lg focus:border-blue-500 focus:outline-none"
                         placeholder={placeholder}
                         value={value}
                         onChange={handleChange}

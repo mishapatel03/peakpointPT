@@ -121,9 +121,8 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
 
       {/* Animated form container */}
       <div
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${
-          isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="w-full max-w-4xl bg-white rounded-lg p-4">
           <div className="text-lg font-bold mt-2">Patient Info :</div>
@@ -174,13 +173,16 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             {/* Other form fields */}
           </div>
 
-          <div className="mt-6">
+          <div className="pt-4">
+            <strong>Generated Sentence:</strong>
             <textarea
-              className="w-full p-2 border rounded"
-              rows="4"
               value={generatedText}
+              className="mt-2 bg-gray-100 p-4 rounded-md"
               onChange={(e) => setGeneratedText(e.target.value)}
-            ></textarea>
+              placeholder="Generated sentence will appear here"
+              style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+            />
+
           </div>
         </div>
       </div>

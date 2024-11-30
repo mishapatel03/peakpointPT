@@ -360,7 +360,6 @@ export default function PatientHistoryForm() {
           placeholder="Generated sentence will appear here"
           style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
         />
-
       </div>
     </div>
   );
