@@ -81,14 +81,14 @@ export default function PatientHistoryForm() {
       }
     });
   };
-  
+
   useEffect(() => {
     if (sentence.trim()) {
       dispatch(setFormField({ field: "patientHistoryValue", value: sentence }));
+      dispatch(setFormField({ field: "bodyParts", value: inputs.bodyPart }));
+      dispatch(setFormField({ field: "symptoms", value: inputs.symptom }));
     }
   }, [sentence, dispatch]);
-
-
 
   useEffect(() => {
     generateSentence();
@@ -187,34 +187,40 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg font-medium">Patient presents with:</span>
         <div className="grid grid-cols-2 gap-4 mt-2">
-          <Select
-            isMulti={true}
-            options={bodyParts.map((part) => ({ value: part, label: part }))}
-            onChange={(selected) => handleChange("bodyPart", selected)}
-            placeholder="Body Part"
-            styles={customSelectStyles}
-          />
-          <Select
-            options={radiatingAreas.map((area) => ({
-              value: area,
-              label: area,
-            }))}
-            onChange={(selected) =>
-              handleChange("radiatingArea", selected?.value)
-            }
-            placeholder="Radiating Area"
-            styles={customSelectStyles}
-          />
-          <Select
-            options={symptoms.map((symptom) => ({
-              value: symptom,
-              label: symptom,
-            }))}
-            isMulti={true}
-            onChange={(selected) => handleChange("symptom", selected)}
-            placeholder="Symptom"
-            styles={customSelectStyles}
-          />
+          <div className="border-2 rounded-[5px] border-gray-400">
+            <Select
+              isMulti={true}
+              options={bodyParts.map((part) => ({ value: part, label: part }))}
+              onChange={(selected) => handleChange("bodyPart", selected)}
+              placeholder="Body Part"
+              styles={customSelectStyles}
+            />
+          </div>
+          <div className="border-2 rounded-[5px] border-gray-400">
+            <Select
+              options={radiatingAreas.map((area) => ({
+                value: area,
+                label: area,
+              }))}
+              onChange={(selected) =>
+                handleChange("radiatingArea", selected?.value)
+              }
+              placeholder="Radiating Area"
+              styles={customSelectStyles}
+            />
+          </div>
+          <div className="border-2 rounded-[5px] border-gray-400">
+            <Select
+              options={symptoms.map((symptom) => ({
+                value: symptom,
+                label: symptom,
+              }))}
+              isMulti={true}
+              onChange={(selected) => handleChange("symptom", selected)}
+              placeholder="Symptom"
+              styles={customSelectStyles}
+            />
+          </div>
         </div>
       </div>
 
@@ -226,23 +232,28 @@ export default function PatientHistoryForm() {
           onChange={() => handleCheckboxChange("line2")}
         />
         <span className="text-lg font-medium">Pain duration:</span>
-        <div className="grid grid-cols-2 gap-4 mt-2">
-          <TextField
-            label="Duration Value"
-            type="number"
-            variant="outlined"
-            onChange={(e) => handleChange("durationValue", e.target.value)}
-          />
-          <Select
-            options={durationUnits.map((unit) => ({
-              value: unit,
-              label: unit,
-            }))}
-            onChange={(selected) => handleChange("durationUnit", selected?.value)}
-            placeholder="Duration Unit"
-            styles={customSelectStyles}
-          />
+        <div className="mt-2 w-full">
+          <div className="flex items-center space-x-4">
+            <input
+              type={"number"}
+              placeholder={`Duration Value`}
+              onChange={(e) => handleChange("durationValue", e.target.value)}
+              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+            />
+            <div className="w-full border-2 rounded-[5px] border-gray-400">
+              <Select
+                options={durationUnits.map((unit) => ({
+                  value: unit,
+                  label: unit,
+                }))}
+                onChange={(selected) => handleChange("durationUnit", selected?.value)}
+                placeholder="Duration Unit"
+                styles={customSelectStyles}
+              />
+            </div>
+          </div>
         </div>
+
       </div>
 
       {/* Line 3 */}
@@ -253,24 +264,28 @@ export default function PatientHistoryForm() {
           onChange={() => handleCheckboxChange("line3")}
         />
         <span className="text-lg font-medium">Cause:</span>
-        <div className="grid grid-cols-2 gap-4 mt-2">
-          <Select
-            options={causes.map((unit) => ({
-              value: unit,
-              label: unit,
-            }))}
-            onChange={(selected) => handleChange("cause", selected?.value)}
-            placeholder="Cause"
-            styles={customSelectStyles}
-          />
-          <TextField
-            label="Jerk on"
-            type="text"
-            variant="outlined"
-            fullWidth
-            onChange={(e) => handleChange("jerkOn", e.target.value)}
-          />
+        <div className="mt-2 w-full">
+          <div className="flex items-center space-x-4">
+            <div className="w-full  border-2 rounded-[5px] border-gray-400">
+              <Select
+                options={causes.map((unit) => ({
+                  value: unit,
+                  label: unit,
+                }))}
+                onChange={(selected) => handleChange("cause", selected?.value)}
+                placeholder="Cause"
+                styles={customSelectStyles}
+              />
+            </div>
+            <input
+              type={"text"}
+              placeholder={`Jerk on`}
+              onChange={(e) => handleChange("jerkOn", e.target.value)}
+              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+            />
+          </div>
         </div>
+
       </div>
 
       <div className="flex items-center space-x-2">
@@ -354,7 +369,7 @@ export default function PatientHistoryForm() {
         <strong>Generated Sentence:</strong>
         <textarea
           key={sentence}
-          className="mt-2 bg-gray-100 p-4 rounded-md"
+          className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
           value={sentence}
           onChange={(e) => setSentence(e.target.value)}
           placeholder="Generated sentence will appear here"

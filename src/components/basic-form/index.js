@@ -7,7 +7,7 @@ import CommonDetailsFields from "../common-details-fields";
 import ObjectiveFormFields from "../objective-form-fields";
 import AppHeader from "../app-header";
 import { useDispatch, useSelector } from "react-redux";
-import { validateForm } from "../../slices/formSlice";
+import { resetForm, validateForm } from "../../slices/formSlice";
 import CustomPDFParser from "../pdf-parser";
 
 export default function BasicForm() {
@@ -21,6 +21,10 @@ export default function BasicForm() {
     dispatch(validateForm());
   };
 
+  const handleResetForm = () => {
+    dispatch(resetForm());
+  }
+
   return (
     <React.Fragment>
       <div data-theme="light">
@@ -28,7 +32,6 @@ export default function BasicForm() {
         <div className="flex h-[87vh]">
           <div className="mt-5 mx-20 flex-1 p-5 overflow-y-auto relative bg-white text-black">
             <HeaderFields />
-            <hr className="border-t border-2 border-gray-200 my-5" />
             <CommonDetailsFields />
             <ObjectiveFormFields />
             <div className="flex sticky bottom-[-20px] justify-center bg-white p-2">
@@ -42,13 +45,21 @@ export default function BasicForm() {
               <button
                 type="button"
                 onClick={() => setPreviewVisible(true)}
+                className="btn w-48  text-black mr-2 border-black p-2 rounded"
+              >
+                Preview
+              </button>
+              <button
+                type="button"
+                onClick={() => handleResetForm()}
                 className="btn w-48  text-black border-black p-2 rounded"
               >
-                Preview 
+                Reset
               </button>
-              <div>
+              {/* <div>
                 <CustomPDFParser/>
-              </div>
+              </div> */}
+
             </div>
           </div>
           {isPreviewVisible && (

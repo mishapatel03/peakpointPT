@@ -14,7 +14,7 @@ export default function PatientHistory() {
   return (
     <>
       {/* Header with toggle button */}
-      <div className="flex items-center space-x-2 mb-4">
+      <div className="flex items-center space-x-2">
         <button
           type="button"
           onClick={toggleExpand}

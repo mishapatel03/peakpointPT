@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "../../shared-components/Select";
+import Select from "react-select";
 import { address } from "../../constants/data";
 import TextInput from "../../shared-components/TextInput";
 import { TEXT_INPUT } from "../../constants";
@@ -15,7 +15,7 @@ export default function HeaderFields() {
 
   return (
     <React.Fragment>
-      <div className="flex flex-col mt-4 mb-4 p-5 border border-gray-200 bg-gray-200 rounded-lg">
+      <div className="flex flex-col mt-4 mb-4 p-5 border border-2 border-gray-950 bg-gray-200 rounded-md">
         <div className="rounded-lg w-full">
           <div className="mt-2 w-full">
             <div className="text-lg font-bold -mb-2">
@@ -23,10 +23,10 @@ export default function HeaderFields() {
             </div>
             <div className="w-full mt-5">
               <Select
-                options={address}
-                field="address"
                 value={formData.address}
                 onChange={(value) => handleChange(value, "address")}
+                options={address.map((part) => ({ value: part, label: part }))}
+                placeholder="Select Clinic's Address"
               />
               {errors && errors.address && <span className="text-red-500">{errors.address}</span>}
             </div>

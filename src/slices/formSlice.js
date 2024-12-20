@@ -7,15 +7,16 @@ const initialState = {
         patientName: "",
         patientDOB: "",
         currentDate: "",
+        bodyParts: [],
         patientHistoryName: "",
         patientHistoryAge: "",
         patientHistoryCondition: "",
         patientHistoryDuration: "",
         patientHistoryValue: "",
-        dxValues: [''],
         social: "",
         testResults: "",
-        arom:{}
+        arom: {},
+        DX: []
     },
     errors: {},
 };
@@ -74,8 +75,12 @@ const formSlice = createSlice({
         clearErrors: (state) => {
             state.errors = {};
         },
+        resetForm: (state) => {
+            state.formData = { ...initialState.formData };
+            state.errors = {};
+        },
     },
 });
 
-export const { setFormField, validateField, validateForm, clearErrors } = formSlice.actions;
+export const { setFormField, validateField, validateForm, clearErrors, resetForm } = formSlice.actions;
 export default formSlice.reducer;

@@ -107,7 +107,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   return (
     <>
       {/* Header with toggle button */}
-      <div className="flex items-center space-x-2 mb-4">
+      <div className="flex items-center space-x-2">
         <button
           type="button"
           onClick={toggleExpand}
@@ -135,20 +135,24 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
-            <Select
-              name="gender"
-              options={GENDER}
-              placeholder="Select Gender"
-              value={gender}
-              onChange={(selectedOption) => setGender(selectedOption)}
-            />
-            <Select
-              name="buildingType"
-              options={HTYPE}
-              placeholder="Select Building"
-              value={buildingType}
-              onChange={(selectedOption) => setBuildingType(selectedOption)}
-            />
+            <div className="border-2 rounded-[5px] border-gray-400">
+              <Select
+                name="gender"
+                options={GENDER}
+                placeholder="Select Gender"
+                value={gender}
+                onChange={(selectedOption) => setGender(selectedOption)}
+              />
+            </div>
+            <div className="border-2 rounded-[5px] border-gray-400">
+              <Select
+                name="buildingType"
+                options={HTYPE}
+                placeholder="Select Building"
+                value={buildingType}
+                onChange={(selectedOption) => setBuildingType(selectedOption)}
+              />
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -177,12 +181,11 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             <strong>Generated Sentence:</strong>
             <textarea
               value={generatedText}
-              className="mt-2 bg-gray-100 p-4 rounded-md"
+              className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
               onChange={(e) => setGeneratedText(e.target.value)}
               placeholder="Generated sentence will appear here"
               style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
             />
-
           </div>
         </div>
       </div>

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { MVMT, arom, balance, bodyPartConfig, days, duration, functionalStatus, gait, goals, specialTest, testResult, yesNo } from '../../constants/data'
+import React, { useEffect, useState } from 'react'
+import { MVMT, arom, balance, bodyPartConfig, days, duration, functionalStatus, gait, goals, palpation, specialTest, stregthDetails, testResult, yesNo } from '../../constants/data'
 import Select from "react-select";
 import { TEXT_AREA, TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
 import { TextField, Checkbox } from "@mui/material";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFormField } from '../../slices/formSlice';
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { bodyPartDetails } from "../../constants/data"
 
 const options = [
     { value: "Mid back", label: "Mid back" },
@@ -28,6 +29,15 @@ const options = [
 export default function ObjectiveFormFields() {
     const dispatch = useDispatch();
     const [isExpanded, setIsExpanded] = useState(false); // State to toggle visibility
+    const bodyParts = useSelector((state) => state.form.formData.bodyParts || []);
+    const symptoms = useSelector((state) => state.form.formData.symptoms || []);
+    const [grades, setGrades] = useState({});
+    const [coordinate, setCoordinate] = useState("Static balance: Good? \n If ICD 10 has Gait abnormality, it should also come here Dynamic balance: ??	")
+    const [sensation, setSensation] = useState("");
+    const [skin, setSkin] = useState("");
+    const [pulse, setPulse] = useState("Normal");
+    const [girth, setGirth] = useState("Normal??");
+    const [posture, setPosture] = useState("Forward head, Round shoulder, ??");
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded); // Toggle the expanded state
@@ -38,6 +48,17 @@ export default function ObjectiveFormFields() {
         1: null,
         2: null,
     });
+
+    useEffect(() => {
+        if (symptoms && symptoms.length && (symptoms.includes('tingling') || symptoms.includes('numbness'))) {
+            setSensation("radiating pain with numbness and tingling traveling down LLE");
+        }
+    }, [symptoms])
+
+
+    useEffect(() => {
+        setGrades({});
+    }, [bodyParts]);
 
     const [formData, setFormData] = useState({
         "Neck": {},
@@ -58,6 +79,13 @@ export default function ObjectiveFormFields() {
 
     const handleChange = (index, selected) => {
         setSelectedValues((prev) => ({ ...prev, [index]: selected?.value || null }));
+    };
+
+    const handleGradeInputChange = (bodyPart, value) => {
+        setGrades((prevGrades) => ({
+            ...prevGrades,
+            [bodyPart]: value,
+        }));
     };
 
     const handleInputChange = (bodyPart, movement, value) => {
@@ -98,13 +126,15 @@ export default function ObjectiveFormFields() {
 
             <div className='mt-5'>
                 <div className="text-lg font-bold ">Posture</div>
-                <TextInput
-                    type={'text'}
+                <textarea
+                    className="mt-2 bg-gray-100 p-4 rounded-md border-gray-400 border-2 rounded-[5px]"
+                    value={posture}
                     placeholder={`Enter Posture details`}
-                    inputBox={TEXT_INPUT}
+                    onChange={(e) => setPosture(e.target.value)}
+                    style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                 />
             </div>
-            <div className="mt-5 border rounded-lg p-4">
+            <div className="mt-5 border rounded-lg p-4 border-gray-400 border-2 rounded-[5px]">
                 {/* Header with toggle button */}
                 <div className="text-lg font-bold">AROM / ACTIVE MVMT</div>
 
@@ -113,14 +143,13 @@ export default function ObjectiveFormFields() {
                 <div className="grid grid-cols-3 gap-4">
                     {Array.from({ length: 3 }).map((_, index) => (
                         <div key={index} className="space-y-4">
-                            {/* Select Dropdown */}
-                            <Select
-                                options={options}
-                                onChange={(selected) => handleChange(index, selected)}
-                                placeholder="Select Body Part"
-                            />
-
-                            {/* Dynamically Render Sections */}
+                            <div className="border-2 rounded-[5px] border-gray-400">
+                                <Select
+                                    isClearable={true}
+                                    options={options}
+                                    onChange={(selected) => handleChange(index, selected)}
+                                    placeholder="Select Body Part"
+                                /></div>
                             {selectedValues[index] &&
                                 bodyPartConfig[selectedValues[index]].map(({ movement, showPostfix, postfixVal }) => (
                                     <div key={movement} className="flex items-center space-x-2">
@@ -154,312 +183,166 @@ export default function ObjectiveFormFields() {
                         </div>
                     ))}
                 </div>
-
             </div>
-            {/* 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">PROM</div>
-                <div className='grid grid-cols-2 gap-4'>
-                    <Select options={gait} />
-                    <Select options={gait} />
+
+            <div className="grid grid-cols-2 gap-4 mt-5">
+                <div>
+                    <div className="text-lg font-bold">Joint mobs</div>
+                    <div className='bg-gray-100 p-4 rounded-md'>
+                        {bodyParts && bodyParts.length ? <React.Fragment>{
+                            bodyParts.map((bodyPart, index) => (
+                                <div key={index} className="mb-2">
+                                    <p>
+                                        {bodyPart === "NECK" || bodyPart === "Lower back" || bodyPart === "Mid back" ? (
+                                            <>
+                                                All glides {bodyPartDetails[bodyPart]} Grade{" "}
+                                                <input
+                                                    type="text"
+                                                    placeholder=""
+                                                    className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                    onChange={(e) => handleInputChange(bodyPart, e.target.value)}
+                                                />
+                                                &nbsp; &gt; pain and guarded
+                                            </>
+                                        ) : (
+                                            <>
+                                                PA {bodyPartDetails[bodyPart]} Grade{" "}
+                                                <input
+                                                    type="text"
+                                                    placeholder=""
+                                                    className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                    onChange={(e) => handleInputChange(bodyPart, e.target.value)}
+                                                />
+                                                &nbsp; &gt; pain and guarded
+                                            </>
+                                        )}
+                                    </p>
+                                </div>
+                            ))
+                        }</React.Fragment> : <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
+                            Please select any body part from the Patient History above.
+                        </div>}
+                    </div>
                 </div>
-            </div>
 
-            <div className='mt-5'>
-                <div className='grid grid-cols-9 gap-4'>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={MVMT} />
-                        <Select options={MVMT} />
+                <div>
+                    <div className="text-lg font-bold">Strength</div>
+                    <div className='bg-gray-100 p-4 rounded-md'>
+                        {bodyParts && bodyParts.length ? <React.Fragment>
+                            {bodyParts.map((bodyPart, index) => (
+                                <div key={index} className="mb-2">
+                                    <p>{stregthDetails[bodyPart]}</p>
+                                </div>
+                            ))}</React.Fragment> : <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
+                            Please select any body part from the Patient History above.
+                        </div>}
                     </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
+                </div>
+
+                <div>
+                    <div className="text-lg font-bold">Palpation</div>
+                    <div className='bg-gray-100 p-4 rounded-md'>
+                        {bodyParts && bodyParts.length ? <React.Fragment>
+                            {bodyParts.map((bodyPart, index) => (
+                                <div key={index} className="mb-2">
+                                    <p>{palpation[bodyPart]}</p>
+                                </div>
+                            ))}</React.Fragment> : <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
+                            Please select any body part from the Patient History above.
+                        </div>}
                     </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={MVMT} />
-                        <Select options={MVMT} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={MVMT} />
-                        <Select options={MVMT} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={MVMT} />
-                        <Select options={MVMT} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
-                        <TextInput
-                            type={'text'}
-                            placeholder={`Enter something`}
-                            inputBox={TEXT_INPUT}
-                        />
+                </div>
+
+                <div>
+                    <div className="text-lg font-bold">Tone</div>
+                    <div className='bg-gray-100 p-4 rounded-md'>
+                        {bodyParts && bodyParts.length ? <React.Fragment>
+                            {bodyParts.map((bodyPart, index) => (
+                                <div key={index} className="mb-2">
+                                    <p>{palpation[bodyPart]}</p>
+                                </div>
+                            ))}</React.Fragment> : <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
+                            Please select any body part from the Patient History above.
+                        </div>}
                     </div>
                 </div>
             </div>
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">JOINT MOBS</div>
-                <TextInput
-                    type={'text'}
-                    placeholder={`Enter Posture details`}
-                    inputBox={TEXT_INPUT}
-                />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">STRENGTH</div>
-                <TextInput
-                    type={'date'}
-                    placeholder={`Enter HX`}
-                    inputBox={TEXT_AREA}
-                />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">SPECIAL TEST</div>
-                <div className='grid grid-cols-6 gap-4'>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={specialTest} />
-                        <Select options={specialTest} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={testResult} />
-                        <Select options={testResult} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={specialTest} />
-                        <Select options={specialTest} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={testResult} />
-                        <Select options={testResult} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={specialTest} />
-                        <Select options={specialTest} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={testResult} />
-                        <Select options={testResult} />
-                    </div>
-                </div>
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">PALPATION</div>
-                <TextInput
-                    type={'date'}
-                    placeholder={`Enter PALPATION`}
-                    inputBox={TEXT_AREA}
-                />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">TONE</div>
-                <TextInput
-                    type={'date'}
-                    placeholder={`Enter Tone`}
-                    inputBox={TEXT_AREA}
-                />
-            </div>
 
             <div className='mt-5'>
                 <div className="text-lg font-bold ">COORDINATION / BALANCE</div>
                 <div className=''>
-                    <Select options={balance} />
+                    <textarea
+                        className="mt-2 bg-gray-100 p-4 rounded-md"
+                        value={coordinate}
+                        onChange={(e) => setCoordinate(e.target.value)}
+                        placeholder=""
+                        style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                    />
                 </div>
             </div>
 
             <div className='mt-5'>
                 <div className="text-lg font-bold ">REFLEXES</div>
                 <div className=''>
-                    <Select options={balance} />
+                    Intact
                 </div>
             </div>
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">SENSATION</div>
-                <div className=''>
-                    <Select options={balance} />
-                </div>
-            </div>
+            <div className="grid grid-cols-2 gap-2 mt-5">
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">SKIN</div>
-                <div className=''>
-                    <Select options={balance} />
-                </div>
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">PULSES</div>
-                <div className=''>
-                    <Select options={balance} />
-                </div>
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">GIRTH</div>
-                <div className=''>
-                    <Select options={balance} />
-                </div>
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">FUNCTIONAL STATUS - (i.e. Bed Mobility, Transfers, Balance, Gait, Endurance)
-                    Patient has difficulties with functional activities such as</div>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={functionalStatus} />
-                        <Select options={functionalStatus} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={functionalStatus} />
-                        <Select options={functionalStatus} />
-                    </div>
-                    <div className='grid grid-cols-1 gap-4'>
-                        <Select options={functionalStatus} />
-                        <Select options={functionalStatus} />
-                    </div>
-                </div>
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">PRIOR FUNCTIONAL STATUS</div>
-                <TextInput
-                    type={'date'}
-                    placeholder={`Enter PRIOR FUNCTIONAL STATUS`}
-                    inputBox={TEXT_AREA}
-                />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">ASSESSMENT</div>
-                <TextInput
-                    type={'date'}
-                    placeholder={`Enter ASSESSMENT`}
-                    inputBox={TEXT_AREA}
-                />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">GOALS</div>
-                <div className='grid grid-cols-2 gap-4'>
-                    <div className='grid grid-cols-3 items-center gap-4'>
-                        <div className="flex items-center text-lg font-bold ">Short Term</div>
-                        <TextInput
-                            type={'number'}
-                            placeholder={`Enter Posture details`}
-                            inputBox={TEXT_INPUT}
+                <div className='mt-5'>
+                    <div className="text-lg font-bold ">SENSATION</div>
+                    <div className=''>
+                        <textarea
+                            className="mt-2 bg-gray-100 p-4 rounded-md"
+                            value={sensation}
+                            onChange={(e) => setSensation(e.target.value)}
+                            placeholder=""
+                            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
-                        <Select options={days} />
                     </div>
-                    <div className='grid grid-cols-3 items-center gap-4'>
-                        <div className="flex items-center text-lg font-bold ">Long Term</div>
-                        <TextInput
-                            type={'number'}
-                            placeholder={`Enter Posture details`}
-                            inputBox={TEXT_INPUT}
+                </div>
+
+                <div className='mt-5'>
+                    <div className="text-lg font-bold ">SKIN</div>
+                    <div className=''>
+                        <textarea
+                            className="mt-2 bg-gray-100 p-4 rounded-md"
+                            value={skin}
+                            onChange={(e) => setSkin(e.target.value)}
+                            placeholder=""
+                            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
-                        <Select options={days} />
                     </div>
                 </div>
-                <div className='grid grid-cols-2 gap-4 mt-5'>
-                    <div className='grid grid-cols-1 items-center gap-4'>
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                    </div>
-                    <div className='grid grid-cols-1 items-center gap-4'>
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                    </div>
-                </div>
-            </div>
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">PLAN</div>
-                <div className='grid grid-cols-2 gap-4 mt-5'>
-                    <div className='grid grid-cols-1 items-center gap-4'>
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
+                <div>
+                    <div className="text-lg font-bold ">PULSES</div>
+                    <div className=''>
+                        <textarea
+                            className="mt-2 bg-gray-100 p-4 rounded-md"
+                            value={pulse}
+                            onChange={(e) => setPulse(e.target.value)}
+                            placeholder=""
+                            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                        />
                     </div>
-                    <div className='grid grid-cols-1 items-center gap-4'>
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
-                        <Select options={goals} />
+                </div>
+
+                <div>
+                    <div className="text-lg font-bold ">GIRTH</div>
+                    <div className=''>
+                        <textarea
+                            className="mt-2 bg-gray-100 p-4 rounded-md"
+                            value={girth}
+                            onChange={(e) => setGirth(e.target.value)}
+                            placeholder=""
+                            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                        />
                     </div>
                 </div>
             </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">FREQUENCY OF TREATMENT </div>
-                <Select options={duration} />
-            </div>
-
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">Patient /Family advised of findings and has agreed to participate in Treatment Plan:</div>
-                <Select options={yesNo} />
-            </div> */}
 
             <div className='mt-5'>
                 <div className='grid grid-cols-2 gap-4 mt-5'>
