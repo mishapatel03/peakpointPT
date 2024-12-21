@@ -44,7 +44,6 @@ export default function CommonDetailsFields() {
 
   useEffect(() => {
     if (dxValues.length === 0) {
-      // If Redux DX values are reset, reset the local state as well
       setSelectedDXOptions([]);
     }
   }, [dxValues]);
@@ -99,7 +98,7 @@ export default function CommonDetailsFields() {
             <input
               type={"text"}
               placeholder={`Enter Allergies`}
-              onChange={(e) => handleChange("allergies", e)}
+              onChange={(e) => handleChange("allergies", e.target.value)}
               className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
@@ -108,7 +107,7 @@ export default function CommonDetailsFields() {
             <input
               type={"text"}
               placeholder={`Enter Medication`}
-              onChange={(e) => handleChange("medications", e)}
+              onChange={(e) => handleChange("medications", e.target.value)}
               className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
@@ -131,7 +130,7 @@ export default function CommonDetailsFields() {
             <input
               type={"text"}
               placeholder={`Enter PSH`}
-              onChange={(e) => handleChange("psh", e)}
+              onChange={(e) => handleChange("psh", e.target.value)}
               className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>

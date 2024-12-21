@@ -11,20 +11,19 @@ export default function PatientHistoryForm() {
     bodyParts: [],
     radiatingArea: "",
     symptoms: [],
-    durationValue: null,
+    durationValue: "",
     durationUnit: "",
     cause: "",
     jerkOn: "",
     imaging: "",
     imagingReason: "",
-    careon: null,
-    careonReason: null,
-    erVisitDate: null,
-    treatment: null,
-    treatmentDate: null,
-    erReason: null,
-    treatmentEffect: null,
-    treatmentType: null
+    careon: "",
+    careonReason: "",
+    erVisitDate: "",
+    treatment: "",
+    treatmentDate: "",
+    treatmentEffect: "",
+    treatmentType: ""
   });
   const [checkboxes, setCheckboxes] = useState({
     line1: false,
@@ -36,6 +35,16 @@ export default function PatientHistoryForm() {
   });
   const formData = useSelector((state) => state.form.formData || []);
   const [sentence, setSentence] = useState("");
+  const [isEditing, setIsEditing] = useState(false); // Track manual editing
+
+  const fieldToCheckboxMap = {
+    line1: ["bodyParts", "symptoms", "radiatingArea"],
+    line2: ["durationValue", "durationUnit"],
+    line3: ["cause", "jerkOn"],
+    line4: ["imaging", "imagingReason"],
+    line5: ["careon", "careonReason"],
+    line6: ["treatment", "treatmentType", "treatmentEffect"],
+  };
 
   useEffect(() => {
     if (formData?.patientHistoryValue !== undefined) {
@@ -49,6 +58,7 @@ export default function PatientHistoryForm() {
   }, []);
 
   useEffect(() => {
+    // Update inputs based on formData
     setInputs((prev) => ({
       ...prev,
       bodyParts: formData?.bodyParts?.length ? prev.bodyParts : [],
@@ -64,9 +74,22 @@ export default function PatientHistoryForm() {
       careon: formData?.careon || "",
       treatment: formData?.treatment || "",
       treatmentType: formData?.treatmentType || "",
-      treatmentEffect: formData?.treatmentEffect || ""
+      treatmentEffect: formData?.treatmentEffect || "",
     }));
+    setCheckboxes((prev) => {
+      const updatedCheckboxes = { ...prev };
+      Object.keys(fieldToCheckboxMap).forEach((checkboxKey) => {
+        const relatedFields = fieldToCheckboxMap[checkboxKey];
+        const hasData = relatedFields.some((key) => {
+          const value = formData?.[key];
+          return Array.isArray(value) ? value.length > 0 : !!value;
+        });
+        updatedCheckboxes[checkboxKey] = hasData;
+      });
+      return updatedCheckboxes;
+    });
   }, [formData]);
+
 
   const handleChange = (field, value) => {
     if (field === "bodyParts" || field === "symptoms") {
@@ -82,15 +105,6 @@ export default function PatientHistoryForm() {
       }));
       dispatch(setFormField({ field: field, value: value || "" }));
     }
-
-    const fieldToCheckboxMap = {
-      line1: ["bodyParts", "symptoms", "radiatingArea"],
-      line2: ["durationValue", "durationUnit"],
-      line3: ["cause", "jerkOn"],
-      line4: ["imaging", "imagingReason"],
-      line5: ["careon", "careonReason"],
-      line6: ["treatment", "treatmentType", "treatmentEffect"],
-    };
 
     Object.keys(fieldToCheckboxMap).forEach((checkboxKey) => {
       if (fieldToCheckboxMap[checkboxKey].includes(field)) {
@@ -108,10 +122,12 @@ export default function PatientHistoryForm() {
     if (sentence.trim()) {
       dispatch(setFormField({ field: "patientHistoryValue", value: sentence }));
     }
-  }, [sentence, dispatch, inputs.symptoms]);
+  }, [sentence]);
 
   useEffect(() => {
-    generateSentence();
+    if (!isEditing) {
+      generateSentence();
+    }
   }, [inputs, checkboxes]);
 
   const handleCheckboxChange = (line) => {
@@ -402,10 +418,15 @@ export default function PatientHistoryForm() {
       <div className="pt-4">
         <strong>Generated Sentence:</strong>
         <textarea
-          key={sentence}
           className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
           value={sentence}
-          onChange={(e) => setSentence(e.target.value)}
+          onChange={(e) => {
+            setIsEditing(true); // Enable manual editing
+            setSentence(e.target.value); // Update the state with the new value
+          }}
+          onBlur={() => {
+            setIsEditing(false);
+          }}
           placeholder="Generated sentence will appear here"
           style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
         />
