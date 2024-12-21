@@ -8,15 +8,15 @@ import { bodyParts, causes, durationUnits, radiatingAreas, symptoms } from "../.
 export default function PatientHistoryForm() {
   const dispatch = useDispatch();
   const [inputs, setInputs] = useState({
-    bodyPart: null,
-    radiatingArea: null,
-    symptom: null,
+    bodyParts: [],
+    radiatingArea: "",
+    symptoms: [],
     durationValue: null,
-    durationUnit: null,
-    cause: null,
-    jerkOn: null,
-    imaging: null,
-    imagingReason: null,
+    durationUnit: "",
+    cause: "",
+    jerkOn: "",
+    imaging: "",
+    imagingReason: "",
     careon: null,
     careonReason: null,
     erVisitDate: null,
@@ -34,7 +34,7 @@ export default function PatientHistoryForm() {
     line5: false,
     line6: false
   });
-  const formData = useSelector((state) => state.form.formData || [""]);
+  const formData = useSelector((state) => state.form.formData || []);
   const [sentence, setSentence] = useState("");
 
   useEffect(() => {
@@ -48,21 +48,43 @@ export default function PatientHistoryForm() {
     }
   }, []);
 
+  useEffect(() => {
+    setInputs((prev) => ({
+      ...prev,
+      bodyParts: formData?.bodyParts?.length ? prev.bodyParts : [],
+      radiatingArea: formData?.radiatingArea || "",
+      durationValue: formData?.durationValue || "",
+      symptoms: formData?.symptoms?.length ? prev.symptoms : [],
+      durationUnit: formData?.durationUnit || "",
+      cause: formData?.cause || "",
+      jerkOn: formData?.jerkOn || "",
+      imagingReason: formData?.imagingReason || "",
+      imaging: formData?.imaging || "",
+      careonReason: formData?.careonReason || "",
+      careon: formData?.careon || "",
+      treatment: formData?.treatment || "",
+      treatmentType: formData?.treatmentType || "",
+      treatmentEffect: formData?.treatmentEffect || ""
+    }));
+  }, [formData]);
+
   const handleChange = (field, value) => {
-    if (field === "bodyPart" || field === "symptom") {
+    if (field === "bodyParts" || field === "symptoms") {
       setInputs((prev) => ({
         ...prev,
         [field]: value.map((item) => item.value),
       }));
+      dispatch(setFormField({ field: field, value: value.map((item) => item.value) || [] }));
     } else {
       setInputs((prev) => ({
         ...prev,
         [field]: value,
       }));
+      dispatch(setFormField({ field: field, value: value || "" }));
     }
 
     const fieldToCheckboxMap = {
-      line1: ["bodyPart", "symptom", "radiatingArea"],
+      line1: ["bodyParts", "symptoms", "radiatingArea"],
       line2: ["durationValue", "durationUnit"],
       line3: ["cause", "jerkOn"],
       line4: ["imaging", "imagingReason"],
@@ -85,10 +107,8 @@ export default function PatientHistoryForm() {
   useEffect(() => {
     if (sentence.trim()) {
       dispatch(setFormField({ field: "patientHistoryValue", value: sentence }));
-      dispatch(setFormField({ field: "bodyParts", value: inputs.bodyPart }));
-      dispatch(setFormField({ field: "symptoms", value: inputs.symptom }));
     }
-  }, [sentence, dispatch]);
+  }, [sentence, dispatch, inputs.symptoms]);
 
   useEffect(() => {
     generateSentence();
@@ -103,9 +123,9 @@ export default function PatientHistoryForm() {
 
   const generateSentence = () => {
     const {
-      bodyPart,
+      bodyParts,
       radiatingArea,
-      symptom,
+      symptoms,
       durationValue,
       durationUnit,
       cause,
@@ -121,16 +141,16 @@ export default function PatientHistoryForm() {
     let sentence = "";
 
     if (checkboxes.line1) {
-      let bodyPartsText = bodyPart?.length
-        ? bodyPart.length === 1
-          ? bodyPart[0]
-          : `${bodyPart.slice(0, -1).join(", ")} and ${bodyPart[bodyPart.length - 1]}`
+      let bodyPartsText = bodyParts?.length
+        ? bodyParts.length === 1
+          ? bodyParts[0]
+          : `${bodyParts.slice(0, -1).join(", ")} and ${bodyParts[bodyParts.length - 1]}`
         : "___";
 
-      let symptomsPartsText = symptom?.length
-        ? symptom.length === 1
-          ? symptom[0]
-          : `${symptom.slice(0, -1).join(", ")} and ${symptom[symptom.length - 1]}`
+      let symptomsPartsText = symptoms?.length
+        ? symptoms.length === 1
+          ? symptoms[0]
+          : `${symptoms.slice(0, -1).join(", ")} and ${symptoms[symptoms.length - 1]}`
         : "___";
 
       sentence += `Patient presents with ${bodyPartsText} ${radiatingArea ? `along with radiating to ${radiatingArea}` : ""
@@ -190,14 +210,16 @@ export default function PatientHistoryForm() {
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
               isMulti={true}
+              value={inputs.bodyParts.map((item) => ({ value: item, label: item }))}
               options={bodyParts.map((part) => ({ value: part, label: part }))}
-              onChange={(selected) => handleChange("bodyPart", selected)}
+              onChange={(selected) => handleChange("bodyParts", selected)}
               placeholder="Body Part"
               styles={customSelectStyles}
             />
           </div>
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
+              value={inputs.radiatingArea ? { value: inputs.radiatingArea, label: inputs.radiatingArea } : null}
               options={radiatingAreas.map((area) => ({
                 value: area,
                 label: area,
@@ -211,13 +233,14 @@ export default function PatientHistoryForm() {
           </div>
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
+              value={inputs.symptoms.map((item) => ({ value: item, label: item }))}
               options={symptoms.map((symptom) => ({
                 value: symptom,
                 label: symptom,
               }))}
               isMulti={true}
-              onChange={(selected) => handleChange("symptom", selected)}
-              placeholder="Symptom"
+              onChange={(selected) => handleChange("symptoms", selected)}
+              placeholder="Symptoms"
               styles={customSelectStyles}
             />
           </div>
@@ -235,6 +258,7 @@ export default function PatientHistoryForm() {
         <div className="mt-2 w-full">
           <div className="flex items-center space-x-4">
             <input
+              value={inputs.durationValue}
               type={"number"}
               placeholder={`Duration Value`}
               onChange={(e) => handleChange("durationValue", e.target.value)}
@@ -242,6 +266,7 @@ export default function PatientHistoryForm() {
             />
             <div className="w-full border-2 rounded-[5px] border-gray-400">
               <Select
+                value={inputs.durationUnit ? { value: inputs.durationUnit, label: inputs.durationUnit } : null}
                 options={durationUnits.map((unit) => ({
                   value: unit,
                   label: unit,
@@ -268,6 +293,7 @@ export default function PatientHistoryForm() {
           <div className="flex items-center space-x-4">
             <div className="w-full  border-2 rounded-[5px] border-gray-400">
               <Select
+                value={inputs.cause ? { value: inputs.cause, label: inputs.cause } : null}
                 options={causes.map((unit) => ({
                   value: unit,
                   label: unit,
@@ -278,6 +304,7 @@ export default function PatientHistoryForm() {
               />
             </div>
             <input
+              value={inputs.jerkOn}
               type={"text"}
               placeholder={`Jerk on`}
               onChange={(e) => handleChange("jerkOn", e.target.value)}
@@ -296,6 +323,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">Patient did take Xray/MRI on</span>
         <input
+          value={inputs.imaging}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
@@ -303,6 +331,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">which shows </span>
         <input
+          value={inputs.imagingReason}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
@@ -318,6 +347,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">Patient went to ER/Urgent care on </span>
         <input
+          value={inputs.careon}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
@@ -325,6 +355,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">Due to</span>
         <input
+          value={inputs.careonReason}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
@@ -340,6 +371,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">Patient has taken </span>
         <Select
+          value={inputs.treatment ? { value: inputs.treatment, label: inputs.treatment } : ""}
           options={["injection", "chiropractic treatment", "Physical or Occupational Therapy "].map((unit) => ({
             value: unit,
             label: unit,
@@ -350,6 +382,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">on</span>
         <input
+          value={inputs.treatmentType}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
@@ -357,6 +390,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">which helped</span>
         <input
+          value={inputs.treatmentEffect}
           type="text"
           placeholder=""
           className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
