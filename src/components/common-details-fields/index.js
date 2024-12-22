@@ -30,7 +30,7 @@ export default function CommonDetailsFields() {
   const dispatch = useDispatch();
   const dxValues = useSelector((state) => state.form.formData.DX || []);
   const pmhValues = useSelector((state) => state.form.formData.pmh || []);
-  const formData = useSelector((state) => state.form.formData || [""]);
+  const formData = useSelector((state) => state.form.formData || {});
   const [open, setOpen] = React.useState(false);
   const [selectedDXOptions, setSelectedDXOptions] = useState([]);
   const [selectedPMHoptions, setSelectedPMHOptions] = useState([]);

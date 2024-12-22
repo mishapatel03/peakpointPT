@@ -35,7 +35,13 @@ const initialState = {
         pmh: [],
         psh: "",
         subjective: "",
-        painScale: ""
+        painScale: "",
+        coordinate: "",
+        sensation: "",
+        skin: "",
+        pulse: "",
+        girth: "",
+        jointMobsValues: []
     },
     errors: {},
 };

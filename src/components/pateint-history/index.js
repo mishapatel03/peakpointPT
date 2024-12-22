@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 export default function PatientHistory() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const formData = useSelector((state) => state.form.formData || [""]);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);

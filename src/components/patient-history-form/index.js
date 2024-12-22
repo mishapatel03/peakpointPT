@@ -33,7 +33,7 @@ export default function PatientHistoryForm() {
     line5: false,
     line6: false
   });
-  const formData = useSelector((state) => state.form.formData || []);
+  const formData = useSelector((state) => state.form.formData || {});
   const [sentence, setSentence] = useState("");
   const [isEditing, setIsEditing] = useState(false); // Track manual editing
 

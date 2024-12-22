@@ -22,9 +22,9 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
     workToDo: "",
     hhaActivity: ""
   });
-  const [isExpanded, setIsExpanded] = useState(false); // Manage expand/collapse
+  const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useDispatch();
-  const formData = useSelector((state) => state.form.formData || []);
+  const formData = useSelector((state) => state.form.formData || {});
 
   const generateMainSentence = () => {
     if (inputs.age && inputs.gender && inputs.buildingType) {
