@@ -29,7 +29,13 @@ const initialState = {
         jerkOn: "",
         treatment: "",
         treatmentType: "",
-        treatmentEffect: ""
+        treatmentEffect: "",
+        allergies: "",
+        medications: "",
+        pmh: [],
+        psh: "",
+        subjective: "",
+        painScale: ""
     },
     errors: {},
 };

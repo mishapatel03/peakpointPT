@@ -2,98 +2,89 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Select from "react-select";
 import Checkbox from "@mui/material/Checkbox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFormField } from "../../slices/formSlice";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState(null);
-  const [buildingType, setBuildingType] = useState(null);
-  const [stairs, setStairs] = useState("");
-  const [workAs, setWorkAs] = useState("");
-  const [workCondition, setWorkCondition] = useState("");
-  const [hhaActivity, setHhaActivity] = useState("");
   const [generatedText, setGeneratedText] = useState("");
   const [checkedStates, setCheckedStates] = useState({
     stairs: false,
     work: false,
     hha: false,
   });
+  const [inputs, setInputs] = useState({
+    age: "",
+    gender: "",
+    buildingType: "",
+    stairs: "",
+    workProfession: "",
+    workToDo: "",
+    hhaActivity: ""
+  });
   const [isExpanded, setIsExpanded] = useState(false); // Manage expand/collapse
   const dispatch = useDispatch();
+  const formData = useSelector((state) => state.form.formData || []);
 
   const generateMainSentence = () => {
-    if (age && gender && buildingType) {
-      return `Patient is ${age} years old ${gender.value} who lives in ${buildingType.value}.`;
+    if (inputs.age && inputs.gender && inputs.buildingType) {
+      return `Patient is ${inputs.age} years old ${inputs.gender} who lives in ${inputs.buildingType}.`;
     }
     return "";
   };
 
+  useEffect(() => {
+    setInputs((prev) => ({
+      ...prev,
+      age: formData?.age || "",
+      gender: formData?.gender || "",
+      buildingType: formData?.buildingType || "",
+      stairs: formData?.stairs || "",
+      workProfession: formData?.workProfession || "",
+      workToDo: formData?.workToDo || "",
+      hhaActivity: formData?.hhaActivity || ""
+    }));
+  }, [formData])
+
+
   const updateGeneratedText = () => {
     const sentences = [];
-    if (checkedStates.stairs && stairs) {
-      sentences.push(`Patient has ${stairs} stairs to reach the apt.`);
+    if (checkedStates.stairs && inputs.stairs) {
+      sentences.push(`Patient has ${inputs.stairs} stairs to reach the apt.`);
     }
-    if (checkedStates.work && workAs && workCondition) {
-      sentences.push(`Patient works as ${workAs} and has to ${workCondition}.`);
+    if (checkedStates.work && inputs.workProfession && inputs.workToDo) {
+      sentences.push(`Patient works as ${inputs.workProfession} and has to ${inputs.workToDo}.`);
     }
-    if (checkedStates.hha && hhaActivity) {
+    if (checkedStates.hha && inputs.hhaActivity) {
       sentences.push(
-        `Patient has HHA, who helps with some functional activities, like ${hhaActivity}.`
+        `Patient has HHA, who helps with some functional activities, like ${inputs.hhaActivity}.`
       );
     }
     setGeneratedText(`${generateMainSentence()} ${sentences.join(" ")}`.trim());
   };
 
-  const handleInputChange = (field, value, key) => {
-    switch (key) {
-      case "stairs":
-        setStairs(value);
-        setCheckedStates((prev) => ({ ...prev, stairs: Boolean(value) }));
-        break;
-      case "workAs":
-        setWorkAs(value);
-        setCheckedStates((prev) => ({
-          ...prev,
-          work: Boolean(value && workCondition),
-        }));
-        break;
-      case "workCondition":
-        setWorkCondition(value);
-        setCheckedStates((prev) => ({
-          ...prev,
-          work: Boolean(workAs && value),
-        }));
-        break;
-      case "hhaActivity":
-        setHhaActivity(value);
-        setCheckedStates((prev) => ({ ...prev, hha: Boolean(value) }));
-        break;
-      default:
-        break;
-    }
-  };
+  const handleInputChange = (field, value) => {
+    setInputs((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    dispatch(setFormField({ field: field, value: value || "" }));
+  }
 
   const handleCheckboxChange = (key, checked) => {
     setCheckedStates((prev) => ({ ...prev, [key]: checked }));
   };
 
-  // Update generatedText whenever relevant fields change
   useEffect(() => {
+    setCheckedStates((prev) => ({
+      ...prev,
+      stairs: !!inputs.stairs,
+      work: !!inputs.workProfession || !!inputs.workToDo,
+      hha: !!inputs.hhaActivity,
+    }));
     updateGeneratedText();
-  }, [
-    age,
-    gender,
-    buildingType,
-    stairs,
-    workAs,
-    workCondition,
-    hhaActivity,
-    checkedStates,
-  ]);
+  }, [inputs]);
 
-  // Automatically save generatedText to form field whenever it changes
   useEffect(() => {
     if (generatedText) {
       dispatch(setFormField({ field: "social", value: generatedText }));
@@ -106,7 +97,6 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
 
   return (
     <>
-      {/* Header with toggle button */}
       <div className="flex items-center space-x-2">
         <button
           type="button"
@@ -132,16 +122,16 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
               variant="standard"
               type="number"
               className="w-32"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={inputs.age}
+              onChange={(e) => handleInputChange("age", e.target.value)}
             />
             <div className="border-2 rounded-[5px] border-gray-400">
               <Select
                 name="gender"
                 options={GENDER}
                 placeholder="Select Gender"
-                value={gender}
-                onChange={(selectedOption) => setGender(selectedOption)}
+                value={inputs.gender ? { value: inputs.gender, label: inputs.gender } : null}
+                onChange={(selectedOption) => handleInputChange("gender", selectedOption?.value)}
               />
             </div>
             <div className="border-2 rounded-[5px] border-gray-400">
@@ -149,8 +139,8 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
                 name="buildingType"
                 options={HTYPE}
                 placeholder="Select Building"
-                value={buildingType}
-                onChange={(selectedOption) => setBuildingType(selectedOption)}
+                value={inputs.buildingType ? { value: inputs.buildingType, label: inputs.buildingType } : null}
+                onChange={(selectedOption) => handleInputChange("buildingType", selectedOption?.value)}
               />
             </div>
           </div>
@@ -166,15 +156,64 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
               <span>Patient has</span>
               <input
                 type="number"
-                value={stairs}
+                value={inputs.stairs}
                 onChange={(e) =>
-                  handleInputChange("stairs", e.target.value, "stairs")
+                  handleInputChange("stairs", e.target.value)
                 }
                 className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
               />
               <span>stairs to reach the apt.</span>
             </div>
-            {/* Other form fields */}
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                checked={checkedStates.work}
+                onChange={(e) =>
+                  handleCheckboxChange("work", e.target.checked)
+                }
+              />
+              <span>Patient works as</span>
+              <input
+                type="text"
+                value={inputs.workProfession}
+                onChange={(e) =>
+                  handleInputChange("workProfession", e.target.value)
+                }
+                className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+              />
+              <span>and has to</span>
+              <input
+                type="text"
+                value={inputs.workToDo}
+                onChange={(e) =>
+                  handleInputChange("workToDo", e.target.value)
+                }
+                className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+              />
+            </div>
+
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                checked={checkedStates.hha}
+                onChange={(e) =>
+                  handleCheckboxChange("hhaActivity", e.target.checked)
+                }
+              />
+              <span>Patient has HHA, who helps with some functional activities, like</span>
+              <input
+                type="text"
+                value={inputs.hhaActivity}
+                onChange={(e) =>
+                  handleInputChange("hhaActivity", e.target.value)
+                }
+                className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+              />
+            </div>
           </div>
 
           <div className="pt-4">

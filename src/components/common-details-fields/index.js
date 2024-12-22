@@ -25,19 +25,22 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function CommonDetailsFields() {
   const dispatch = useDispatch();
   const dxValues = useSelector((state) => state.form.formData.DX || []);
+  const pmhValues = useSelector((state) => state.form.formData.pmh || []);
   const formData = useSelector((state) => state.form.formData || [""]);
   const [open, setOpen] = React.useState(false);
   const [selectedDXOptions, setSelectedDXOptions] = useState([]);
   const [selectedPMHoptions, setSelectedPMHOptions] = useState([]);
   const [inputs, setInputs] = useState({
-    allergies: null,
-    medications: null,
-    psh: null,
+    allergies: "",
+    medications: "",
+    psh: "",
+    testResults: "",
+    subjective: "",
+    painScale: ""
   });
 
   const handleClose = () => setOpen(false);
@@ -46,7 +49,19 @@ export default function CommonDetailsFields() {
     if (dxValues.length === 0) {
       setSelectedDXOptions([]);
     }
-  }, [dxValues]);
+    if (pmhValues.length === 0) {
+      setSelectedPMHOptions([]);
+    }
+    setInputs((prev) => ({
+      ...prev,
+      allergies: formData?.allergies || "",
+      medications: formData?.medications || "",
+      psh: formData?.psh || "",
+      testResults: formData?.testResults || "",
+      subjective: formData?.subjective || "",
+      painScale: formData?.painScale || ""
+    }));
+  }, [dxValues, formData, pmhValues]);
 
   const handleDXChange = (selected) => {
     setSelectedDXOptions(selected);
@@ -96,6 +111,7 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2 ">Allergies</div>
             <input
+              value={inputs.allergies}
               type={"text"}
               placeholder={`Enter Allergies`}
               onChange={(e) => handleChange("allergies", e.target.value)}
@@ -105,6 +121,7 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2 ">Medications</div>
             <input
+              value={inputs.medications}
               type={"text"}
               placeholder={`Enter Medication`}
               onChange={(e) => handleChange("medications", e.target.value)}
@@ -128,6 +145,7 @@ export default function CommonDetailsFields() {
           <div>
             <div className="text-lg font-bold mb-2">PSH</div>
             <input
+              value={inputs.psh}
               type={"text"}
               placeholder={`Enter PSH`}
               onChange={(e) => handleChange("psh", e.target.value)}
@@ -143,24 +161,25 @@ export default function CommonDetailsFields() {
               HTYPE={HTYPE}
             />
           </div>
-          {/* <div className="mt-2 text-lg">{formData?.social}</div> */}
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="mt-5">
             <div className="text-lg font-bold mb-2">Test Results</div>
             <input
+              value={inputs.testResults}
               type={"text"}
               placeholder={`Enter Test results`}
-              onChange={(e) => handleChange("testResults", e)}
+              onChange={(e) => handleChange("testResults", e.target.value)}
               className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
           <div className="mt-5">
             <div className="text-lg font-bold mb-2 ">Subjective</div>
             <input
+              value={inputs.subjective}
               type={"text"}
               placeholder={`Enter subjective`}
-              onChange={(e) => handleChange("subjective", e)}
+              onChange={(e) => handleChange("subjective", e.target.value)}
               className="input border-2 rounded-[5px border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
@@ -169,9 +188,10 @@ export default function CommonDetailsFields() {
               Pain scale: None 0-1-2-3-4-5-6-7-8-9-10 Worst
             </div>
             <input
+              value={inputs.painScale}
               type={"text"}
               placeholder={`Enter Scale`}
-              onChange={(e) => handleChange("subjective", e)}
+              onChange={(e) => handleChange("painScale", e.target.value)}
               className="input border-2 rounded-[5px border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
