@@ -29,8 +29,8 @@ export default function BasicForm() {
     <React.Fragment>
       <div data-theme="light">
         <AppHeader />
-        <div className="flex h-[87vh]">
-          <div className="mt-5 mx-20 flex-1 p-5 overflow-y-auto relative bg-white text-black">
+        <div className="flex h-[87vh] bg-gray-200">
+          <div className="mt-7 mx-20 flex-1 p-5 overflow-y-auto relative text-black">
             <HeaderFields />
             <CommonDetailsFields />
             <ObjectiveFormFields />
@@ -63,7 +63,7 @@ export default function BasicForm() {
             </div>
           </div>
           {isPreviewVisible && (
-            <div className="mt-5 mx-10 flex-1 p-5 overflow-y-auto relative bg-gray-300">
+            <div className="mt-7 mx-10 flex-1 p-5 overflow-y-auto relative bg-gray-300">
               <div className="flex justify-end mb-2.5">
                 <button
                   type="button"

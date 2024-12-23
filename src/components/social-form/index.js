@@ -114,7 +114,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
         className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
           }`}
       >
-        <div className="w-full max-w-4xl bg-white rounded-lg p-4">
+        <div className="w-full max-w-4xl bg-white p-4">
           <div className="text-lg font-bold mt-2">Patient Info :</div>
           <div className="grid pb-4 grid-cols-1 md:grid-cols-4 gap-4 items-center">
             <TextField
@@ -125,7 +125,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
               value={inputs.age}
               onChange={(e) => handleInputChange("age", e.target.value)}
             />
-            <div className="border-2 rounded-[5px] border-gray-400">
+            <div className="border-2 rounded-[5px] ">
               <Select
                 name="gender"
                 options={GENDER}
@@ -134,7 +134,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
                 onChange={(selectedOption) => handleInputChange("gender", selectedOption?.value)}
               />
             </div>
-            <div className="border-2 rounded-[5px] border-gray-400">
+            <div className="border-2 rounded-[5px] ">
               <Select
                 name="buildingType"
                 options={HTYPE}
@@ -220,7 +220,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             <strong>Generated Sentence:</strong>
             <textarea
               value={generatedText}
-              className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
+              className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] "
               onChange={(e) => setGeneratedText(e.target.value)}
               placeholder="Generated sentence will appear here"
               style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}

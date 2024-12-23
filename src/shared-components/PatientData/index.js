@@ -262,7 +262,7 @@ export default function PatientData({ data }) {
       <Page style={styles.page}>
         <View style={styles.container}>
           <View style={styles.headerSection}>
-            <Text>{data.address}</Text>
+            <Text>{data.address?.value}</Text>
             {/* <Text>{data.header.address}</Text>
             <Text>{data.header.contact}</Text> */}
           </View>

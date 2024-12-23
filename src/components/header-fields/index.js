@@ -15,13 +15,13 @@ export default function HeaderFields() {
 
   return (
     <React.Fragment>
-      <div className="flex flex-col mt-4 mb-4 p-5 border border-2 border-gray-950 bg-gray-200 rounded-md">
+      <div className="flex flex-col mt-4 mb-4 p-5 bg-white shadow-lg rounded-md">
         <div className="rounded-lg w-full">
           <div className="mt-2 w-full">
             <div className="text-lg font-bold -mb-2">
               Clinic's address
             </div>
-            <div className="w-full mt-5">
+            <div className="w-full mt-7">
               <Select
                 value={formData.address}
                 onChange={(value) => handleChange(value, "address")}
@@ -32,10 +32,10 @@ export default function HeaderFields() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-5">
+          <div className="grid grid-cols-2 gap-4 mt-7">
             <div>
               <p className="text-lg font-bold -mb-2">Name</p>
-              <div className="mt-5">
+              <div className="mt-7">
                 <TextInput
                   type={"text"}
                   placeholder={`Enter Patient's Name`}
@@ -49,7 +49,7 @@ export default function HeaderFields() {
             </div>
             <div>
               <p className="text-lg font-bold -mb-2">Date of birth</p>
-              <div className="mt-5">
+              <div className="mt-7">
                 <TextInput
                   type={"date"}
                   placeholder={"Select a DOB"}

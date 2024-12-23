@@ -86,10 +86,10 @@ export default function CommonDetailsFields() {
   return (
     <React.Fragment>
       <div className="mb-4">
-        <div className="mt-5">
+        <div className="mt-7">
           <div className="text-lg font-bold mb-2 ">DX</div>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            <div className="items-center border-2 rounded-[5px] border-gray-400">
+            <div className="items-center border-2 rounded-[5px]">
               <CreatableSelect
                 isMulti
                 placeholder={"Select or Add new DX"}
@@ -103,11 +103,11 @@ export default function CommonDetailsFields() {
             </div>
           </div>
         </div>
-        <div className="mt-5 border-2 rounded-lg p-4 border-gray-400">
+        <div className="mt-7 border-2 rounded-lg p-4 bg-white shadow-md">
           <PatientHistory />
           {/* // <div className="mt-2 text-lg">{formData?.patientHistoryValue}</div> */}
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-5">
+        <div className="grid grid-cols-4 gap-4 mt-7">
           <div>
             <div className="text-lg font-bold mb-2 ">Allergies</div>
             <input
@@ -115,7 +115,7 @@ export default function CommonDetailsFields() {
               type={"text"}
               placeholder={`Enter Allergies`}
               onChange={(e) => handleChange("allergies", e.target.value)}
-              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px]  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
           <div>
@@ -125,12 +125,12 @@ export default function CommonDetailsFields() {
               type={"text"}
               placeholder={`Enter Medication`}
               onChange={(e) => handleChange("medications", e.target.value)}
-              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px]  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
           <div>
             <div className="text-lg font-bold mb-2  ">PMH</div>
-            <div className="w-full  border-2 rounded-[5px] border-gray-400">
+            <div className="w-full  border-2 rounded-[5px]">
               <CreatableSelect
                 value={selectedPMHoptions}
                 onChange={handlePMHChange}
@@ -149,12 +149,12 @@ export default function CommonDetailsFields() {
               type={"text"}
               placeholder={`Enter PSH`}
               onChange={(e) => handleChange("psh", e.target.value)}
-              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px]  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
         </div>
-        <div className="mt-5">
-          <div className="mt-5 border rounded-lg p-4 border-gray-400 border-2 rounded-[5px]">
+        <div className="mt-7 bg-white">
+          <div className="mt-7  p-4 shadow-md">
             <SocialForm
               handleClose={handleClose}
               GENDER={GENDER}
@@ -163,27 +163,27 @@ export default function CommonDetailsFields() {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <div className="mt-5">
+          <div className="mt-7">
             <div className="text-lg font-bold mb-2">Test Results</div>
             <input
               value={inputs.testResults}
               type={"text"}
               placeholder={`Enter Test results`}
               onChange={(e) => handleChange("testResults", e.target.value)}
-              className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px]  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
-          <div className="mt-5">
+          <div className="mt-7">
             <div className="text-lg font-bold mb-2 ">Subjective</div>
             <input
               value={inputs.subjective}
               type={"text"}
               placeholder={`Enter subjective`}
               onChange={(e) => handleChange("subjective", e.target.value)}
-              className="input border-2 rounded-[5px border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
-          <div className="mt-5">
+          <div className="mt-7">
             <div className="text-lg font-bold mb-2 ">
               Pain scale: None 0-1-2-3-4-5-6-7-8-9-10 Worst
             </div>
@@ -192,7 +192,7 @@ export default function CommonDetailsFields() {
               type={"text"}
               placeholder={`Enter Scale`}
               onChange={(e) => handleChange("painScale", e.target.value)}
-              className="input border-2 rounded-[5px border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
         </div>

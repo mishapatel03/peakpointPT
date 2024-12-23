@@ -174,29 +174,29 @@ export default function ObjectiveFormFields() {
     return (
         <React.Fragment>
             <div className="text-xl font-bold bg-gray-200 p-2 rounded-[5px]">OBJECTIVE</div>
-            <div className='mt-5'>
+            <div className='mt-7'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
                     options={gait.map((part) => ({ value: part, label: part }))}
                 />
             </div>
 
-            <div className='mt-5'>
+            <div className='mt-7'>
                 <div className="text-lg font-bold ">Posture</div>
                 <textarea
-                    className="mt-2 bg-gray-100 p-4 rounded-md border-gray-400 border-2 rounded-[5px]"
+                    className="mt-2 bg-gray-100 p-4 rounded-md  border-2 rounded-[5px]"
                     value={inputs.posture}
                     placeholder={`Enter Posture details`}
                     onChange={(e) => handleInputFieldChange("posture", e.target.value)}
                     style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                 />
             </div>
-            <div className="mt-5 border rounded-lg p-4 border-gray-400 border-2 rounded-[5px]">
-                <div className="text-lg font-bold">AROM / ACTIVE MVMT</div>
+            <div className="bg-white mt-7 shadow-mg p-4 border-2 rounded-[5px]">
+                <div className="text-lg font-bold">Arom / Active Movement</div>
                 <div className="grid grid-cols-3 gap-4">
                     {Array.from({ length: 3 }).map((_, index) => (
                         <div key={index} className="space-y-4">
-                            <div className="border-2 rounded-[5px] border-gray-400">
+                            <div className="border-2 rounded-[5px] ">
                                 <Select
                                     value={options.find((option) => option.value === selectedValues[index]) || null}
                                     isClearable={true}
@@ -239,7 +239,7 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-5">
+            <div className="grid grid-cols-2 gap-4 mt-7">
                 <div>
                     <div className="text-lg font-bold">Joint mobs</div>
                     <div className="bg-gray-100 p-4 rounded-md">
@@ -349,8 +349,8 @@ export default function ObjectiveFormFields() {
             </div>
 
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">COORDINATION / BALANCE</div>
+            <div className='mt-7'>
+                <div className="text-lg font-bold ">Co-ordination / Balance</div>
                 <div className=''>
                     <textarea
                         className="mt-2 bg-gray-100 p-4 rounded-md"
@@ -362,17 +362,17 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-5'>
-                <div className="text-lg font-bold ">REFLEXES</div>
+            <div className='mt-7'>
+                <div className="text-lg font-bold ">Reflexes</div>
                 <div className=''>
                     Intact
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-5">
+            <div className="grid grid-cols-2 gap-2 mt-7">
 
-                <div className='mt-5'>
-                    <div className="text-lg font-bold ">SENSATION</div>
+                <div className='mt-7'>
+                    <div className="text-lg font-bold ">Sensation</div>
                     <div className=''>
                         <textarea
                             className="mt-2 bg-gray-100 p-4 rounded-md"
@@ -384,7 +384,7 @@ export default function ObjectiveFormFields() {
                     </div>
                 </div>
 
-                <div className='mt-5'>
+                <div className='mt-7'>
                     <div className="text-lg font-bold ">SKIN</div>
                     <div className=''>
                         <textarea
@@ -398,7 +398,7 @@ export default function ObjectiveFormFields() {
                 </div>
 
                 <div>
-                    <div className="text-lg font-bold ">PULSES</div>
+                    <div className="text-lg font-bold ">Pulses</div>
                     <div className=''>
                         <textarea
                             className="mt-2 bg-gray-100 p-4 rounded-md"
@@ -411,7 +411,7 @@ export default function ObjectiveFormFields() {
                 </div>
 
                 <div>
-                    <div className="text-lg font-bold ">GIRTH</div>
+                    <div className="text-lg font-bold ">Girth</div>
                     <div className=''>
                         <textarea
                             className="mt-2 bg-gray-100 p-4 rounded-md"
@@ -424,11 +424,11 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-5'>
-                <div className='grid grid-cols-2 gap-4 mt-5'>
+            <div className='mt-7'>
+                <div className='grid grid-cols-2 gap-4 mt-7'>
 
                     <div className='grid grid-cols-1 items-center gap-4'>
-                        <div className="text-lg font-bold ">PHYSICIAN CERTIFICATION</div>
+                        <div className="text-lg font-bold ">Physician Certification</div>
                         <TextInput
                             type={'date'}
                             placeholder={`Enter Posture details`}
@@ -436,11 +436,12 @@ export default function ObjectiveFormFields() {
                         />
                     </div>
                     <div className='grid grid-cols-1 items-center gap-4'>
-                        <div className="text-lg font-bold ">THERAPIST'S SIGNATURE</div>
+                        <div className="text-lg font-bold ">Therapist's Signature</div>
                         <TextInput
                             type={'date'}
                             placeholder={`Enter Posture details`}
                             inputBox={TEXT_INPUT}
+                            className="bg-white"
                         />
                     </div>
                 </div>
