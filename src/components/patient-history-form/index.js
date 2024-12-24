@@ -35,7 +35,7 @@ export default function PatientHistoryForm() {
   });
   const formData = useSelector((state) => state.form.formData || {});
   const [sentence, setSentence] = useState("");
-  const [isEditing, setIsEditing] = useState(false); // Track manual editing
+  const [additionalComment, setAdditionalComment] = useState("");
 
   const fieldToCheckboxMap = {
     line1: ["bodyParts", "symptoms", "radiatingArea"],
@@ -125,10 +125,8 @@ export default function PatientHistoryForm() {
   }, [sentence]);
 
   useEffect(() => {
-    if (!isEditing) {
-      generateSentence();
-    }
-  }, [inputs, checkboxes]);
+    generateSentence();
+  }, [inputs, checkboxes, additionalComment]);
 
   const handleCheckboxChange = (line) => {
     setCheckboxes((prev) => {
@@ -198,7 +196,7 @@ export default function PatientHistoryForm() {
         }, which has helped ${treatmentEffect || "___"}. `;
     }
 
-    setSentence(sentence.trim());
+    setSentence(sentence.trim() + additionalComment.trim());
   };
 
   const customSelectStyles = {
@@ -415,21 +413,18 @@ export default function PatientHistoryForm() {
       </div>
 
       {/* Display Sentence */}
-      <div className="pt-4">
-        <strong>Generated Sentence:</strong>
+      <div>
+        <p className="text-lg font-medium">Additional Comments</p>
         <textarea
-          className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
-          value={sentence}
-          onChange={(e) => {
-            setIsEditing(true); // Enable manual editing
-            setSentence(e.target.value); // Update the state with the new value
-          }}
-          onBlur={() => {
-            setIsEditing(false);
-          }}
+          onChange={(e) => setAdditionalComment(e.target.value)}
+          className="bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
           placeholder="Generated sentence will appear here"
-          style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+          style={{ width: "100%", minHeight: "50px" }}
         />
+      </div>
+      <div className="">
+        <strong>Generated Sentence:</strong>
+        <p className="mt-2">{sentence}</p>
       </div>
     </div>
   );

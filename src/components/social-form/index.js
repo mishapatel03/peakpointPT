@@ -25,6 +25,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.form.formData || {});
+  const [additionalComment, setAdditionalComment] = useState("");
 
   const generateMainSentence = () => {
     if (inputs.age && inputs.gender && inputs.buildingType) {
@@ -60,7 +61,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
         `Patient has HHA, who helps with some functional activities, like ${inputs.hhaActivity}.`
       );
     }
-    setGeneratedText(`${generateMainSentence()} ${sentences.join(" ")}`.trim());
+    setGeneratedText(`${generateMainSentence()} ${sentences.join(" ")}`.trim() + additionalComment.trim());
   };
 
   const handleInputChange = (field, value) => {
@@ -83,7 +84,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
       hha: !!inputs.hhaActivity,
     }));
     updateGeneratedText();
-  }, [inputs]);
+  }, [inputs, additionalComment]);
 
   useEffect(() => {
     if (generatedText) {
@@ -216,15 +217,18 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             </div>
           </div>
 
-          <div className="pt-4">
-            <strong>Generated Sentence:</strong>
+          <div className="mt-2">
+            <p className="text-lg font-medium">Additional Comments</p>
             <textarea
-              value={generatedText}
-              className="mt-2 bg-gray-100 p-4 rounded-md border-2 rounded-[5px] "
-              onChange={(e) => setGeneratedText(e.target.value)}
+              onChange={(e) => setAdditionalComment(e.target.value)}
+              className="bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
               placeholder="Generated sentence will appear here"
-              style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+              style={{ width: "100%", minHeight: "50px" }}
             />
+          </div>
+          <div className="mt-2">
+            <strong>Generated Sentence:</strong>
+            <p className="mt-2">{generatedText}</p>
           </div>
         </div>
       </div>

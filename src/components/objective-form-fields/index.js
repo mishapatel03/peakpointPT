@@ -30,6 +30,7 @@ export default function ObjectiveFormFields() {
     const dispatch = useDispatch();
     const formAllData = useSelector((state) => state.form.formData || {});
     const bodyParts = useSelector((state) => state.form.formData.bodyParts || []);
+    const currentJointMobsValues = useSelector((state) => state.form.formData.jointMobsValues || []);
     const symptoms = useSelector((state) => state.form.formData.symptoms || []);
     const [grades, setGrades] = useState({});
     const [sensation, setSensation] = useState("");
@@ -149,6 +150,22 @@ export default function ObjectiveFormFields() {
         }));
     };
 
+    const handleJointMobsChange = (bodyPart, value) => {
+        let sentenceVal = "";
+        if (["C2-7", "L2-5", "Mid back"].includes(bodyPart)) {
+            sentenceVal = `PA ${bodyPart} Grade ${value} > pain and guarded`;
+        } else {
+            sentenceVal = `All glides ${bodyPart} Grade ${value} > pain and guarded`;
+        }
+        const updatedJointMobsValues = currentJointMobsValues.filter(
+            (sentence) => !sentence.includes(bodyPart)
+        );
+        updatedJointMobsValues.push(sentenceVal);
+        dispatch(setFormField({ field: "jointMobsValues", value: updatedJointMobsValues }));
+    };
+
+
+
     const handleInputChange = (bodyPart, movement, value) => {
         setFormData((prev) => {
             const updatedFormData = {
@@ -250,26 +267,26 @@ export default function ObjectiveFormFields() {
                                         <p>
                                             {["C2-7", "L2-5", "Mid back"].includes(details) ? (
                                                 <>
-                                                    All glides {details} Grade{" "}
-                                                    <input
-                                                        type="text"
-                                                        placeholder=""
-                                                        className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-                                                        onChange={(e) =>
-                                                            handleInputChange(details, e.target.value)
-                                                        }
-                                                    />
-                                                    &nbsp; &gt; pain and guarded
-                                                </>
-                                            ) : (
-                                                <>
                                                     PA {details} Grade{" "}
                                                     <input
                                                         type="text"
                                                         placeholder=""
                                                         className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
                                                         onChange={(e) =>
-                                                            handleInputChange(details, e.target.value)
+                                                            handleJointMobsChange(details, e.target.value)
+                                                        }
+                                                    />
+                                                    &nbsp; &gt; pain and guarded
+                                                </>
+                                            ) : (
+                                                <>
+                                                    All glides {details} Grade{" "}
+                                                    <input
+                                                        type="text"
+                                                        placeholder=""
+                                                        className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                        onChange={(e) =>
+                                                            handleJointMobsChange(details, e.target.value)
                                                         }
                                                     />
                                                     &nbsp; &gt; pain and guarded
