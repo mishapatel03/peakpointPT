@@ -45,6 +45,9 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
       workToDo: formData?.workToDo || "",
       hhaActivity: formData?.hhaActivity || ""
     }));
+    if (formData?.social == "") {
+      setAdditionalComment("");
+    }
   }, [formData])
 
 
@@ -220,6 +223,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
           <div className="mt-2">
             <p className="text-lg font-medium">Additional Comments</p>
             <textarea
+              value={additionalComment}
               onChange={(e) => setAdditionalComment(e.target.value)}
               className="bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
               placeholder="Generated sentence will appear here"

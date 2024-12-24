@@ -76,6 +76,9 @@ export default function PatientHistoryForm() {
       treatmentType: formData?.treatmentType || "",
       treatmentEffect: formData?.treatmentEffect || "",
     }));
+    if (formData?.patientHistoryValue == "") {
+      setAdditionalComment("");
+    }
     setCheckboxes((prev) => {
       const updatedCheckboxes = { ...prev };
       Object.keys(fieldToCheckboxMap).forEach((checkboxKey) => {
@@ -416,6 +419,7 @@ export default function PatientHistoryForm() {
       <div>
         <p className="text-lg font-medium">Additional Comments</p>
         <textarea
+          value={additionalComment}
           onChange={(e) => setAdditionalComment(e.target.value)}
           className="bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
           placeholder="Generated sentence will appear here"
