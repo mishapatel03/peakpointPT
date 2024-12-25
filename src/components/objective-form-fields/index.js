@@ -70,7 +70,7 @@ export default function ObjectiveFormFields() {
     useEffect(() => {
         setInputs((prev) => ({
             ...prev,
-            gait: formAllData?.gait || "",
+            gait: formAllData?.gait?.value || "",
             posture: formAllData?.posture || "",
             coordinate: formAllData?.coordinate || "",
             sensation: formAllData?.sensation || "",
@@ -194,7 +194,10 @@ export default function ObjectiveFormFields() {
             <div className='mt-7'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
+                    value={formAllData.gait}
+                    onChange={(e) => handleInputFieldChange("gait", e)}
                     options={gait.map((part) => ({ value: part, label: part }))}
+                    placeholder="Please select.."
                 />
             </div>
 
@@ -370,10 +373,10 @@ export default function ObjectiveFormFields() {
                 <div className="text-lg font-bold ">Co-ordination / Balance</div>
                 <div className=''>
                     <textarea
+                        placeholder="Add something..."
                         className="mt-2 bg-gray-100 p-4 rounded-md"
                         value={inputs.coordinate}
                         onChange={(e) => handleInputFieldChange("coordinate", e.target.value)}
-                        placeholder=""
                         style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                     />
                 </div>
@@ -395,7 +398,7 @@ export default function ObjectiveFormFields() {
                             className="mt-2 bg-gray-100 p-4 rounded-md"
                             value={inputs.sensation}
                             onChange={(e) => handleInputFieldChange("sensation", e.target.value)}
-                            placeholder=""
+                            placeholder="Add something..."
                             style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
                     </div>
@@ -408,7 +411,7 @@ export default function ObjectiveFormFields() {
                             className="mt-2 bg-gray-100 p-4 rounded-md"
                             value={inputs.skin}
                             onChange={(e) => handleInputFieldChange("skin", e.target.value)}
-                            placeholder=""
+                            placeholder="Add something..."
                             style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
                     </div>
@@ -421,7 +424,7 @@ export default function ObjectiveFormFields() {
                             className="mt-2 bg-gray-100 p-4 rounded-md"
                             value={inputs.pulse}
                             onChange={(e) => handleInputFieldChange("pulse", e.target.value)}
-                            placeholder=""
+                            placeholder="Add something..."
                             style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
                     </div>
@@ -434,7 +437,7 @@ export default function ObjectiveFormFields() {
                             className="mt-2 bg-gray-100 p-4 rounded-md"
                             value={inputs.girth}
                             onChange={(e) => handleInputFieldChange("girth", e.target.value)}
-                            placeholder=""
+                            placeholder="Add something..."
                             style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
                         />
                     </div>

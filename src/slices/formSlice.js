@@ -19,6 +19,7 @@ const initialState = {
         social: "",
         testResults: "",
         arom: {},
+        gait: "",
         DX: [],
         symptoms: [],
         radiatingArea: "",

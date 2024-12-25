@@ -216,6 +216,9 @@ export default function PatientData({ data }) {
     aromtext: {
       fontSize: 9,
     },
+    observationHeader: {
+      marginLeft: 80
+    }
   });
 
   const test = {
@@ -339,9 +342,8 @@ export default function PatientData({ data }) {
                 {data.pmh?.length > 0
                   ? data.pmh.length === 1
                     ? data.pmh[0]
-                    : `${data.pmh.slice(0, -1).join(", ")} and ${
-                        data.pmh[data.pmh.length - 1]
-                      }`
+                    : `${data.pmh.slice(0, -1).join(", ")} and ${data.pmh[data.pmh.length - 1]
+                    }`
                   : ""}
               </Text>
             </View>
@@ -387,6 +389,33 @@ export default function PatientData({ data }) {
 
           <View style={styles.row}>
             <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>PAIN SCALE:</Text>
+            </View>
+            {/* <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.subjective}</Text>
+            </View> */}
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>OBSERVATION   Gait:</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.gait?.value}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.observationHeader}>Posture : </Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.posture}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
               <Text style={styles.headerText}>AROM / ACTIVE MVMT :</Text>
             </View>
           </View>
@@ -397,9 +426,7 @@ export default function PatientData({ data }) {
               </View>
             ))}
           </View>
-          {/* Table Rows */}
 
-          {/* Table Rows */}
           {Array.from({ length: maxFields }).map((_, rowIndex) => (
             <View style={styles.cellAromRow} key={rowIndex}>
               {filledData.map((item, index) => {
@@ -414,6 +441,143 @@ export default function PatientData({ data }) {
               })}
             </View>
           ))}
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>JOINT MOBS</Text>
+            </View>
+            <View style={styles.cell}>
+              {data.jointMobsValues.length > 0 && (
+                <Text style={styles.cellText}>
+                  {data.jointMobsValues.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <Text>{item}</Text>
+                      {index < data.jointMobsValues.length - 1 && (
+                        <Text style={{ fontWeight: "bold" }}> AND </Text>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </Text>
+              )}
+            </View>
+          </View>
+
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>STRENGTH</Text>
+            </View>
+            <View style={styles.cell}>
+              {data.strengthValues.length > 0 && (
+                <Text style={styles.cellText}>
+                  {data.strengthValues.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <Text>{item}</Text>
+                      {index < data.strengthValues.length - 1 && (
+                        <Text style={{ fontWeight: "bold" }}> AND </Text>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>PALPATION</Text>
+            </View>
+            <View style={styles.cell}>
+              {data.palpationValues.length > 0 && (
+                <Text style={styles.cellText}>
+                  {data.palpationValues.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <Text>{item}</Text>
+                      {index < data.palpationValues.length - 1 && (
+                        <Text style={{ fontWeight: "bold" }}> AND </Text>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>TONE</Text>
+            </View>
+            <View style={styles.cell}>
+              {data.palpationValues.length > 0 && (
+                <Text style={styles.cellText}>
+                  {data.palpationValues.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <Text>{item}</Text>
+                      {index < data.palpationValues.length - 1 && (
+                        <Text style={{ fontWeight: "bold" }}> AND </Text>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>COORDINATION / BALANCE</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.coordinate}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>REFLEXES</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>Intact</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>SENSATION</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.sensation}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>SKIN</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.skin}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>PULSES</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.pulse}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>GIRTH</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.girth}</Text>
+            </View>
+          </View>
+
+
         </View>
 
         {/* Pain Scale Section */}
