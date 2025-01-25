@@ -194,6 +194,7 @@ export default function ObjectiveFormFields() {
             <div className='mt-7'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
+                    isClearable={true}
                     value={formAllData.gait}
                     onChange={(e) => handleInputFieldChange("gait", e)}
                     options={gait.map((part) => ({ value: part, label: part }))}

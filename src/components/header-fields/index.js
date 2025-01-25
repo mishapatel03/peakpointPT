@@ -23,6 +23,7 @@ export default function HeaderFields() {
             </div>
             <div className="w-full mt-7">
               <Select
+                isClearable={true}
                 value={formData.address}
                 onChange={(value) => handleChange(value, "address")}
                 options={address.map((part) => ({ value: part, label: part }))}

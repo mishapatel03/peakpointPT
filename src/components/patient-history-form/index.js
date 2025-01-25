@@ -170,7 +170,7 @@ export default function PatientHistoryForm() {
           : `${symptoms.slice(0, -1).join(", ")} and ${symptoms[symptoms.length - 1]}`
         : "___";
 
-      sentence += `Patient presents with ${bodyPartsText} ${radiatingArea ? `along with radiating to ${radiatingArea}` : ""
+      sentence += `Patient presents with pain in ${bodyPartsText} ${radiatingArea ? `along with radiating symptoms to ${radiatingArea}` : ""
         } with ${symptomsPartsText}. `;
     }
 
@@ -222,10 +222,11 @@ export default function PatientHistoryForm() {
           checked={checkboxes.line1}
           onChange={() => handleCheckboxChange("line1")}
         />
-        <span className="text-lg font-medium">Patient presents with:</span>
+        <span className="text-lg font-medium">Patient presents with pain in :</span>
         <div className="grid grid-cols-2 gap-4 mt-2">
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
+              isClearable={true}
               isMulti={true}
               value={inputs.bodyParts.map((item) => ({ value: item, label: item }))}
               options={bodyParts.map((part) => ({ value: part, label: part }))}
@@ -236,6 +237,7 @@ export default function PatientHistoryForm() {
           </div>
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
+              isClearable={true}
               value={inputs.radiatingArea ? { value: inputs.radiatingArea, label: inputs.radiatingArea } : null}
               options={radiatingAreas.map((area) => ({
                 value: area,
@@ -250,6 +252,7 @@ export default function PatientHistoryForm() {
           </div>
           <div className="border-2 rounded-[5px] border-gray-400">
             <Select
+              isClearable={true}
               value={inputs.symptoms.map((item) => ({ value: item, label: item }))}
               options={symptoms.map((symptom) => ({
                 value: symptom,
@@ -283,6 +286,7 @@ export default function PatientHistoryForm() {
             />
             <div className="w-full border-2 rounded-[5px] border-gray-400">
               <Select
+                isClearable={true}
                 value={inputs.durationUnit ? { value: inputs.durationUnit, label: inputs.durationUnit } : null}
                 options={durationUnits.map((unit) => ({
                   value: unit,
@@ -310,6 +314,7 @@ export default function PatientHistoryForm() {
           <div className="flex items-center space-x-4">
             <div className="w-full  border-2 rounded-[5px] border-gray-400">
               <Select
+                isClearable={true}
                 value={inputs.cause ? { value: inputs.cause, label: inputs.cause } : null}
                 options={causes.map((unit) => ({
                   value: unit,
@@ -388,6 +393,7 @@ export default function PatientHistoryForm() {
         />
         <span className="text-lg">Patient has taken </span>
         <Select
+          isClearable={true}
           value={inputs.treatment ? { value: inputs.treatment, label: inputs.treatment } : ""}
           options={["injection", "chiropractic treatment", "Physical or Occupational Therapy "].map((unit) => ({
             value: unit,

@@ -131,6 +131,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             />
             <div className="border-2 rounded-[5px] ">
               <Select
+                isClearable={true}
                 name="gender"
                 options={GENDER}
                 placeholder="Select Gender"
@@ -140,6 +141,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             </div>
             <div className="border-2 rounded-[5px] ">
               <Select
+                isClearable={true}
                 name="buildingType"
                 options={HTYPE}
                 placeholder="Select Building"
