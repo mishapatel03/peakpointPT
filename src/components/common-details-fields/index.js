@@ -91,7 +91,7 @@ export default function CommonDetailsFields() {
 
     try {
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyCL-5IPyRV2h0ONoDyJgNo4-NWqrLUpHAo",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+process.env.REACT_APP_GEMINI_API_KEY,
         {
           contents: [
             {
