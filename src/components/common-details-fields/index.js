@@ -6,7 +6,7 @@ import { TEXT_AREA, TEXT_INPUT } from "../../constants";
 import TextInput from "../../shared-components/TextInput";
 import Checkbox from "@mui/material/Checkbox";
 import Modal from "@mui/material/Modal";
-import { FaPencil } from "react-icons/fa6";
+import { FaLightbulb, FaMicrochip, FaPencil, FaRobot } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import PatientHistory from "../pateint-history";
 import CreatableSelect from "react-select/creatable";
 import { setFormField } from "../../slices/formSlice";
 import SocialForm from "../social-form";
+import axios from "axios";
 const style = {
   position: "absolute",
   top: "50%",
@@ -40,9 +41,11 @@ export default function CommonDetailsFields() {
     psh: "",
     testResults: "",
     subjective: "",
-    painScale: ""
+    painScale: "",
   });
 
+  const [correctedText, setCorrectedText] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export default function CommonDetailsFields() {
       psh: formData?.psh || "",
       testResults: formData?.testResults || "",
       subjective: formData?.subjective || "",
-      painScale: formData?.painScale || ""
+      painScale: formData?.painScale || "",
     }));
   }, [dxValues, formData, pmhValues]);
 
@@ -81,6 +84,48 @@ export default function CommonDetailsFields() {
       [field]: value,
     }));
     dispatch(setFormField({ field, value }));
+  };
+
+  const checkGrammar = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyCL-5IPyRV2h0ONoDyJgNo4-NWqrLUpHAo",
+        {
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Paraphrase the following sentence with correct grammar: ${inputs.subjective}`,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const field = "subjective";
+      const value =
+        response?.data.candidates[0]?.content?.parts[0]?.text.trim();
+      setInputs((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+      dispatch(setFormField({ field, value }));
+      setCorrectedText(
+        response?.data.candidates[0]?.content?.parts[0]?.text.trim()
+      );
+    } catch (error) {
+      console.error("Error correcting grammar:", error);
+      setCorrectedText("Error: Unable to correct grammar.");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -136,7 +181,10 @@ export default function CommonDetailsFields() {
                 onChange={handlePMHChange}
                 isMulti
                 name="colors"
-                options={PMH.map((option) => ({ label: option, value: option }))}
+                options={PMH.map((option) => ({
+                  label: option,
+                  value: option,
+                }))}
                 className="max-w-lg basic-multi-select"
                 classNamePrefix="select"
               />
@@ -174,13 +222,19 @@ export default function CommonDetailsFields() {
             />
           </div>
           <div className="mt-7">
-            <div className="text-lg font-bold mb-2 ">Subjective</div>
+            <div className="flex items-center text-lg font-bold mb-2">
+              <span>Subjective</span>
+              <span className="cursor-pointer text-gray-600 hover:text-black ml-2">
+                <FaLightbulb size={15} onClick={checkGrammar} title="AI Assistance" />
+              </span>
+            </div>
+
             <input
               value={inputs.subjective}
-              type={"text"}
-              placeholder={`Enter subjective`}
+              type="text"
+              placeholder="Enter subjective"
               onChange={(e) => handleChange("subjective", e.target.value)}
-              className="input border-2 rounded-[5px  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+              className="input border-2 rounded-[5px] bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
           <div className="mt-7">
@@ -197,11 +251,9 @@ export default function CommonDetailsFields() {
           </div>
         </div>
       </div>
-      {
-        open && (
-          <SocialForm handleClose={handleClose} GENDER={GENDER} HTYPE={HTYPE} />
-        )
-      }
+      {open && (
+        <SocialForm handleClose={handleClose} GENDER={GENDER} HTYPE={HTYPE} />
+      )}
     </React.Fragment>
   );
 }

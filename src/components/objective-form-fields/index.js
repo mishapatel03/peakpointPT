@@ -445,7 +445,7 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-7'>
+            <div className='mt-7 mb-2'>
                 <div className='grid grid-cols-2 gap-4 mt-7'>
 
                     <div className='grid grid-cols-1 items-center gap-4'>
