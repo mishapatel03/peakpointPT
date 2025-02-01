@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { TextField } from "@mui/material";
-import { DX, GENDER, HTYPE, PMH } from "../../constants/data";
+import { DX, GENDER, HTYPE, PMH, testResults } from "../../constants/data";
 import { TEXT_AREA, TEXT_INPUT } from "../../constants";
 import TextInput from "../../shared-components/TextInput";
 import Checkbox from "@mui/material/Checkbox";
@@ -35,6 +35,7 @@ export default function CommonDetailsFields() {
   const [open, setOpen] = React.useState(false);
   const [selectedDXOptions, setSelectedDXOptions] = useState([]);
   const [selectedPMHoptions, setSelectedPMHOptions] = useState([]);
+  const [isChange, setChange] = useState(false);
   const [inputs, setInputs] = useState({
     allergies: "",
     medications: "",
@@ -68,6 +69,7 @@ export default function CommonDetailsFields() {
 
   const handleDXChange = (selected) => {
     setSelectedDXOptions(selected);
+    setChange(true)
     const formattedValues = selected.map((option) => option.value);
     dispatch(setFormField({ field: "DX", value: formattedValues }));
   };
@@ -86,12 +88,32 @@ export default function CommonDetailsFields() {
     dispatch(setFormField({ field, value }));
   };
 
+  const handleSelectChange = (selectedOption) => {
+    handleChange("testResults", selectedOption ? { label: selectedOption.label, value: selectedOption.label } : null);
+  };
+
+  const CustomOption = (props) => {
+    const { data, innerRef, innerProps } = props;
+    return (
+      <div
+        ref={innerRef}
+        {...innerProps}
+        style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px", cursor: "pointer" }}
+      >
+        <span>{data.label}</span>
+        <a href={data.value} target="_blank" rel="noopener noreferrer" style={{ fontSize: "12px", color: "blue", textDecoration: "underline" }} onClick={(e) => e.stopPropagation()}>
+          Open
+        </a>
+      </div>
+    );
+  };
+
   const checkGrammar = async () => {
     setLoading(true);
 
     try {
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+process.env.REACT_APP_GEMINI_API_KEY,
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.REACT_APP_GEMINI_API_KEY,
         {
           contents: [
             {
@@ -145,6 +167,7 @@ export default function CommonDetailsFields() {
                 value={selectedDXOptions}
                 onChange={handleDXChange}
               />
+              {selectedDXOptions && selectedDXOptions.length < 2 && isChange && (<p style={{ color: "red" }}>Please select at least 2 DX</p>)}
             </div>
           </div>
         </div>
@@ -213,30 +236,18 @@ export default function CommonDetailsFields() {
         <div className="grid grid-cols-3 gap-4">
           <div className="mt-7">
             <div className="text-lg font-bold mb-2">Test Results</div>
-            <input
-              value={inputs.testResults}
-              type={"text"}
-              placeholder={`Enter Test results`}
-              onChange={(e) => handleChange("testResults", e.target.value)}
-              className="input border-2 rounded-[5px]  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
-            />
-          </div>
-          <div className="mt-7">
-            <div className="flex items-center text-lg font-bold mb-2">
-              <span>Subjective</span>
-              <span className="cursor-pointer text-gray-600 hover:text-black ml-2">
-                <FaLightbulb size={15} onClick={checkGrammar} title="AI Assistance" />
-              </span>
-            </div>
 
-            <input
-              value={inputs.subjective}
-              type="text"
-              placeholder="Enter subjective"
-              onChange={(e) => handleChange("subjective", e.target.value)}
-              className="input border-2 rounded-[5px] bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
+            <Select
+              value={formData.testResults}
+              isClearable={true}
+              onChange={handleSelectChange}
+              options={testResults}
+              placeholder="Please select.."
+              components={{ Option: CustomOption }}
+              getOptionLabel={(e) => e.label}
             />
           </div>
+
           <div className="mt-7">
             <div className="text-lg font-bold mb-2 ">
               Pain scale: None 0-1-2-3-4-5-6-7-8-9-10 Worst
@@ -249,6 +260,22 @@ export default function CommonDetailsFields() {
               className="input border-2 rounded-[5px  bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
             />
           </div>
+        </div>
+        <div className="mt-7">
+          <div className="flex items-center text-lg font-bold">
+            <span>Subjective</span>
+            <span className="cursor-pointer text-gray-600 hover:text-black ml-2">
+              <FaLightbulb size={15} onClick={checkGrammar} title="AI Assistance" />
+            </span>
+          </div>
+          <textarea
+            value={inputs.subjective}
+            type="text"
+            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+            placeholder="Enter subjective"
+            onChange={(e) => handleChange("subjective", e.target.value)}
+            className="bg-white p-4 rounded-md  border-2 rounded-[5px]"
+          />
         </div>
       </div>
       {open && (

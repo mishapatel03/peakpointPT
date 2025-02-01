@@ -24,11 +24,14 @@ export default function HeaderFields() {
             <div className="w-full mt-7">
               <Select
                 isClearable={true}
-                value={formData.address}
                 onChange={(value) => handleChange(value, "address")}
-                options={address.map((part) => ({ value: part, label: part }))}
+                options={address.map((addr) => ({
+                  value: addr,
+                  label: `${addr.clinicName}, ${addr.addressLine1}, ${addr.addressLine2} Tel: ${addr.tel} Fax: ${addr.fax}`
+                }))}
                 placeholder="Select Clinic's Address"
               />
+
               {errors && errors.address && <span className="text-red-500">{errors.address}</span>}
             </div>
           </div>

@@ -162,17 +162,16 @@ export default function PatientData({ data }) {
       justifyContent: "center",
     },
     cellArom: {
-      flex: 1, // Each cell will take an equal portion of the row's width
-      alignItems: "center", // Center-align the text horizontally
-      justifyContent: "flex-start", // Align text to the top
-      paddingHorizontal: 10, // Add some padding to the left and right
+      flex: 1,
+      alignItems: "flex-start", // Align content to the left
+      paddingHorizontal: 10,
     },
     cellAromText: {
       fontSize: 10,
       padding: 2,
     },
     cellAromTextValue: {
-      textAlign: "center", // Center-align values
+      textAlign: "left", // Align text to the left
       fontSize: 10,
       padding: 2,
     },
@@ -184,11 +183,10 @@ export default function PatientData({ data }) {
       //borderRightWidth: 1
     },
     cellAromRow: {
-      flexDirection: "row", // Arrange items in a row
-      justifyContent: "space-between", // Distribute space evenly across the row
-      alignItems: "center", // Vertically align items in the center
+      flexDirection: "row",
       borderBottomWidth: 1,
       borderColor: "#000",
+      paddingVertical: 5,
     },
     cellText: {
       textAlign: "left",
@@ -265,9 +263,11 @@ export default function PatientData({ data }) {
       <Page style={styles.page}>
         <View style={styles.container}>
           <View style={styles.headerSection}>
-            <Text>{data.address?.value}</Text>
-            {/* <Text>{data.header.address}</Text>
-            <Text>{data.header.contact}</Text> */}
+            <Text>{data.address?.value?.clinicName}</Text>
+            <Text>{data.address?.value?.addressLine1}</Text>
+            <Text>{data.address?.value?.addressLine2}</Text>
+            <Text>Tel. {data.address?.value?.tel}</Text>
+            <Text>Fax. {data.address?.value?.fax}</Text>
           </View>
 
           <View style={styles.divider} />
@@ -372,7 +372,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>TEST RESULTS:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.testResults}</Text>
+              <Text style={styles.cellText}>{data.testResults?.value}</Text>
             </View>
           </View>
 
@@ -391,9 +391,9 @@ export default function PatientData({ data }) {
             <View style={styles.cellHeader}>
               <Text style={styles.headerText}>PAIN SCALE:</Text>
             </View>
-            {/* <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.subjective}</Text>
-            </View> */}
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.painScale}</Text>
+            </View>
           </View>
 
           <View style={styles.row}>
@@ -401,7 +401,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>OBSERVATION   Gait:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.gait?.value}</Text>
+              <Text style={styles.cellText}>{data.gait?.value || data.gait}</Text>
             </View>
           </View>
 
@@ -419,6 +419,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>AROM / ACTIVE MVMT :</Text>
             </View>
           </View>
+
           <View style={styles.cellAromRow}>
             {keysWithFields.map((key, index) => (
               <View style={styles.cellArom} key={index}>
@@ -434,7 +435,7 @@ export default function PatientData({ data }) {
                 return (
                   <View style={styles.cellArom} key={index}>
                     <Text style={styles.cellAromTextValue}>
-                      {field ? `${field[0]}: ${field[1]}` : ""}
+                      {field ? `${field[0]} ${field[1]}` : ""}
                     </Text>
                   </View>
                 );

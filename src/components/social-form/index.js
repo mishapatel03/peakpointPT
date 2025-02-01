@@ -54,17 +54,17 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   const updateGeneratedText = () => {
     const sentences = [];
     if (checkedStates.stairs && inputs.stairs) {
-      sentences.push(`Patient has ${inputs.stairs} stairs to reach the apt.`);
+      sentences.push(`Patient has ${inputs.stairs} stairs to reach the ${inputs.buildingType || "apartment"}.`);
     }
     if (checkedStates.work && inputs.workProfession && inputs.workToDo) {
       sentences.push(`Patient works as ${inputs.workProfession} and has to ${inputs.workToDo}.`);
     }
     if (checkedStates.hha && inputs.hhaActivity) {
       sentences.push(
-        `Patient has HHA, who helps with some functional activities, like ${inputs.hhaActivity}.`
+        `Patient has HHA, who helps with some activities, like ${inputs.hhaActivity}.`
       );
     }
-    setGeneratedText(`${generateMainSentence()} ${sentences.join(" ")}`.trim() + additionalComment.trim());
+    setGeneratedText(`${generateMainSentence()} ${sentences.join(" ")}`.trim() + " " + additionalComment.trim());
   };
 
   const handleInputChange = (field, value) => {
@@ -115,7 +115,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
 
       {/* Animated form container */}
       <div
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        className={`transition-all duration-500 ease-in-out overflow-scroll ${isExpanded ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
           }`}
       >
         <div className="w-full max-w-4xl bg-white p-4">
@@ -168,7 +168,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
                 }
                 className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
               />
-              <span>stairs to reach the apt.</span>
+              <span>stairs to reach the {inputs.buildingType || "apartment"}.</span>
             </div>
           </div>
 
@@ -210,7 +210,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
                   handleCheckboxChange("hhaActivity", e.target.checked)
                 }
               />
-              <span>Patient has HHA, who helps with some functional activities, like</span>
+              <span>Patient has HHA, who helps with some activities, like</span>
               <input
                 type="text"
                 value={inputs.hhaActivity}

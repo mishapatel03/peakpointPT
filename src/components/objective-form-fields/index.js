@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { MVMT, arom, balance, bodyPartConfig, days, duration, functionalStatus, gait, goals, palpation, specialTest, stregthDetails, testResult, yesNo } from '../../constants/data'
+import { bodyPartConfig, gait, palpation, posture, stregthDetails } from '../../constants/data'
 import Select from "react-select";
-import { TEXT_AREA, TEXT_INPUT } from '../../constants';
+import { TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
-import { TextField, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { setFormField } from '../../slices/formSlice';
-import { FaPlus, FaMinus } from "react-icons/fa6";
 import { bodyPartDetails } from "../../constants/data"
 
 const options = [
@@ -14,7 +12,8 @@ const options = [
     { value: "LB", label: "LB" },
     { value: "Lumbar spine", label: "Lumbar spine" },
     { value: "Toes", label: "Toes" },
-    { value: "Shoulder", label: "Shoulder" },
+    { value: "Left shoulder", label: "Left shoulder" },
+    { value: "Right shoulder", label: "Right shoulder" },
     { value: "Neck", label: "Neck" },
     { value: "Cervical spine", label: "Cervical spine" },
     { value: "Thoracic spine", label: "Thoracic spine" },
@@ -37,8 +36,7 @@ export default function ObjectiveFormFields() {
     const [strengthValues, setStrengthValues] = useState([]);
     const [palpationValues, setPalpationValues] = useState([]);
     const [inputs, setInputs] = useState({
-        gait: "",
-        posture: "Forward head, Round shoulder, ??",
+        posture: "",
         coordinate: "Static balance: Good? \n If ICD 10 has Gait abnormality, it should also come here Dynamic balance: ??",
         sensation: "",
         skin: "",
@@ -59,7 +57,8 @@ export default function ObjectiveFormFields() {
         "Thoracic spine": {},
         "Finger": {},
         "Toes": {},
-        "Shoulder": {},
+        "Left shoulder": {},
+        "Right shoulder": {},
         "Hip": {},
         "Knee": {},
         "Elbow": {},
@@ -139,8 +138,29 @@ export default function ObjectiveFormFields() {
         dispatch(setFormField({ field, value }));
     };
 
+    const handleGaitinput = (field, value) => {
+        setInputs((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+        dispatch(setFormField({ field, value }));
+    }
+
     const handleChange = (index, selected) => {
-        setSelectedValues((prev) => ({ ...prev, [index]: selected?.value || null }));
+        const previousValue = selectedValues[index]; // Get the previously selected body part
+        const newSelectedValues = { ...selectedValues, [index]: selected?.value || null };
+
+        // If a body part was previously selected and is now being removed, delete it from formData
+        if (previousValue && !selected) {
+            setFormData((prev) => {
+                const updatedFormData = { ...prev };
+                delete updatedFormData[previousValue]; // Remove the body part from formData
+                dispatch(setFormField({ field: "arom", value: updatedFormData })); // Update Redux store
+                return updatedFormData;
+            });
+        }
+        console.log("selected", newSelectedValues);
+        setSelectedValues(newSelectedValues);
     };
 
     const handleGradeInputChange = (bodyPart, value) => {
@@ -194,22 +214,34 @@ export default function ObjectiveFormFields() {
             <div className='mt-7'>
                 <div className="text-lg font-bold ">Gait</div>
                 <Select
+                    className='mt-2'
                     isClearable={true}
-                    value={formAllData.gait}
-                    onChange={(e) => handleInputFieldChange("gait", e)}
+                    onChange={(e) => handleGaitinput("gait", e)}
                     options={gait.map((part) => ({ value: part, label: part }))}
                     placeholder="Please select.."
                 />
+
+                <div className="mt-2">
+                    <strong>Generated Sentence:</strong>
+                    <textarea
+                        className="mt-2 bg-white p-4 rounded-md  border-2 rounded-[5px]"
+                        value={inputs.gait?.value}
+                        placeholder={`Enter Posture details`}
+                        onChange={(e) => handleGaitinput("gait", e.target.value)}
+                        style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                    />
+                </div>
             </div>
 
             <div className='mt-7'>
                 <div className="text-lg font-bold ">Posture</div>
-                <textarea
-                    className="mt-2 bg-gray-100 p-4 rounded-md  border-2 rounded-[5px]"
-                    value={inputs.posture}
-                    placeholder={`Enter Posture details`}
-                    onChange={(e) => handleInputFieldChange("posture", e.target.value)}
-                    style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                <Select
+                    isMulti={true}
+                    className='mt-2'
+                    isClearable={true}
+                    onChange={(e) => handleInputFieldChange("posture", e)}
+                    options={posture.map((part) => ({ value: part, label: part }))}
+                    placeholder="Please select.."
                 />
             </div>
             <div className="bg-white mt-7 shadow-mg p-4 border-2 rounded-[5px]">
@@ -225,36 +257,35 @@ export default function ObjectiveFormFields() {
                                     onChange={(selected) => handleChange(index, selected)}
                                     placeholder="Select Body Part"
                                 /></div>
-                            {selectedValues[index] &&
-                                bodyPartConfig[selectedValues[index]].map(({ movement, showPostfix, postfixVal }) => (
-                                    <div key={movement} className="flex items-center space-x-2">
-                                        <span className="text-lg font-medium">{movement}</span>
-                                        {showPostfix ? (
-                                            <>
-                                                <input
-                                                    type="number"
-                                                    onChange={(e) =>
-                                                        handleInputChange(
-                                                            selectedValues[index],
-                                                            movement,
-                                                            e.target.value + postfixVal
-                                                        )
-                                                    }
-                                                    className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-                                                />
-                                                <span className="text-lg font-medium">{postfixVal}</span>
-                                            </>
-                                        ) : (
+                            {selectedValues[index] && bodyPartConfig[selectedValues[index]]?.map(({ movement, showPostfix, postfixVal }) => (
+                                <div key={movement} className="flex items-center space-x-2">
+                                    <span className="text-lg font-medium">{movement}</span>
+                                    {showPostfix ? (
+                                        <>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 onChange={(e) =>
-                                                    handleInputChange(selectedValues[index], movement, e.target.value)
+                                                    handleInputChange(
+                                                        selectedValues[index],
+                                                        movement,
+                                                        e.target.value + postfixVal
+                                                    )
                                                 }
                                                 className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
                                             />
-                                        )}
-                                    </div>
-                                ))}
+                                            <span className="text-lg font-medium">{postfixVal}</span>
+                                        </>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            onChange={(e) =>
+                                                handleInputChange(selectedValues[index], movement, e.target.value)
+                                            }
+                                            className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                        />
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     ))}
                 </div>

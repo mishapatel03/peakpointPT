@@ -199,7 +199,7 @@ export default function PatientHistoryForm() {
         }, which has helped ${treatmentEffect || "___"}. `;
     }
 
-    setSentence(sentence.trim() + additionalComment.trim());
+    setSentence(sentence.trim() + " " +additionalComment.trim());
   };
 
   const customSelectStyles = {

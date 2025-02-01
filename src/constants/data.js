@@ -1,8 +1,27 @@
 export const address = [
-  "FIRST CLASS PHYSICAL THERAPY, PC 225 Broadway, Suite 1420,New York, NY 10007 Tel. (212) 571-5000,Fax (212) 571-5001",
-  "ABSOLUTE CARE PHYSICAL THERAPY GROUP, PLLC3065 Brighto",
-  "FIRST CLASS PHYSICAL THERAPY, PC 3514 Mermaid Ave., Suite 003,Brooklyn, NY 11224 Tel. (718) 996-1100,Fax (718) 676-9511",
+  {
+    clinicName: "PEAK POINT PHYSICAL THERAPY, PC",
+    addressLine1: "225 Broadway, Suite 1420",
+    addressLine2: "New York, NY 10007",
+    tel: "(212) 571-5000",
+    fax: "(212) 571-5001"
+  },
+  {
+    clinicName: "PEAK POINT PHYSICAL THERAPY, PC PLLC",
+    addressLine1: "3065 Brighton",
+    addressLine2: "", // No second address line provided
+    tel: "", // No contact details provided
+    fax: ""
+  },
+  {
+    clinicName: "PEAK POINT PHYSICAL THERAPY, PC",
+    addressLine1: "3514 Mermaid Avenue, Suite 003",
+    addressLine2: "Brooklyn, NY 11224",
+    tel: "(718) 996-1100",
+    fax: "(718) 676-9511"
+  }
 ];
+
 
 export const PMH = [
   'Hypertension', 'Asthma',
@@ -16,8 +35,15 @@ export const GENDER = [
 ]
 
 export const HTYPE = [
-  { label: "House", value: "House" },
-  { label: "Appartment", value: "Appartment" }
+  { label: "house", value: "house" },
+  { label: "apartment", value: "apartment" }
+]
+
+export const testResults = [
+  { label: "NDI", value: "https://orthopowertools.com/NDI" },
+  { label: "Oswestry", value: "https://orthotoolkit.com/oswestry/" },
+  { label: "LEFS", value: "https://orthopowertools.com/LEFS" },
+  { label: "QuickDASH", value: "https://orthopowertools.com/QUICKDASH" }
 ]
 
 export const DX = [
@@ -175,7 +201,7 @@ export const palpation = {
   "Left Wrist": "Hand muscles, Wrist flexors, Wrist extensors",
   "Right Wrist": "Hand muscles, Wrist flexors, Wrist extensors",
   "BL Wrist": "Hand muscles, Wrist flexors, Wrist extensors",
-  "Left Hip": "Iliopsoas, TFL, Gluteals", 
+  "Left Hip": "Iliopsoas, TFL, Gluteals",
   "Right Hip": "Iliopsoas, TFL, Gluteals",
   "BL Hip": "Iliopsoas, TFL, Gluteals",
   "Left Knee": "Quadriceps, ITB, Calf, Tib ant/post, Hamstrings",
@@ -187,17 +213,17 @@ export const palpation = {
 }
 
 const commonMovementsForSecA = [
-  { movement: "Flexion Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Extension Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Side Bending Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Rotation Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Flexion : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Extension : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Side Bending : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Rotation : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
 ];
 
 const commonMovementsForSecB = [
-  { movement: "Flexion Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Extension Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Abduction Reduced", showPostfix: true, postfixVal: "% > pain ^" },
-  { movement: "Aduction Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Flexion : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Extension : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Abduction : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
+  { movement: "Aduction : Reduced", showPostfix: true, postfixVal: "% > pain ^" },
 ]
 
 const commonMovementsForSecC = [
@@ -217,7 +243,8 @@ export const bodyPartConfig = {
   "Thoracic spine": commonMovementsForSecA,
   "Finger": commonMovementsForSecB,
   "Toes": commonMovementsForSecB,
-  "Shoulder": commonMovementsForSecC,
+  "Left shoulder": commonMovementsForSecC,
+  "Right shoulder": commonMovementsForSecC,
   "Hip": commonMovementsForSecC,
   "Knee": [
     { movement: "Flexion" },
@@ -250,6 +277,37 @@ export const gait = [
   "Not available to demonstrate"
 ];
 
+export const posture = [
+  "Increased lumbar lordotic curve",
+  "Increased cervical lordotic curve",
+  "Decreased thoracic kyphotic curve",
+  "Lordotic posture",
+  "Kypholordotic posture",
+  "Flat low back posture",
+  "Postural Scoliosis",
+  "Idiopathic scoliosis",
+  "Adolescent idiopathic scoliosis",
+  "Neuromuscular scoliosis",
+  "Anterior pelvic tilt",
+  "Shrugged shoulders",
+  "Increased thoracic kyphotic curve",
+  "Decreased cervical lordotic curve",
+  "Kyphotic posture",
+  "Slouched Posture",
+  "Flat upper back posture",
+  "Structural Scoliosis",
+  "Congenital scoliosis",
+  "Degenerative scoliosis",
+  "Kyphoscoliosis",
+  "Posterior pelvic tilt",
+  "Knee hyperextension",
+  "Protruded Head",
+  "Rounded shoulders",
+  "Unleveled shoulders",
+  "Lateral Tilt",
+  "Anterior Tilt"
+]
+
 export const arom = [
   "Neck",
   "LB",
@@ -259,7 +317,9 @@ export const arom = [
   "Thoracic spine",
   "Finger",
   "Toes",
-  "Shoulder", "Hip",
+  "Left shoulder",
+  "Right shoulder", 
+  "Hip",
   "Knee",
   "Elbow",
   "Ankle",
@@ -269,7 +329,7 @@ export const arom = [
 export const bodyPartDetails = {
   "Neck": "C2-7",
   "Lower Back": "L2-5",
-  "Mid Back" : "T7-12",
+  "Mid Back": "T7-12",
   "Left Finger": "MPJ, IPJ",
   "Right Finger": "MPJ, IPJ",
   "BL Finger": "MPJ, IPJ",
