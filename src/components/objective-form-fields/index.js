@@ -5,43 +5,32 @@ import { TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFormField } from '../../slices/formSlice';
-import { bodyPartDetails } from "../../constants/data"
-
-const options = [
-    { value: "Mid back", label: "Mid back" },
-    { value: "LB", label: "LB" },
-    { value: "Lumbar spine", label: "Lumbar spine" },
-    { value: "Toes", label: "Toes" },
-    { value: "Left shoulder", label: "Left shoulder" },
-    { value: "Right shoulder", label: "Right shoulder" },
-    { value: "Neck", label: "Neck" },
-    { value: "Cervical spine", label: "Cervical spine" },
-    { value: "Thoracic spine", label: "Thoracic spine" },
-    { value: "Finger", label: "Finger" },
-    { value: "Hip", label: "Hip" },
-    { value: "Knee", label: "Knee" },
-    { value: "Elbow", label: "Elbow" },
-    { value: "Ankle", label: "Ankle" },
-    { value: "Wrist", label: "Wrist" },
-];
+import { bodyPartDetails, PLAN_OPTIONS, options } from "../../constants/data"
+import GrammarCheckTextarea from '../../shared-components/AI-assitant/GrammarCheckTextarea';
 
 export default function ObjectiveFormFields() {
     const dispatch = useDispatch();
     const formAllData = useSelector((state) => state.form.formData || {});
     const bodyParts = useSelector((state) => state.form.formData.bodyParts || []);
     const currentJointMobsValues = useSelector((state) => state.form.formData.jointMobsValues || []);
-    const symptoms = useSelector((state) => state.form.formData.symptoms || []);
-    const [grades, setGrades] = useState({});
-    const [sensation, setSensation] = useState("");
-    const [strengthValues, setStrengthValues] = useState([]);
-    const [palpationValues, setPalpationValues] = useState([]);
+    const [strengthValues, setStrengthValues] = useState("");
+    const [palpationValues, setPalpationValues] = useState("");
+    const [toneValue, setToneValue] = useState("");
+    const selectedPlans = useSelector((state) => state.form.formData.plan || []);
+    const [checkedPlans, setCheckedPlans] = useState(selectedPlans);
+    const storedSignature = useSelector((state) => state.form.formData.therapistSignature || null);
+    const [preview, setPreview] = useState(storedSignature || "");
+    const [selectedParts, setSelectedParts] = useState({});
+    const [additionalComment, setAdditionalComment] = useState("");
+
     const [inputs, setInputs] = useState({
         posture: "",
         coordinate: "Static balance: Good? \n If ICD 10 has Gait abnormality, it should also come here Dynamic balance: ??",
         sensation: "",
         skin: "",
         pulse: "Normal",
-        girth: "Normal??"
+        girth: "Normal??",
+        assessment: ""
     });
     const [selectedValues, setSelectedValues] = useState({
         0: null,
@@ -87,29 +76,40 @@ export default function ObjectiveFormFields() {
         }
     }, [formAllData])
 
+    const handleFourValInput = (field, value) => {
+        switch (field) {
+            case "strengthValues":
+                setStrengthValues(value); // Update local state for strengthValues
+                break;
+            case "palpationValues":
+                setPalpationValues(value); // Update local state for palpationValues
+                break;
+            case "toneValue":
+                setToneValue(value); // Update local state for palpationValues
+                break;
+            default:
+                break;
+        }
+        dispatch(setFormField({ field, value })); // Update Redux store
+    };
+
     useEffect(() => {
         const uniqueStrengths = [
             ...new Set(bodyParts.map((bodyPart) => stregthDetails[bodyPart]).filter(Boolean)),
         ];
-        setStrengthValues(uniqueStrengths);
-        dispatch(setFormField({ field: "strengthValues", value: uniqueStrengths }));
+        setStrengthValues(uniqueStrengths.toString());
+        dispatch(setFormField({ field: "strengthValues", value: uniqueStrengths.toString() }));
 
         const uniquePalpations = [
             ...new Set(bodyParts.map((bodyPart) => palpation[bodyPart]).filter(Boolean)),
         ];
-        setPalpationValues(uniquePalpations);
-        dispatch(setFormField({ field: "palpationValues", value: uniquePalpations }));
+        setPalpationValues(uniquePalpations.toString());
+        dispatch(setFormField({ field: "palpationValues", value: uniquePalpations.toString() }));
+
+        setToneValue(uniquePalpations.toString());
+        dispatch(setFormField({ field: "toneValue", value: uniquePalpations.toString() }));
+
     }, [bodyParts, dispatch]);
-
-    useEffect(() => {
-        if (symptoms && symptoms.length && (symptoms.includes('tingling') || symptoms.includes('numbness'))) {
-            setSensation("radiating pain with numbness and tingling traveling down LLE");
-        }
-    }, [symptoms])
-
-    useEffect(() => {
-        setGrades({});
-    }, [bodyParts]);
 
     const normalizeKey = (key) => key.toLowerCase();
 
@@ -131,11 +131,26 @@ export default function ObjectiveFormFields() {
     );
 
     const handleInputFieldChange = (field, value) => {
+        let formattedValue = value;
+        if (field === "ptCertificate" && value) {
+            formattedValue = new Date(value).toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+            });
+        }
         setInputs((prev) => ({
             ...prev,
-            [field]: value,
+            [field]: formattedValue,
         }));
-        dispatch(setFormField({ field, value }));
+        dispatch(setFormField({ field, value: formattedValue }));
+    };
+
+    const handleJMCheckboxChange = (part) => {
+        setSelectedParts((prev) => ({
+            ...prev,
+            [part]: prev[part] ? null : "", // Toggle checkbox and reset grade if unchecked
+        }));
     };
 
     const handleGaitinput = (field, value) => {
@@ -163,13 +178,6 @@ export default function ObjectiveFormFields() {
         setSelectedValues(newSelectedValues);
     };
 
-    const handleGradeInputChange = (bodyPart, value) => {
-        setGrades((prevGrades) => ({
-            ...prevGrades,
-            [bodyPart]: value,
-        }));
-    };
-
     const handleJointMobsChange = (bodyPart, value) => {
         let sentenceVal = "";
         if (["C2-7", "L2-5", "Mid back"].includes(bodyPart)) {
@@ -184,7 +192,12 @@ export default function ObjectiveFormFields() {
         dispatch(setFormField({ field: "jointMobsValues", value: updatedJointMobsValues }));
     };
 
-
+    const handleJointMobsv2Change = (part, value) => {
+        setSelectedParts((prev) => ({
+            ...prev,
+            [part]: value,
+        }));
+    };
 
     const handleInputChange = (bodyPart, movement, value) => {
         setFormData((prev) => {
@@ -206,6 +219,37 @@ export default function ObjectiveFormFields() {
             dispatch(setFormField({ field: "arom", value: output }));
             return updatedFormData;
         });
+    };
+
+    const handleAdditionalComments = (comment) => {
+        setAdditionalComment(comment);
+    };
+
+    const handleBlur = () => {
+        const updatedJointMobsValues = [...currentJointMobsValues, additionalComment];
+        dispatch(setFormField({ field: "jointMobsValues", value: updatedJointMobsValues }));
+    };
+
+    const handleCheckboxChange = (plan) => {
+        let updatedPlans = checkedPlans.includes(plan)
+            ? checkedPlans.filter((item) => item !== plan)
+            : [...checkedPlans, plan];
+
+        setCheckedPlans(updatedPlans);
+        dispatch(setFormField({ field: "plan", value: updatedPlans }));
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const signatureData = reader.result;
+                setPreview(signatureData);
+                dispatch(setFormField({ field: "therapistSignature", value: signatureData })); // Save to Redux
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -291,64 +335,93 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-7">
-                <div>
-                    <div className="text-lg font-bold">Joint mobs</div>
-                    <div className="bg-gray-100 p-4 rounded-md">
-                        {bodyParts && bodyParts.length ? (
-                            <React.Fragment>
-                                {uniqueParts.map((details, index) => (
-                                    <div key={index} className="mb-2">
+
+            <div className='mt-4'>
+                <div className="text-lg font-bold">Joint mobs</div>
+                <div className="bg-gray-100 p-4 rounded-md">
+                    {bodyParts && bodyParts.length ? (
+                        <React.Fragment>
+                            {uniqueParts.map((details, index) => (
+                                <div key={index} className="mb-2">
+                                    <label className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={!!selectedParts[details]} // Check if the part is selected
+                                            onChange={() => handleJMCheckboxChange(details)}
+                                            className="mr-2"
+                                        />
                                         <p>
                                             {["C2-7", "L2-5", "Mid back"].includes(details) ? (
                                                 <>
                                                     PA {details} Grade{" "}
-                                                    <input
-                                                        type="text"
-                                                        placeholder=""
-                                                        className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-                                                        onChange={(e) =>
-                                                            handleJointMobsChange(details, e.target.value)
-                                                        }
-                                                    />
+                                                    {selectedParts[details] !== null && (
+                                                        <input
+                                                            type="text"
+                                                            placeholder=""
+                                                            className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                            value={selectedParts[details] || ""}
+                                                            onChange={(e) => {
+                                                                handleJointMobsChange(details, e.target.value); handleJointMobsv2Change(details, e.target.value)
+                                                            }
+
+                                                            }
+                                                        />
+                                                    )}
                                                     &nbsp; &gt; pain and guarded
                                                 </>
                                             ) : (
                                                 <>
                                                     All glides {details} Grade{" "}
-                                                    <input
-                                                        type="text"
-                                                        placeholder=""
-                                                        className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
-                                                        onChange={(e) =>
-                                                            handleJointMobsChange(details, e.target.value)
-                                                        }
-                                                    />
+                                                    {selectedParts[details] !== null && (
+                                                        <input
+                                                            type="text"
+                                                            placeholder=""
+                                                            className="w-40 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
+                                                            value={selectedParts[details] || ""}
+                                                            onChange={(e) => { handleJointMobsChange(details, e.target.value); handleJointMobsv2Change(details, e.target.value) }
+                                                            }
+                                                        />
+                                                    )}
                                                     &nbsp; &gt; pain and guarded
                                                 </>
                                             )}
                                         </p>
-                                    </div>
-                                ))}
-                            </React.Fragment>
-                        ) : (
-                            <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
-                                Please select any body part from the Patient History above.
-                            </div>
-                        )}
-                    </div>
+                                    </label>
+                                </div>
+                            ))}
+                        </React.Fragment>
+                    ) : (
+                        <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
+                            Please select any body part from the Patient History above.
+                        </div>
+                    )}
+
+                    <p className="text-lg font-medium">Additional Comments</p>
+                    <textarea
+                        value={additionalComment}
+                        onChange={(e) => handleAdditionalComments(e.target.value)}
+                        onBlur={handleBlur} // Add this line
+                        className="bg-white p-4 rounded-md border-2 rounded-[5px] border-gray-400"
+                        placeholder="Generated sentence will appear here"
+                        style={{ width: "100%", minHeight: "50px" }}
+                    />
+
                 </div>
 
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-7">
                 <div>
                     <div className="text-lg font-bold">Strength</div>
-                    <div className="bg-gray-100 p-4 rounded-md">
+                    <div className="rounded-md">
                         {bodyParts && bodyParts.length ? (
                             <React.Fragment>
-                                {strengthValues.map((strength, index) => (
-                                    <div key={index} className="mb-2">
-                                        <p>{strength}</p>
-                                    </div>
-                                ))}
+                                <textarea
+                                    className="bg-white p-4 rounded-md"
+                                    value={strengthValues}
+                                    onChange={(e) => handleFourValInput("strengthValues", e.target.value)}
+                                    placeholder="Add something..."
+                                    style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                                />
                             </React.Fragment>
                         ) : (
                             <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
@@ -361,14 +434,16 @@ export default function ObjectiveFormFields() {
 
                 <div>
                     <div className="text-lg font-bold">Palpation</div>
-                    <div className="bg-gray-100 p-4 rounded-md">
+                    <div className="rounded-md">
                         {bodyParts && bodyParts.length ? (
                             <React.Fragment>
-                                {palpationValues.map((palpationValue, index) => (
-                                    <div key={index} className="mb-2">
-                                        <p>{palpationValue}</p>
-                                    </div>
-                                ))}
+                                <textarea
+                                    className="bg-white p-3 rounded-md"
+                                    value={palpationValues}
+                                    onChange={(e) => handleFourValInput("palpationValues", e.target.value)}
+                                    placeholder="Add something..."
+                                    style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                                />
                             </React.Fragment>
                         ) : (
                             <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
@@ -381,14 +456,16 @@ export default function ObjectiveFormFields() {
 
                 <div>
                     <div className="text-lg font-bold">Tone</div>
-                    <div className="bg-gray-100 p-4 rounded-md">
+                    <div className="rounded-md">
                         {bodyParts && bodyParts.length ? (
                             <React.Fragment>
-                                {[...new Set(bodyParts.map((bodyPart) => palpation[bodyPart]))].map((toneValue, index) => (
-                                    <div key={index} className="mb-2">
-                                        <p>{toneValue}</p>
-                                    </div>
-                                ))}
+                                <textarea
+                                    className="bg-white p-3 rounded-md"
+                                    value={toneValue}
+                                    onChange={(e) => handleFourValInput("toneValue", e.target.value)}
+                                    placeholder="Add something..."
+                                    style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                                />
                             </React.Fragment>
                         ) : (
                             <div className="bg-gray-100 p-4 rounded text-center text-gray-500">
@@ -476,6 +553,33 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
+            <div className="mt-5">
+                <GrammarCheckTextarea
+                    value={inputs.assessment}
+                    onChange={handleInputFieldChange}
+                    placeholder="Assessment"
+                    fieldName="assessment"
+                />
+
+            </div>
+
+            <div className="mt-5">
+                <div className="text-lg font-bold">Plan</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-3">
+                    {PLAN_OPTIONS.map((plan, index) => (
+                        <label key={index} className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                checked={checkedPlans.includes(plan)}
+                                onChange={() => handleCheckboxChange(plan)}
+                                className="w-5 h-5"
+                            />
+                            <span>{plan}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
             <div className='mt-7 mb-2'>
                 <div className='grid grid-cols-2 gap-4 mt-7'>
 
@@ -483,18 +587,25 @@ export default function ObjectiveFormFields() {
                         <div className="text-lg font-bold ">Physician Certification</div>
                         <TextInput
                             type={'date'}
+                            onChange={(e) => handleInputFieldChange("ptCertificate", e)}
                             placeholder={`Enter Posture details`}
                             inputBox={TEXT_INPUT}
                         />
                     </div>
                     <div className='grid grid-cols-1 items-center gap-4'>
                         <div className="text-lg font-bold ">Therapist's Signature</div>
-                        <TextInput
-                            type={'date'}
-                            placeholder={`Enter Posture details`}
-                            inputBox={TEXT_INPUT}
-                            className="bg-white"
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="border p-2 rounded"
+                            onChange={handleFileChange}
                         />
+
+                        {preview && (
+                            <div className="mt-2">
+                                <img src={preview} alt="Therapist Signature" className="w-40 h-auto border rounded shadow" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

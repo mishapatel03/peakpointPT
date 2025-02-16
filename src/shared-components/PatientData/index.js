@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 
 export default function PatientData({ data }) {
   const dxRows = [];
@@ -7,11 +7,11 @@ export default function PatientData({ data }) {
     dxRows.push(data?.DX?.slice(i, i + 2));
   }
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
+  const therapistSignature = data.therapistSignature || null;
 
   const styles = StyleSheet.create({
+    signatureContainer: { marginTop: 20, textAlign: "center" },
+    signatureImage: { width: 120, height: 50 },
     container: {
       backgroundColor: "#e5e7eb",
       flexDirection: "row",
@@ -76,7 +76,6 @@ export default function PatientData({ data }) {
     },
     section: {
       marginBottom: 10,
-      borderBottom: "1px solid #eee",
       paddingBottom: 5,
     },
     row: {
@@ -216,7 +215,69 @@ export default function PatientData({ data }) {
     },
     observationHeader: {
       marginLeft: 80
-    }
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: "bold",
+      marginBottom: 5,
+      textDecoration: "underline",
+      textAlign: "center"
+    },
+    columnsContainer: {
+      marginLeft: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      flexWrap: "wrap"
+    },
+    column: {
+      width: "48%"
+    },
+    bulletPoint: {
+      marginBottom: 6,
+      textAlign: "left",
+      flexWrap: "wrap",
+      maxWidth: "100%"
+    },
+
+    s_table: {
+      width: "100%",
+    },
+    s_row: {
+      flexDirection: "row",
+    },
+    s_cell: {
+      borderRight: "1px solid black",
+      padding: 2,
+    },
+    s_headerCell: {
+      marginLeft: 5,
+      fontSize: 10,
+      fontWeight: "bold",
+    },
+    s_dateCell: {
+      flexDirection: "row",
+      alignItems: "center"
+    },
+    s_dateText: {
+      marginLeft: 5,
+      fontSize: 10,
+      fontWeight: "bold",
+      marginRight: 5,
+    },
+    s_dateLine: {
+      borderBottom: "1px solid black",
+      width: 50,
+      marginHorizontal: 3,
+    },
+    s_signatureContainer: {
+      height: 20,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    s_signatureImage: {
+      width: 100,
+      height: 40,
+    },
   });
 
   const test = {
@@ -255,6 +316,11 @@ export default function PatientData({ data }) {
   const keysWithFields = Object.keys(data.arom).filter(
     (key) => typeof data.arom[key] === "object" && Object.keys(data.arom[key]).length > 0
   );
+
+  const selectedPlans = data.plan || [];
+  const midIndex = Math.ceil(selectedPlans.length / 2);
+  const firstColumn = selectedPlans.slice(0, midIndex);
+  const secondColumn = selectedPlans.slice(midIndex);
 
   const getTodayDate = () => new Date().toISOString().split("T")[0];
 
@@ -469,18 +535,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>STRENGTH</Text>
             </View>
             <View style={styles.cell}>
-              {data.strengthValues.length > 0 && (
-                <Text style={styles.cellText}>
-                  {data.strengthValues.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <Text>{item}</Text>
-                      {index < data.strengthValues.length - 1 && (
-                        <Text style={{ fontWeight: "bold" }}> AND </Text>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </Text>
-              )}
+              <Text style={styles.cellText}>{data.strengthValues}</Text>
             </View>
           </View>
 
@@ -489,18 +544,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>PALPATION</Text>
             </View>
             <View style={styles.cell}>
-              {data.palpationValues.length > 0 && (
-                <Text style={styles.cellText}>
-                  {data.palpationValues.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <Text>{item}</Text>
-                      {index < data.palpationValues.length - 1 && (
-                        <Text style={{ fontWeight: "bold" }}> AND </Text>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </Text>
-              )}
+              <Text style={styles.cellText}>{data.palpationValues}</Text>
             </View>
           </View>
 
@@ -509,18 +553,7 @@ export default function PatientData({ data }) {
               <Text style={styles.headerText}>TONE</Text>
             </View>
             <View style={styles.cell}>
-              {data.palpationValues.length > 0 && (
-                <Text style={styles.cellText}>
-                  {data.palpationValues.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <Text>{item}</Text>
-                      {index < data.palpationValues.length - 1 && (
-                        <Text style={{ fontWeight: "bold" }}> AND </Text>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </Text>
-              )}
+              <Text style={styles.cellText}>{data.toneValue}</Text>
             </View>
           </View>
 
@@ -578,206 +611,72 @@ export default function PatientData({ data }) {
             </View>
           </View>
 
+          <View style={styles.row}>
+            <View style={styles.cellHeader}>
+              <Text style={styles.headerText}>ASSESSMENT</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={styles.cellText}>{data.assessment}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.section}>
+              <View style={styles.cellHeader}>
+                <Text style={styles.headerText}>PLAN</Text>
+              </View>
+              {selectedPlans.length > 0 && (
+                <View style={styles.columnsContainer}>
+
+                  <View style={styles.column}>
+                    {firstColumn.map((plan, index) => (
+                      <Text key={index} style={[styles.bulletPoint, styles.cellText]}>
+                        • {plan}
+                      </Text>
+                    ))}
+                  </View>
+                  <View style={styles.column}>
+                    {secondColumn.map((plan, index) => (
+                      <Text key={index} style={[styles.bulletPoint, styles.cellText]}>
+                        • {plan}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.s_table}>
+            {/* Header Row */}
+            <View style={styles.s_row}>
+              <View style={[styles.s_cell, { width: "50%" }]}>
+                <Text style={styles.s_headerCell}>PHYSICIAN CERTIFICATION</Text>
+              </View>
+              <View style={[styles.cell, { width: "50%", borderRight: "none" }]}>
+                <Text style={styles.s_headerCell}>THERAPIST'S SIGNATURE</Text>
+              </View>
+            </View>
+
+            <View style={styles.s_row}>
+              <View style={[styles.s_cell, { width: "50%" }]}>
+                <View style={styles.s_dateCell}>
+                  <Text style={styles.s_dateText}>DATE</Text>
+                  <Text>{data.ptCertificate}</Text>
+                </View>
+              </View>
+
+              <View style={[styles.s_cell, { width: "50%", borderRight: "none" }]}>
+                <View style={styles.s_signatureContainer}>
+                  {therapistSignature && (
+                    <Image src={therapistSignature} style={styles.s_signatureImage} />
+                  )}
+                </View>
+              </View>
+            </View>
+          </View>
 
         </View>
-
-        {/* Pain Scale Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.painScaleLabel}>PAIN SCALE:</Text>
-          <View style={styles.painScale}>
-            <Text style={styles.scaleValue}>7/10</Text>
-          </View>
-        </View> */}
-
-        {/* Observation Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>OBSERVATION:</Text>
-          <Text style={styles.fieldValue}>
-            Gait: {data.physical?.observation.gait}
-          </Text>
-          <Text style={styles.fieldValue}>
-            Posture: {data.physical?.observation.posture}
-          </Text>
-        </View> */}
-
-        {/* AROM / Active Movement */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>AROM / ACTIVE MVMT:</Text>
-          <View style={styles.tableHeader}>
-            <Text style={styles.fieldValue}>
-              Flex: {data.physical?.arom.flex}
-            </Text>
-            <Text style={styles.fieldValue}>
-              Ext Rot: {data.physical?.arom.ext_rot}
-            </Text>
-          </View>
-          <View style={styles.tableHeader}>
-            <Text style={styles.fieldValue}>
-              Ext: {data.physical?.arom.ext}
-            </Text>
-            <Text style={styles.fieldValue}>SB: {data.physical?.arom.sb}</Text>
-          </View>
-        </View> */}
-
-        {/* PROM Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>PROM:</Text>
-          <Text style={styles.fieldValue}>
-            Lx spine: {data.physical?.prom.lx_spine}
-          </Text>
-          <Text style={styles.fieldValue}>
-            Shoulder: {data.physical?.prom.shoulder}
-          </Text>
-        </View> */}
-
-        {/* Joint Mobs Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>JOINT MOBS:</Text>
-          <Text style={styles.fieldValue}>{data.physical?.joint_mobs}</Text>
-        </View> */}
-
-        {/* Strength Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>STRENGTH:</Text>
-          <Text style={styles.fieldValue}>{data.physical?.strength}</Text>
-        </View> */}
-
-        {/* Special Test Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>SPECIAL TEST:</Text>
-          <View style={styles.tableHeader}>
-            <Text style={styles.fieldValue}>
-              SLR: {data.physical?.special_test.slr}
-            </Text>
-            <Text style={styles.fieldValue}>
-              McKenzie: {data.physical?.special_test.mckenzie}
-            </Text>
-          </View>
-          <View style={styles.tableHeader}>
-            <Text style={styles.fieldValue}>
-              Apprehension: {data.physical?.special_test.apprehension}
-            </Text>
-            <Text style={styles.fieldValue}>
-              VA: {data.physical?.special_test.va}
-            </Text>
-          </View>
-        </View> */}
-
-        {/* Palpation Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>PALPATION:</Text>
-          <Text style={styles.fieldValue}>{data.physical?.palpation}</Text>
-        </View> */}
-
-        {/* Tone Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.fieldLabel}>TONE:</Text>
-          <Text style={styles.fieldValue}>{data.physical?.tone}</Text>
-        </View> */}
-        {/* Coordination/Balance Section */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>COORDINATION / BALANCE</Text>
-          <View style={styles.row}>
-            <Text style={styles.fieldLabel}>Dynamic balance:</Text>
-            <Text style={styles.fieldValue}>{data.coordination_balance}</Text>
-          </View>
-        </View> */}
-
-        {/* Reflexes, Sensation, Skin, Girth */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>REFLEXES</Text>
-          <Text style={styles.fieldValue}>{data.reflexes}</Text>
-
-          <Text style={styles.sectionTitle}>SENSATION</Text>
-          <Text style={styles.fieldValue}>{data.sensation}</Text>
-
-          <Text style={styles.sectionTitle}>SKIN</Text>
-          <Text style={styles.fieldValue}>{data.skin}</Text>
-
-          <Text style={styles.sectionTitle}>GIRTH</Text>
-          <Text style={styles.fieldValue}>{data.girth}</Text>
-        </View> */}
-
-        {/* Functional Status */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>FUNCTIONAL STATUS</Text>
-          <Text style={styles.fieldValue}>{data.functional_status.note}</Text>
-          {data.functional_status.activities.map((activity, index) => (
-            <Text key={index} style={styles.fieldValue}>
-              - {activity}
-            </Text>
-          ))}
-        </View> */}
-
-        {/* Prior Functional Status */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>PRIOR FUNCTIONAL STATUS</Text>
-          <Text style={styles.fieldValue}>{data.prior_functional_status}</Text>
-        </View> */}
-
-        {/* Assessment */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>ASSESSMENT</Text>
-          <Text style={styles.fieldValue}>{data.assessment}</Text>
-        </View> */}
-
-        {/* Goals */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>GOALS</Text>
-          <Text style={styles.fieldLabel}>Short Term (6 Weeks)</Text>
-          {data.goals.short_term.map((goal, index) => (
-            <Text key={index} style={styles.fieldValue}>
-              {goal}
-            </Text>
-          ))}
-          <Text style={styles.fieldLabel}>Long Term (12 Weeks)</Text>
-          {data.goals.long_term.map((goal, index) => (
-            <Text key={index} style={styles.fieldValue}>
-              {goal}
-            </Text>
-          ))}
-        </View> */}
-
-        {/* Plan */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>PLAN</Text>
-          {data.plan.details.map((planDetail, index) => (
-            <Text key={index} style={styles.fieldValue}>
-              {planDetail}
-            </Text>
-          ))}
-        </View> */}
-
-        {/* Frequency of Treatment */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>FREQUENCY OF TREATMENT</Text>
-          <Text style={styles.fieldValue}>{data.frequency}</Text>
-        </View> */}
-
-        {/* Certification */}
-        {/* <View style={styles.section}>
-          <Text style={styles.sectionTitle}>CERTIFICATION</Text>
-          <Text style={styles.fieldLabel}>Patient Certification:</Text>
-          <Text style={styles.fieldValue}>
-            {data.certification.patient_certification}
-          </Text>
-          <Text style={styles.fieldLabel}>Physician Certification:</Text>
-          <Text style={styles.fieldValue}>
-            {data.certification.physician_certification}
-          </Text>
-          <View style={styles.certificationRow}>
-            <View style={styles.certificationColumn}>
-              <Text style={styles.fieldLabel}>Therapist Signature:</Text>
-              <Text style={styles.fieldValue}>
-                {data.certification.therapist_signature}
-              </Text>
-            </View>
-            <View style={styles.certificationColumn}>
-              <Text style={styles.fieldLabel}>Date:</Text>
-              <Text style={styles.fieldValue}>{data.certification.date}</Text>
-            </View>
-          </View>
-        </View> */}
       </Page>
     </Document>
   );

@@ -15,6 +15,8 @@ import CreatableSelect from "react-select/creatable";
 import { setFormField } from "../../slices/formSlice";
 import SocialForm from "../social-form";
 import axios from "axios";
+import GrammarCheckTextarea from "../../shared-components/AI-assitant/GrammarCheckTextarea";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -108,47 +110,47 @@ export default function CommonDetailsFields() {
     );
   };
 
-  const checkGrammar = async () => {
-    setLoading(true);
+  // const checkGrammar = async () => {
+  //   setLoading(true);
 
-    try {
-      const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.REACT_APP_GEMINI_API_KEY,
-        {
-          contents: [
-            {
-              parts: [
-                {
-                  text: `Paraphrase the following sentence with correct grammar: ${inputs.subjective}`,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const field = "subjective";
-      const value =
-        response?.data.candidates[0]?.content?.parts[0]?.text.trim();
-      setInputs((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-      dispatch(setFormField({ field, value }));
-      setCorrectedText(
-        response?.data.candidates[0]?.content?.parts[0]?.text.trim()
-      );
-    } catch (error) {
-      console.error("Error correcting grammar:", error);
-      setCorrectedText("Error: Unable to correct grammar.");
-    }
+  //   try {
+  //     const response = await axios.post(
+  //       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.REACT_APP_GEMINI_API_KEY,
+  //       {
+  //         contents: [
+  //           {
+  //             parts: [
+  //               {
+  //                 text: `Paraphrase the following sentence with correct grammar: ${inputs.subjective}`,
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const field = "subjective";
+  //     const value =
+  //       response?.data.candidates[0]?.content?.parts[0]?.text.trim();
+  //     setInputs((prev) => ({
+  //       ...prev,
+  //       [field]: value,
+  //     }));
+  //     dispatch(setFormField({ field, value }));
+  //     setCorrectedText(
+  //       response?.data.candidates[0]?.content?.parts[0]?.text.trim()
+  //     );
+  //   } catch (error) {
+  //     console.error("Error correcting grammar:", error);
+  //     setCorrectedText("Error: Unable to correct grammar.");
+  //   }
 
-    setLoading(false);
-  };
+  //   setLoading(false);
+  // };
 
   return (
     <React.Fragment>
@@ -261,22 +263,12 @@ export default function CommonDetailsFields() {
             />
           </div>
         </div>
-        <div className="mt-7">
-          <div className="flex items-center text-lg font-bold">
-            <span>Subjective</span>
-            <span className="cursor-pointer text-gray-600 hover:text-black ml-2">
-              <FaLightbulb size={15} onClick={checkGrammar} title="AI Assistance" />
-            </span>
-          </div>
-          <textarea
-            value={inputs.subjective}
-            type="text"
-            style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
-            placeholder="Enter subjective"
-            onChange={(e) => handleChange("subjective", e.target.value)}
-            className="bg-white p-4 rounded-md  border-2 rounded-[5px]"
-          />
-        </div>
+        <GrammarCheckTextarea
+          value={inputs.subjective}
+          onChange={handleChange}
+          placeholder="Subjective"
+          fieldName="subjective"
+        />
       </div>
       {open && (
         <SocialForm handleClose={handleClose} GENDER={GENDER} HTYPE={HTYPE} />
