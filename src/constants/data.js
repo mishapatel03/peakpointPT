@@ -114,12 +114,11 @@ export const DX = [
 
 export const radiatingAreas = ["BLE", "BUE", "LLE", "LUE"];
 export const symptoms = ["tingling", "numbness", "burning"];
-export const durationUnits = ["days", "months", "years"];
+export const durationUnits = ["days", "months", "years", "weeks"];
 export const causes = [
   "MVA",
   "Fall",
-  "Lifting heavy weight",
-  "getting a jerk on ____",
+  "Lifting heavy weight"
 ];
 
 export const bodyParts = [
@@ -325,6 +324,325 @@ export const arom = [
   "Ankle",
   "Wrist"
 ]
+
+const sharedActivities = {
+  "Bed Mobility": [
+    "Turning from one side to another while sleeping"
+  ],
+  "Toileting": [
+    "Cleanse after using toilet",
+    "Dressing lower body after using toilet"
+  ],
+  "Household chores": [
+    "Sweeping floors",
+    "Mopping floors",
+    "Cooking or meal preparation",
+    "Dusting furniture",
+    "Vacuuming"
+  ],
+  "Twisting/Turning": [
+    "Turning back to look backward"
+  ],
+  "Front Carry": [
+    "Front carry a box",
+    "Holding a baby",
+    "Carrying a grocery bag",
+    "Holding a tray or plate"
+  ],
+  "Driving": [
+    "Driving to/from work",
+    "Driving to/from shopping mall",
+    "Driving to/from grocery store"
+  ],
+  "Pushing/pulling": [
+    "Pushing/pulling shopping cart",
+    "Pushing/pulling stroller",
+    "Pushing/pulling dining table chair",
+    "Pushing/pulling furniture",
+    "Pushing/pulling heavy door"
+  ],
+  "Sleeping": [
+    "Sleeping on back",
+    "Sleeping on side"
+  ],
+  "Dressing": [
+    "Putting on a shirt",
+    "Buttoning up the shirt"
+  ],
+  "Fine Motor Skills": [
+    "Writing",
+    "Picking up small objects"
+  ],
+  "Grooming": ["Standing during brushing teeth", "Standing while shaving",
+    "Standing while applying make up", "Bending forward in sink to wash face and hands", "Brushing hair"],
+  "High Level Activities": [
+    "Reaching overhead",
+    "Lifting objects"
+  ],
+  "Bending and lifting": ["Bending forward to pick up grocery bag from floor",
+    "Bending forward to pick up the laundry bag", "Bending forward to pick up the small box"],
+  "Lifting and/carrying": [
+    "Lifting and/carrying a laundry bag", "Lifting and/carrying a grocery bag", "Lifting and/carrying a box", "Lifting and/carrying garbage bag/can"
+  ]
+
+};
+
+export const aromRelatedTitles = {
+  bodyPartCategories: {
+    "Lower Mid Back, Low Back, Hip, Knee, Ankle": {
+      activities: [
+        {
+          title: "Bed Mobility",
+          details: sharedActivities["Bed Mobility"]
+        },
+        {
+          title: "Transfers",
+          details: ["Getting on/off the chair", "Getting on/off the bed",
+            "Getting on/off from the toilet", "Getting in/out of the car", "Getting on/off of the bus"]
+        },
+        {
+          title: "Toileting",
+          details: sharedActivities["Toileting"]
+        },
+        {
+          title: "Walking short distance",
+          details: ["Walking from bed to bathroom in the morning", "Walking in between rooms",
+            "Walking in- between adjacent corridor", "Moving around in wheel chair"]
+        },
+        {
+          title: "Bathing",
+          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back"]
+        },
+        {
+          title: "Dressing",
+          details: ["Bending forward/ Stooping to tie shoe lashes", "Bending forward/ Stooping to don/doff shoes", "Bending forward to dress legs/put on pants"]
+        },
+        {
+          title: "Grooming",
+          details: sharedActivities["Grooming"]
+        },
+        {
+          title: "High level activities",
+          details: ["Running", "Jumping", "Brisk walking", "Jogging", "Taking sharp turns while running", "Shoveling the snow", "Mowing Lawn", "Gardening/Outdoor domestic"]
+        },
+        {
+          title: "Sitting",
+          details: ["Sitting to watch TV", "Sitting at dinner table", "Sitting in doctors waiting area"]
+        },
+        {
+          title: "Standing",
+          details: ["Standing in kitchen to prepare meal", "Standing at the bus stop", "Standing at the bus stop", "Waiting in post office queue", "Standing in kitchen sink to wash dishes"]
+        },
+        {
+          title: "Walking",
+          details: ["Walking around the community", "Walking uphill", "Walking inside grocery store to get essential items", "Walking on uneven ground"]
+        },
+        {
+          title: "Bending forward",
+          details: ["Bending forward to pick up item from floor", "Bending forward /Stooping to load the washer/dryer", "Bending forward while playing with kids"]
+        },
+        {
+          title: "Bending and lifting",
+          details: sharedActivities["Bending and lifting"]
+        },
+        {
+          title: "Lifting and/carrying",
+          details: sharedActivities["Lifting and/carrying"]
+        },
+        {
+          title: "Squatting",
+          details: ["Squatting to pick up grocery bag from floor", "Squatting to pick up the laundry bag", "Squatting to pick up the box", "Squatting to pick up an item from floor"]
+        },
+        {
+          title: "Negotiating stairs",
+          details: ["Going upstairs", "Going downstairs"]
+        },
+        {
+          title: "Household chores",
+          details: sharedActivities["Household chores"]
+        },
+        {
+          title: "Twisting/Turning",
+          details: sharedActivities["Twisting/Turning"]
+        },
+        {
+          title: "Front Carry",
+          details: sharedActivities["Front Carry"]
+        },
+        {
+          title: "Driving",
+          details: sharedActivities["Driving"]
+        },
+        {
+          title: "Pushing/pulling",
+          details: sharedActivities["Pushing/pulling"]
+        },
+        {
+          title: "Sleeping",
+          details: sharedActivities["Sleeping"]
+        }
+      ]
+    },
+    "Neck, Upper Mid Back, Shoulders": {
+      activities: [
+        {
+          title: "Bed Mobility",
+          details: sharedActivities["Bed Mobility"]
+        },
+        {
+          title: "Transfers",
+          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"]
+        },
+        {
+          title: "Toileting",
+          details: sharedActivities["Toileting"]
+        },
+        {
+          title: "Bathing",
+          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back", "Using hair dryer"]
+        },
+        {
+          title: "Dressing",
+          details: ["Don on/off Jacket or shirt", "Put on the tshirt or top", "Don on/off bra"]
+        },
+        {
+          title: "Grooming",
+          details: sharedActivities["Grooming"]
+        },
+        {
+          title: "High level activities",
+          details: ["Throw and object", "Open tight jar"]
+        },
+        {
+          title: "Bending and lifting",
+          details: sharedActivities["Bending and lifting"]
+        },
+        {
+          title: "Lifting and/carrying",
+          details: sharedActivities["Lifting and/carrying"]
+        },
+        {
+          title: "Household chores",
+          details: sharedActivities["Household chores"]
+        },
+        {
+          title: "Twisting/Turning",
+          details: sharedActivities["Twisting/Turning"]
+        },
+        {
+          title: "Front Carry",
+          details: sharedActivities["Front Carry"]
+        },
+        {
+          title: "Driving",
+          details: sharedActivities["Driving"]
+        },
+        {
+          title: "Pushing/pulling",
+          details: sharedActivities["Pushing/pulling"]
+        },
+        {
+          title: "Sleeping",
+          details: sharedActivities["Sleeping"]
+        },
+        {
+          title: "Locomotion",
+          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"]
+        },
+        {
+          title: "Overhead lifting",
+          details: []
+        },
+        {
+          title: "Overhead activities",
+          details: []
+        },
+        {
+          title: "Hand behind back activities",
+          details: ["Reaching for back pocket", "Applying lotion", "Adjusting a belt", "Tuck in a shirt", "Washing back", "Fastening a bra"]
+        }
+      ]
+    },
+    "Elbow, Hand, Wrist": {
+      activities: [
+        {
+          title: "Bed Mobility",
+          details: sharedActivities["Bed Mobility"]
+        },
+        {
+          title: "Transfers",
+          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"]
+        },
+        {
+          title: "Toileting",
+          details: sharedActivities["Toileting"]
+        },
+        {
+          title: "Bathing",
+          details: ["Taking full body bath using soap bar"]
+        },
+        {
+          title: "Dressing",
+          details: ["Buttoning shirt", "Donning/doffing tie", "Donning/doffing socks", "Donning/doffing shoes lashes", "Zip/unzip the clothes"]
+        },
+        {
+          title: "Grooming",
+          details: ["Shaving", "Applying make up", "Combing hair", "Brushing teeth", "Flossing teeth", "Washing and drying face, hands"]
+        },
+        {
+          title: "Lifting and/carrying",
+          details: sharedActivities["Lifting and/carrying"]
+        },
+        {
+          title: "Household chores",
+          details: sharedActivities["Household chores"]
+        },
+        {
+          title: "Front Carry",
+          details: sharedActivities["Front Carry"]
+        },
+        {
+          title: "Pushing/pulling",
+          details: sharedActivities["Pushing/pulling"]
+        },
+        {
+          title: "Locomotion",
+          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"]
+        },
+        {
+          title: "Eating and drinking",
+          details: ["Holding a coffee mug", "Drinking water from a cup", "Using spoon/fork/knife", "Holding a heavy dinner plate"]
+        },
+        {
+          title: "Gripping",
+          details: ["Holding pen/pencil", "Using a door knob", "Turning key", "Opening/closing faucet at kitchen sink", "Open tight jar"]
+        },
+        {
+          title: "Grasping",
+          details: ["Shacking hands", "Holding big spoon during cooking", "Holding on to hand rail in the bus/subway"]
+        },
+        {
+          title: "Fine motor activities",
+          details: ["Writing", "Kneading", "Using scissors", "Twisting nuts on off bolts", "Typing on a keyboard", "Opening and closing small bottles", "Tying shoes lashes", "Playing a piano/musical instrument", "Using/operating cellphone", "Turning pages in a book", "Using a can opener", "Using bottle opener"]
+        }
+      ]
+    }
+  }
+}
+
+export const reverseMapping = {
+  "Ankle": "Lower Mid Back, Low Back, Hip, Knee, Ankle",
+  "Knee": "Lower Mid Back, Low Back, Hip, Knee, Ankle",
+  "Hip": "Lower Mid Back, Low Back, Hip, Knee, Ankle",
+  "Low Back": "Lower Mid Back, Low Back, Hip, Knee, Ankle",
+  "Lower Mid Back": "Lower Mid Back, Low Back, Hip, Knee, Ankle",
+  "Neck": "Neck, Upper Mid Back, Shoulders",
+  "Upper Mid Back": "Neck, Upper Mid Back, Shoulders",
+  "Shoulders": "Neck, Upper Mid Back, Shoulders",
+  "Elbow": "Elbow, Hand, Wrist",
+  "Hand": "Elbow, Hand, Wrist",
+  "Wrist": "Elbow, Hand, Wrist"
+}
 
 export const bodyPartDetails = {
   "Neck": "C2-7",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { bodyPartConfig, gait, palpation, posture, stregthDetails } from '../../constants/data'
+import { aromRelatedTitles, bodyPartConfig, gait, palpation, posture, reverseMapping, stregthDetails } from '../../constants/data'
 import Select from "react-select";
 import { TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFormField } from '../../slices/formSlice';
 import { bodyPartDetails, PLAN_OPTIONS, options } from "../../constants/data"
 import GrammarCheckTextarea from '../../shared-components/AI-assitant/GrammarCheckTextarea';
+import { FaCheck } from "react-icons/fa6";
 
 export default function ObjectiveFormFields() {
     const dispatch = useDispatch();
@@ -22,6 +23,9 @@ export default function ObjectiveFormFields() {
     const [preview, setPreview] = useState(storedSignature || "");
     const [selectedParts, setSelectedParts] = useState({});
     const [additionalComment, setAdditionalComment] = useState("");
+    const [bodyPartActivities, setBodyPartActivities] = useState({});
+    const [expandedActivities, setExpandedActivities] = useState({});
+    const [checkedDetails, setCheckedDetails] = useState({});
 
     const [inputs, setInputs] = useState({
         posture: "",
@@ -75,6 +79,39 @@ export default function ObjectiveFormFields() {
             })
         }
     }, [formAllData])
+
+    useEffect(() => {
+        const getActivities = () => {
+            const activitiesMap = {};
+
+            Object.values(selectedValues).forEach((part) => {
+                if (!part) return; // Skip if null
+
+                const category = reverseMapping[part];
+                console.log("category", category) // Find category from reverse mapping
+                if (category) {
+                    activitiesMap[part] = aromRelatedTitles.bodyPartCategories[category]?.activities || [];
+                }
+            });
+
+            setBodyPartActivities(activitiesMap); // Update state
+        };
+
+        getActivities();
+    }, [selectedValues]); // Runs whenever selectedValues change
+
+    const handleDetailCheck = (bodyPart, activityIndex, detailIndex) => {
+        setCheckedDetails((prev) => ({
+            ...prev,
+            [bodyPart]: {
+                ...prev[bodyPart],
+                [activityIndex]: {
+                    ...(prev[bodyPart]?.[activityIndex] || {}),
+                    [detailIndex]: !prev[bodyPart]?.[activityIndex]?.[detailIndex], // Toggle checked state
+                }
+            }
+        }));
+    };
 
     const handleFourValInput = (field, value) => {
         switch (field) {
@@ -161,6 +198,17 @@ export default function ObjectiveFormFields() {
         dispatch(setFormField({ field, value }));
     }
 
+    const toggleActivity = (bodyPart, index) => {
+        setExpandedActivities((prev) => ({
+            ...prev,
+            [bodyPart]: {
+                ...prev[bodyPart],
+                [index]: !prev[bodyPart]?.[index], // Toggle expand/collapse state
+            },
+        }));
+    };
+
+
     const handleChange = (index, selected) => {
         const previousValue = selectedValues[index]; // Get the previously selected body part
         const newSelectedValues = { ...selectedValues, [index]: selected?.value || null };
@@ -174,7 +222,7 @@ export default function ObjectiveFormFields() {
                 return updatedFormData;
             });
         }
-        console.log("selected", newSelectedValues);
+        // dispatch(setFormField({ field: "aromKeys", value: newSelectedValues }));
         setSelectedValues(newSelectedValues);
     };
 
@@ -552,6 +600,59 @@ export default function ObjectiveFormFields() {
                     </div>
                 </div>
             </div>
+
+            <div>
+                <div className="text-lg font-bold">Function/Observation:</div>
+
+                {Object.entries(bodyPartActivities).map(([bodyPart, activities]) => (
+                    <div key={bodyPart} className="mt-4">
+                        <h3 className="font-semibold text-lg">{bodyPart}</h3>
+                        <div className="grid grid-cols-3 gap-4 mt-2">
+                            {activities.length > 0 ? (
+                                activities.map((activity, index) => (
+                                    <div key={index} className="p-2 bg-gray-100 rounded-md flex items-center justify-between">
+                                        <span>{activity.title}</span>
+                                        <button
+                                            className="text-xl font-bold"
+                                            onClick={() => toggleActivity(bodyPart, index)}
+                                        >
+                                            {expandedActivities[bodyPart]?.[index] ? <FaCheck /> : "X"}
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-500 col-span-3">No activities available.</p>
+                            )}
+                        </div>
+
+                        {activities.map((activity, activityIndex) => (
+                            expandedActivities[bodyPart]?.[activityIndex] && (
+                                <div key={`${bodyPart}-${activityIndex}`} className="mt-2 ml-6">
+                                    <h4 className="font-medium text-gray-800">{activity.title}</h4>
+                                    <div className="grid grid-cols-3 gap-4 bg-gray-50 p-3 rounded-md border border-gray-300">
+                                        {activity.details.map((detail, detailIndex) => (
+                                            <div key={detailIndex} className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={checkedDetails[bodyPart]?.[activityIndex]?.[detailIndex] || false}
+                                                    onChange={() => handleDetailCheck(bodyPart, activityIndex, detailIndex)}
+                                                    className="w-4 h-4"
+                                                />
+                                                <span className="text-gray-700">{detail}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )
+                        ))}
+
+                    </div>
+                ))}
+            </div>
+
+
+
+
 
             <div className="mt-5">
                 <GrammarCheckTextarea

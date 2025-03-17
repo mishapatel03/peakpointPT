@@ -11,7 +11,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   const [checkedStates, setCheckedStates] = useState({
     stairs: false,
     work: false,
-    hha: false,
+    hhaActivity: false,
   });
   const [inputs, setInputs] = useState({
     age: "",
@@ -58,13 +58,13 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
 
   const updateGeneratedText = () => {
     const sentences = [];
-    if (checkedStates.stairs && inputs.stairs) {
+    if (checkedStates.stairs) {
       sentences.push(`Patient has ${inputs.stairs} stairs to reach the ${inputs.buildingType || "apartment"}.`);
     }
-    if (checkedStates.work && inputs.workProfession && inputs.workToDo) {
+    if (checkedStates.work) {
       sentences.push(`Patient works as ${inputs.workProfession} and has to ${inputs.workToDo}.`);
     }
-    if (checkedStates.hha && inputs.hhaActivity) {
+    if (checkedStates.hhaActivity) {
       sentences.push(
         `Patient has HHA, who helps with some activities, like ${inputs.hhaActivity}.`
       );
@@ -93,16 +93,9 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
 
   useEffect(() => {
     if (!isEditingSentence) {
-      setCheckedStates((prev) => ({
-        ...prev,
-        stairs: !!inputs.stairs,
-        work: !!inputs.workProfession || !!inputs.workToDo,
-        hha: !!inputs.hhaActivity,
-      }));
       updateGeneratedText();
     }
-
-  }, [inputs, additionalComment]);
+  }, [inputs, additionalComment, checkedStates]);
 
   useEffect(() => {
     if (generatedText) {
@@ -221,7 +214,7 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  checked={checkedStates.hha}
+                  checked={checkedStates.hhaActivity}
                   onChange={(e) =>
                     handleCheckboxChange("hhaActivity", e.target.checked)
                   }

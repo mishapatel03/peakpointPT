@@ -31,12 +31,15 @@ export default function PatientHistoryForm() {
     line3: false,
     line4: false,
     line5: false,
-    line6: false
+    line6: false,
+    line7: false
   });
   const formData = useSelector((state) => state.form.formData || {});
   const [sentence, setSentence] = useState("");
   const [additionalComment, setAdditionalComment] = useState("");
   const [isEditingSentence, setIsEditingSentence] = useState(false);
+  const [comments, setComments] = useState("None Reported");
+  const [radioSelection, setRadioSelection] = useState("");
 
   const fieldToCheckboxMap = {
     line1: ["bodyParts", "symptoms", "radiatingArea"],
@@ -143,13 +146,19 @@ export default function PatientHistoryForm() {
     if (!isEditingSentence) {
       generateSentence();
     }
-  }, [inputs, checkboxes, additionalComment]);
+  }, [inputs, checkboxes, additionalComment, radioSelection]);
 
   const handleCheckboxChange = (line) => {
     setCheckboxes((prev) => {
       const updatedCheckboxes = { ...prev, [line]: !prev[line] };
       return updatedCheckboxes;
     });
+  };
+
+  const handleRadioChange = (event) => {
+    const value = event.target.value;
+    setRadioSelection(value);
+    setComments(value === "Yes" ? "" : "None reported"); // Reset comments when No is selected
   };
 
   const generateSentence = () => {
@@ -176,41 +185,45 @@ export default function PatientHistoryForm() {
         ? bodyParts.length === 1
           ? bodyParts[0]
           : `${bodyParts.slice(0, -1).join(", ")} and ${bodyParts[bodyParts.length - 1]}`
-        : "___";
+        : ".";
 
       let symptomsPartsText = symptoms?.length
         ? symptoms.length === 1
-          ? symptoms[0]
-          : `${symptoms.slice(0, -1).join(", ")} and ${symptoms[symptoms.length - 1]}`
-        : "___";
+          ? `with ${symptoms[0]}`
+          : `with  ${symptoms.slice(0, -1).join(", ")} and ${symptoms[symptoms.length - 1]}`
+        : "";
 
       sentence += `Patient presents with pain in ${bodyPartsText} ${radiatingArea ? `along with radiating symptoms to ${radiatingArea}` : ""
-        } with ${symptomsPartsText}. `;
+        } ${symptomsPartsText}.`;
     }
 
     if (checkboxes.line2) {
-      sentence += `Pain has been present since ${durationValue || "___"} ${durationUnit || "___"
+      sentence += `Pain has been present since ${durationValue || ""} ${durationUnit || ""
         }. `;
     }
 
     if (checkboxes.line3) {
-      sentence += `Due to ${cause || "___"} ${inputs.jerkOn ? `getting a jerk on ${inputs.jerkOn}` : "without any injury"
-        }. `;
+      sentence += `Due to ${cause || ""}. `;
     }
 
     if (checkboxes.line4) {
-      sentence += `Patient did take Xray/MRI on ${imaging || "___"}, which shows ${imagingReason || "___"
+      sentence += `Patient did take Xray/MRI on ${imaging || ""}, which shows ${imagingReason || ""
         }. `;
     }
 
     if (checkboxes.line5) {
-      sentence += `Patient went to ER/Urgent care on ${careon || "___"} due to ${careonReason || "___"
+      sentence += `Patient went to ER/Urgent care on ${careon || ""} due to ${careonReason || ""
         }. `;
     }
 
     if (checkboxes.line6) {
-      sentence += `Patient has taken ${treatment || "___"} on ${treatmentType || "___"
-        }, which has helped ${treatmentEffect || "___"}. `;
+      sentence += `Patient has taken ${treatment || ""} on ${treatmentType || ""
+        }, which has helped ${treatmentEffect || ""}. `;
+    }
+
+    if (checkboxes.line7) {
+      sentence += `Prior physical therapy history for current condition: ${radioSelection === "Yes" ? `${comments}` : "None reported"
+        }`
     }
 
     setSentence(sentence.trim() + " " + additionalComment.trim());
@@ -341,13 +354,13 @@ export default function PatientHistoryForm() {
                   styles={customSelectStyles}
                 />
               </div>
-              <input
+              {/* <input
                 value={inputs.jerkOn}
                 type={"text"}
                 placeholder={`Jerk on`}
                 onChange={(e) => handleChange("jerkOn", e.target.value)}
                 className="input border-2 rounded-[5px] border-gray-400 bg-white input-bordered w-full focus:border-blue-500 focus:outline-none placeholder-gray-500 py-1 h-10"
-              />
+              /> */}
             </div>
           </div>
 
@@ -401,6 +414,52 @@ export default function PatientHistoryForm() {
           />
         </div>
 
+        <div>
+          <div className="flex items-center gap-2">
+            <Checkbox
+              style={{ paddingLeft: 0 }}
+              checked={checkboxes.line7}
+              onChange={() => handleCheckboxChange("line7")}
+            />
+
+            <span className="text-lg">Prior physical therapy history for current condition</span>
+
+            <div className="flex ml-2 gap-2">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="Yes"
+                  checked={radioSelection === "Yes"}
+                  onChange={handleRadioChange}
+                  className="mr-1"
+                />
+                Yes
+              </label>
+
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="No"
+                  checked={radioSelection === "No"}
+                  onChange={handleRadioChange}
+                  className="mr-1"
+                />
+                No
+              </label>
+            </div>
+          </div>
+
+          {radioSelection === "Yes" && (
+            <textarea
+              placeholder="Enter comments"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+              className="mt-2 ml-8 p-2 border rounded-md w-full border-2 border-gray-300 focus:border-blue-500 outline-none text-lg"
+            />
+          )}
+
+        </div>
+
         <div className="flex items-center space-x-2">
           <Checkbox
             style={{ paddingLeft: 0 }}
@@ -444,7 +503,7 @@ export default function PatientHistoryForm() {
             value={additionalComment}
             onChange={(e) => setAdditionalComment(e.target.value)}
             className="bg-gray-100 p-4 rounded-md border-2 rounded-[5px] border-gray-400"
-            placeholder="Generated sentence will appear here"
+            placeholder="Enter Comments"
             style={{ width: "100%", minHeight: "50px" }}
           />
         </div>
