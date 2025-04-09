@@ -81,12 +81,12 @@ export default function ObjectiveFormFields() {
     }, [formAllData])
 
     useEffect(() => {
-        const filtered = selectedDetail.map(({ id, detail, selectedTitle, comments, goal, value }) => ({
+        const filtered = selectedDetail.map(({ id, detail, selectedTitle, comments, goal, value, currentVal }) => ({
             id,
             detail,
             selectedTitle,
             comments,
-            goal, value
+            goal, value, currentVal
         }));
 
         dispatch(setFormField({
@@ -788,8 +788,13 @@ export default function ObjectiveFormFields() {
                                                 className="w-full p-1 border rounded"
                                                 value={item.value}
                                                 onChange={(e) => {
+                                                    const selectedValue = e.target.value;
+                                                    const selectedStatus = item.currentStatus?.find(status => String(status.value) === selectedValue);
+
                                                     const updated = [...selectedDetail];
-                                                    updated[index].value = e.target.value;
+                                                    updated[index].value = selectedValue;
+                                                    updated[index].currentVal = selectedStatus?.label || "";
+
                                                     setSelectedDetail(updated);
                                                 }}
                                             >
