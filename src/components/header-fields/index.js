@@ -15,31 +15,40 @@ export default function HeaderFields() {
 
   return (
     <React.Fragment>
-      <div className="flex flex-col mt-4 mb-4 p-5 bg-white shadow-lg rounded-md">
+      <div className="flex flex-col mt-4 mb-4 bg-white rounded-md">
         <div className="rounded-lg w-full">
           <div className="mt-2 w-full">
             <div className="text-lg font-bold -mb-2">
               Clinic's address
             </div>
-            <div className="w-full mt-7">
+            <div className="w-full mt-2">
               <Select
-                isClearable={true}
+                isClearable
+                classNamePrefix="react-select"
+                className="cursor-pointer"
                 onChange={(value) => handleChange(value, "address")}
                 options={address.map((addr) => ({
                   value: addr,
                   label: `${addr.clinicName}, ${addr.addressLine1}, ${addr.addressLine2} Tel: ${addr.tel} Fax: ${addr.fax}`
                 }))}
                 placeholder="Select Clinic's Address"
+                styles={{
+                  control: (provided) => ({ ...provided, cursor: "pointer" }),
+                  option: (provided) => ({ ...provided, cursor: "pointer" }),
+                  dropdownIndicator: (provided) => ({ ...provided, cursor: "pointer" }),
+                  clearIndicator: (provided) => ({ ...provided, cursor: "pointer" }),
+                }}
               />
+
 
               {errors && errors.address && <span className="text-red-500">{errors.address}</span>}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-7">
+          <div className="grid grid-cols-2 gap-4 mt-4">
             <div>
               <p className="text-lg font-bold -mb-2">Name</p>
-              <div className="mt-7">
+              <div className="mt-2">
                 <TextInput
                   type={"text"}
                   placeholder={`Enter Patient's Name`}
@@ -53,7 +62,7 @@ export default function HeaderFields() {
             </div>
             <div>
               <p className="text-lg font-bold -mb-2">Date of birth</p>
-              <div className="mt-7">
+              <div className="mt-2">
                 <TextInput
                   type={"date"}
                   placeholder={"Select a DOB"}

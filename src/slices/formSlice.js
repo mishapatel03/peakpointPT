@@ -19,7 +19,11 @@ const initialState = {
         social: "",
         testResults: "",
         arom: {},
-        aromKeys: {},
+        aromKeys: {
+            0: null,
+            1: null,
+            2: null,
+        },
         gait: "",
         DX: [],
         symptoms: [],
@@ -70,6 +74,10 @@ const formSlice = createSlice({
 
             state.errors = errors;
         },
+        updateAromKeys: (state, action) => {
+            const { index, value } = action.payload;
+            state.formData.aromKeys[index] = value;
+        },
         validateField: (state, field, value) => {
             const rules = validationRules[field];
             const errors = { ...state.errors };
@@ -109,5 +117,5 @@ const formSlice = createSlice({
     },
 });
 
-export const { setFormField, validateField, validateForm, clearErrors, resetForm } = formSlice.actions;
+export const { setFormField, validateField, validateForm, clearErrors, resetForm, updateAromKeys } = formSlice.actions;
 export default formSlice.reducer;

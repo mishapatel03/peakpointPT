@@ -4,10 +4,12 @@ import Select from "react-select";
 import { TEXT_INPUT } from '../../constants';
 import TextInput from '../../shared-components/TextInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormField } from '../../slices/formSlice';
+import { setFormField, updateAromKeys } from '../../slices/formSlice';
 import { bodyPartDetails, PLAN_OPTIONS, options } from "../../constants/data"
 import GrammarCheckTextarea from '../../shared-components/AI-assitant/GrammarCheckTextarea';
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaTrash } from "react-icons/fa6";
+import { nanoid } from "nanoid";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ObjectiveFormFields() {
     const dispatch = useDispatch();
@@ -24,8 +26,8 @@ export default function ObjectiveFormFields() {
     const [selectedParts, setSelectedParts] = useState({});
     const [additionalComment, setAdditionalComment] = useState("");
     const [bodyPartActivities, setBodyPartActivities] = useState({});
-    const [expandedActivities, setExpandedActivities] = useState({});
-    const [checkedDetails, setCheckedDetails] = useState({});
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [selectedDetail, setSelectedDetail] = useState([]);
 
     const [inputs, setInputs] = useState({
         posture: "",
@@ -41,6 +43,8 @@ export default function ObjectiveFormFields() {
         1: null,
         2: null,
     });
+    const aromKeys = useSelector((state) => state.form.formData.aromKeys);
+
     const [formData, setFormData] = useState({
         "Neck": {},
         "LB": {},
@@ -72,62 +76,110 @@ export default function ObjectiveFormFields() {
         }));
 
         if (formAllData.arom && Object.keys(formAllData.arom).length === 0) {
-            setSelectedValues({
-                0: null,
-                1: null,
-                2: null,
-            })
+            dispatch(updateAromKeys({ 0: null, 1: null, 2: null }));
         }
     }, [formAllData])
 
     useEffect(() => {
-        const getActivities = () => {
-            const activitiesMap = {};
+        const filtered = selectedDetail.map(({ id, detail, selectedTitle, comments, goal, value }) => ({
+            id,
+            detail,
+            selectedTitle,
+            comments,
+            goal, value
+        }));
 
-            Object.values(selectedValues).forEach((part) => {
-                if (!part) return; // Skip if null
+        dispatch(setFormField({
+            field: 'functionalActivities',
+            value: filtered
+        }));
+    }, [selectedDetail]);
+
+
+
+    useEffect(() => {
+        const getMergedActivities = () => {
+            const activityMap = {};
+
+            Object.values(aromKeys).forEach((part) => {
+                if (!part) return;
 
                 const category = reverseMapping[part];
-                console.log("category", category) // Find category from reverse mapping
-                if (category) {
-                    activitiesMap[part] = aromRelatedTitles.bodyPartCategories[category]?.activities || [];
-                }
+                if (!category) return;
+
+                const activities = aromRelatedTitles.bodyPartCategories[category]?.activities || [];
+                activities.forEach(({ title, details, currentStatus, type, unit }) => {
+                    if (!activityMap[title]) {
+                        activityMap[title] = {
+                            title,
+                            details: new Set(),
+                            isExpanded: false,
+                            currentStatus,
+                            type,
+                            unit,
+                        };
+                    }
+                    details.forEach((detail) => activityMap[title].details.add(detail));
+                });
             });
 
-            setBodyPartActivities(activitiesMap); // Update state
+            const mergedActivities = Object.values(activityMap).map(activity => ({
+                ...activity,
+                details: Array.from(activity.details)
+            }));
+
+            setBodyPartActivities(mergedActivities);
         };
+        getMergedActivities();
+    }, [aromKeys]);
 
-        getActivities();
-    }, [selectedValues]); // Runs whenever selectedValues change
+    const handleDetailSelection = (detail) => {
+        let data = []
+        setSelectedDetail((prevDetails) => {
+            const existing = prevDetails.find(
+                (d) => d.detail === detail && d.selectedTitle === selectedActivity.title
+            );
 
-    const handleDetailCheck = (bodyPart, activityIndex, detailIndex) => {
-        setCheckedDetails((prev) => ({
-            ...prev,
-            [bodyPart]: {
-                ...prev[bodyPart],
-                [activityIndex]: {
-                    ...(prev[bodyPart]?.[activityIndex] || {}),
-                    [detailIndex]: !prev[bodyPart]?.[activityIndex]?.[detailIndex], // Toggle checked state
-                }
+            if (existing) {
+                return prevDetails.filter(
+                    (d) => !(d.detail === detail && d.selectedTitle === selectedActivity.title)
+                );
             }
-        }));
+
+            data = [
+                ...prevDetails,
+                {
+                    id: nanoid(),
+                    detail,
+                    selectedTitle: selectedActivity.title,
+                    currentStatus: selectedActivity.currentStatus,
+                    type: selectedActivity.type,
+                    unit: selectedActivity.unit,
+                    value: "",
+                    comments: "",
+                    prior: "",
+                    goal: ""
+                }
+            ];
+            return data;
+        });
     };
 
     const handleFourValInput = (field, value) => {
         switch (field) {
             case "strengthValues":
-                setStrengthValues(value); // Update local state for strengthValues
+                setStrengthValues(value);
                 break;
             case "palpationValues":
-                setPalpationValues(value); // Update local state for palpationValues
+                setPalpationValues(value);
                 break;
             case "toneValue":
-                setToneValue(value); // Update local state for palpationValues
+                setToneValue(value);
                 break;
             default:
                 break;
         }
-        dispatch(setFormField({ field, value })); // Update Redux store
+        dispatch(setFormField({ field, value }));
     };
 
     useEffect(() => {
@@ -149,8 +201,6 @@ export default function ObjectiveFormFields() {
     }, [bodyParts, dispatch]);
 
     const normalizeKey = (key) => key.toLowerCase();
-
-    // Create a lookup object with normalized keys
     const normalizedBodyPartDetails = Object.keys(bodyPartDetails).reduce(
         (acc, key) => {
             acc[normalizeKey(key)] = bodyPartDetails[key];
@@ -186,7 +236,7 @@ export default function ObjectiveFormFields() {
     const handleJMCheckboxChange = (part) => {
         setSelectedParts((prev) => ({
             ...prev,
-            [part]: prev[part] ? null : "", // Toggle checkbox and reset grade if unchecked
+            [part]: prev[part] ? null : "",
         }));
     };
 
@@ -198,32 +248,18 @@ export default function ObjectiveFormFields() {
         dispatch(setFormField({ field, value }));
     }
 
-    const toggleActivity = (bodyPart, index) => {
-        setExpandedActivities((prev) => ({
-            ...prev,
-            [bodyPart]: {
-                ...prev[bodyPart],
-                [index]: !prev[bodyPart]?.[index], // Toggle expand/collapse state
-            },
-        }));
-    };
-
-
     const handleChange = (index, selected) => {
-        const previousValue = selectedValues[index]; // Get the previously selected body part
-        const newSelectedValues = { ...selectedValues, [index]: selected?.value || null };
-
-        // If a body part was previously selected and is now being removed, delete it from formData
+        const previousValue = aromKeys[index];
+        const newSelectedValues = { ...aromKeys, [index]: selected?.value || null };
         if (previousValue && !selected) {
             setFormData((prev) => {
                 const updatedFormData = { ...prev };
-                delete updatedFormData[previousValue]; // Remove the body part from formData
-                dispatch(setFormField({ field: "arom", value: updatedFormData })); // Update Redux store
+                delete updatedFormData[previousValue];
+                dispatch(setFormField({ field: "arom", value: updatedFormData }));
                 return updatedFormData;
             });
         }
-        // dispatch(setFormField({ field: "aromKeys", value: newSelectedValues }));
-        setSelectedValues(newSelectedValues);
+        dispatch(updateAromKeys({ index, value: selected?.value || null }));
     };
 
     const handleJointMobsChange = (bodyPart, value) => {
@@ -314,18 +350,18 @@ export default function ObjectiveFormFields() {
                 />
 
                 <div className="mt-2">
-                    <strong>Generated Sentence:</strong>
+                    <p className="text-lg font-bold -mb-2">Generated Sentence</p>
                     <textarea
-                        className="mt-2 bg-white p-4 rounded-md  border-2 rounded-[5px]"
+                        className="bg-white p-4 rounded-md mt-2 border-2 rounded-[5px]"
                         value={inputs.gait?.value}
                         placeholder={`Enter Posture details`}
                         onChange={(e) => handleGaitinput("gait", e.target.value)}
-                        style={{ width: "100%", minHeight: "50px", margin: "10px 0" }}
+                        style={{ width: "100%", minHeight: "50px" }}
                     />
                 </div>
             </div>
 
-            <div className='mt-7'>
+            <div className='mt-2'>
                 <div className="text-lg font-bold ">Posture</div>
                 <Select
                     isMulti={true}
@@ -343,13 +379,13 @@ export default function ObjectiveFormFields() {
                         <div key={index} className="space-y-4">
                             <div className="border-2 rounded-[5px] ">
                                 <Select
-                                    value={options.find((option) => option.value === selectedValues[index]) || null}
+                                    value={options.find((option) => option.value === aromKeys[index]) || null}
                                     isClearable={true}
                                     options={options}
                                     onChange={(selected) => handleChange(index, selected)}
                                     placeholder="Select Body Part"
                                 /></div>
-                            {selectedValues[index] && bodyPartConfig[selectedValues[index]]?.map(({ movement, showPostfix, postfixVal }) => (
+                            {aromKeys[index] && bodyPartConfig[aromKeys[index]]?.map(({ movement, showPostfix, postfixVal }) => (
                                 <div key={movement} className="flex items-center space-x-2">
                                     <span className="text-lg font-medium">{movement}</span>
                                     {showPostfix ? (
@@ -358,7 +394,7 @@ export default function ObjectiveFormFields() {
                                                 type="number"
                                                 onChange={(e) =>
                                                     handleInputChange(
-                                                        selectedValues[index],
+                                                        aromKeys[index],
                                                         movement,
                                                         e.target.value + postfixVal
                                                     )
@@ -371,7 +407,7 @@ export default function ObjectiveFormFields() {
                                         <input
                                             type="text"
                                             onChange={(e) =>
-                                                handleInputChange(selectedValues[index], movement, e.target.value)
+                                                handleInputChange(aromKeys[index], movement, e.target.value)
                                             }
                                             className="w-16 border-b-2 border-gray-300 focus:border-blue-500 outline-none text-center text-lg"
                                         />
@@ -522,10 +558,7 @@ export default function ObjectiveFormFields() {
                         )}
                     </div>
                 </div>
-
             </div>
-
-
             <div className='mt-7'>
                 <div className="text-lg font-bold ">Co-ordination / Balance</div>
                 <div className=''>
@@ -539,16 +572,9 @@ export default function ObjectiveFormFields() {
                 </div>
             </div>
 
-            <div className='mt-7'>
-                <div className="text-lg font-bold ">Reflexes</div>
-                <div className=''>
-                    Intact
-                </div>
-            </div>
+            <div className="grid grid-cols-2 gap-2">
 
-            <div className="grid grid-cols-2 gap-2 mt-7">
-
-                <div className='mt-7'>
+                <div className='mt-4'>
                     <div className="text-lg font-bold ">Sensation</div>
                     <div className=''>
                         <textarea
@@ -561,7 +587,7 @@ export default function ObjectiveFormFields() {
                     </div>
                 </div>
 
-                <div className='mt-7'>
+                <div className='mt-4'>
                     <div className="text-lg font-bold ">SKIN</div>
                     <div className=''>
                         <textarea
@@ -604,52 +630,245 @@ export default function ObjectiveFormFields() {
             <div>
                 <div className="text-lg font-bold">Function/Observation:</div>
 
-                {Object.entries(bodyPartActivities).map(([bodyPart, activities]) => (
-                    <div key={bodyPart} className="mt-4">
-                        <h3 className="font-semibold text-lg">{bodyPart}</h3>
-                        <div className="grid grid-cols-3 gap-4 mt-2">
-                            {activities.length > 0 ? (
-                                activities.map((activity, index) => (
-                                    <div key={index} className="p-2 bg-gray-100 rounded-md flex items-center justify-between">
-                                        <span>{activity.title}</span>
-                                        <button
-                                            className="text-xl font-bold"
-                                            onClick={() => toggleActivity(bodyPart, index)}
+                {bodyPartActivities.length > 0 ? (
+                    <>
+                        <div className="flex space-x-4 p-4 bg-gray-100">
+                            <div className="w-1/3 border p-4 bg-white rounded-lg shadow-md">
+                                <h2 className="font-bold text-lg border-b pb-2 mb-2">Activities</h2>
+                                <div
+                                    className="flex flex-wrap gap-2 overflow-y-scroll h-[300px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 p-2"
+                                    style={{ overflowY: "scroll" }}
+                                >
+                                    {bodyPartActivities.map((activity) => (
+                                        <div
+                                            key={activity.title}
+                                            className={`px-4 py-2 text-sm font-semibold cursor-pointer rounded-full transition-all duration-300 
+        ${selectedActivity?.title === activity.title ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-blue-100"}
+      `}
+                                            onClick={() => setSelectedActivity(activity)}
                                         >
-                                            {expandedActivities[bodyPart]?.[index] ? <FaCheck /> : "X"}
-                                        </button>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-500 col-span-3">No activities available.</p>
-                            )}
-                        </div>
+                                            {activity.title}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
 
-                        {activities.map((activity, activityIndex) => (
-                            expandedActivities[bodyPart]?.[activityIndex] && (
-                                <div key={`${bodyPart}-${activityIndex}`} className="mt-2 ml-6">
-                                    <h4 className="font-medium text-gray-800">{activity.title}</h4>
-                                    <div className="grid grid-cols-3 gap-4 bg-gray-50 p-3 rounded-md border border-gray-300">
-                                        {activity.details.map((detail, detailIndex) => (
-                                            <div key={detailIndex} className="flex items-center space-x-2">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={checkedDetails[bodyPart]?.[activityIndex]?.[detailIndex] || false}
-                                                    onChange={() => handleDetailCheck(bodyPart, activityIndex, detailIndex)}
-                                                    className="w-4 h-4"
-                                                />
-                                                <span className="text-gray-700">{detail}</span>
+                            <div className="w-1/3 border p-4 bg-white rounded-lg shadow-md h-full">
+                                <h2 className="font-bold text-lg border-b pb-2 mb-2">Details</h2>
+                                {selectedActivity?.details?.length > 0 ? (
+                                    selectedActivity.details.map((detail, index) => {
+                                        const isSelected = selectedDetail.some(
+                                            (d) => d.detail === detail && d.selectedTitle === selectedActivity.title
+                                        );
+                                        return (
+                                            <div
+                                                key={index}
+                                                onClick={() => handleDetailSelection(detail)}
+                                                className={`p-3 cursor-pointer mt-2 rounded-md transition-all duration-300 ${isSelected ? "bg-green-200 font-semibold text-green-900" : "bg-gray-100 hover:bg-gray-200"
+                                                    }`}
+                                            >
+                                                {detail}
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <p className="text-sm text-gray-500">No details available for the selected activity.</p>
+                                )}
+                            </div>
+
+                            {/* Selected Details Panel */}
+                            <div className="w-1/3 border p-4 bg-white rounded-lg shadow-md h-full">
+                                <h2 className="font-bold text-lg border-b pb-2 mb-2">Selected Details</h2>
+                                {selectedDetail.length > 0 ? (
+                                    <div className="space-y-2">
+                                        {selectedDetail.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="p-3 bg-gray-200 rounded-md text-gray-700 shadow-sm flex justify-between items-center"
+                                            >
+                                                <span>{item.detail}</span>
+                                                <button
+                                                    onClick={() => setSelectedDetail((prev) => prev.filter((_, i) => i !== index))}
+                                                    className="text-red-500 hover:text-red-700"
+                                                >
+                                                    ❌
+                                                </button>
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                            )
-                        ))}
+                                ) : (
+                                    <p className="text-gray-500">No details selected.</p>
+                                )}
+                            </div>
 
-                    </div>
-                ))}
+                        </div>
+                    </>
+                ) : (
+                    <p className="text-gray-500 mt-4">No activities available.</p>
+                )}
             </div>
+            {selectedDetail.length > 0 && (<div className="overflow-x-auto pt-2">
+                <table className="w-full border border-gray-300 rounded-lg shadow-md bg-white">
+                    <thead>
+                        <tr className="bg-gray-200">
+                            <th className="p-2 border">Action</th>
+                            <th className="p-2 border">Function</th>
+                            <th className="p-2 border">Comments</th>
+                            <th className="p-2 border">Current Status</th>
+                            <th className="p-2 border">Prior</th>
+                            <th className="p-2 border">
+                                Goal <br />
+                                <div className="flex justify-center gap-2">
+                                    <label>
+                                        SG:
+                                        <input
+                                            type="number"
+                                            className="ml-1 p-1 w-16 border rounded"
+                                            // value={goalValues.SG}
+                                            onChange={(e) => console.log("SG", e.target.value)}
+                                        />
+                                    </label>
+                                    <label>
+                                        LG:
+                                        <input
+                                            type="number"
+                                            className="ml-1 p-1 w-16 border rounded"
+                                            // value={goalValues.LG}
+                                            onChange={(e) => console.log("LG", e.target.value)}
+                                        />
+                                    </label>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <AnimatePresence>
 
+                            {selectedDetail.map((item, index) => (
+                                <motion.tr
+                                    key={item.id}
+                                    className="border-t"
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, x: 50 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <td className="p-2 border text-center">
+                                        <button
+                                            className="text-red-600 hover:text-red-800"
+                                            onClick={() =>
+                                                setSelectedDetail((prev) => prev.filter((_, i) => i !== index))
+                                            }
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </td>
+
+                                    <td className="p-2 border">{item.detail}</td>
+
+                                    {/* Comments */}
+                                    <td className="p-2 border">
+                                        <input
+                                            type="text"
+                                            className="w-full p-1 border rounded"
+                                            value={item.comments}
+                                            onChange={(e) => {
+                                                const updated = selectedDetail.map((d, i) =>
+                                                    i === index ? { ...d, comments: e.target.value } : d
+                                                );
+                                                setSelectedDetail(updated);
+                                            }}
+                                        />
+                                    </td>
+
+                                    {/* Current Status Value Input */}
+                                    <td className="p-2 border">
+                                        {item.type === "select" ? (
+                                            <select
+                                                className="w-full p-1 border rounded"
+                                                value={item.value}
+                                                onChange={(e) => {
+                                                    const updated = [...selectedDetail];
+                                                    updated[index].value = e.target.value;
+                                                    setSelectedDetail(updated);
+                                                }}
+                                            >
+                                                <option value="">Select...</option>
+                                                {item.currentStatus?.map((status, i) => (
+                                                    <option key={i} value={status.value}>
+                                                        {status.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <div className="flex items-center gap-1">
+                                                <input
+                                                    type={item.type === "number" ? "number" : "text"}
+                                                    className="w-full p-1 border rounded"
+                                                    value={item.value}
+                                                    onChange={(e) => {
+                                                        const updated = [...selectedDetail];
+                                                        updated[index].value = e.target.value;
+                                                        setSelectedDetail(updated);
+                                                    }}
+                                                />
+                                                {item.unit && <span className="text-sm text-gray-500">{item.unit}</span>}
+                                            </div>
+                                        )}
+                                    </td>
+
+                                    {/* Prior */}
+                                    <td className="p-2 border">
+                                        <input
+                                            type="text"
+                                            className="w-full p-1 border rounded"
+                                            value={item.prior}
+                                            onChange={(e) => {
+                                                const updated = [...selectedDetail];
+                                                updated[index].prior = e.target.value;
+                                                setSelectedDetail(updated);
+                                            }}
+                                        />
+                                    </td>
+
+                                    {/* Goal */}
+                                    <td className="p-2 border text-center">
+                                        <label className="mr-2">
+                                            <input
+                                                type="radio"
+                                                name={`goal-${index}`}
+                                                value="SG"
+                                                checked={item.goal === "SG"}
+                                                onChange={(e) => {
+                                                    const updated = [...selectedDetail];
+                                                    updated[index].goal = e.target.value;
+                                                    setSelectedDetail(updated);
+                                                }}
+                                            />{" "}
+                                            SG
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`goal-${index}`}
+                                                value="LG"
+                                                checked={item.goal === "LG"}
+                                                onChange={(e) => {
+                                                    const updated = [...selectedDetail];
+                                                    updated[index].goal = e.target.value;
+                                                    setSelectedDetail(updated);
+                                                }}
+                                            />{" "}
+                                            LG
+                                        </label>
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </AnimatePresence>
+
+                    </tbody>
+                </table>
+            </div>)}
 
 
 
@@ -661,9 +880,7 @@ export default function ObjectiveFormFields() {
                     placeholder="Assessment"
                     fieldName="assessment"
                 />
-
             </div>
-
             <div className="mt-5">
                 <div className="text-lg font-bold">Plan</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-3">

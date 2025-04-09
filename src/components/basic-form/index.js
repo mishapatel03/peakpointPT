@@ -29,7 +29,7 @@ export default function BasicForm() {
     <React.Fragment>
       <div data-theme="light">
         <AppHeader />
-        <div className="flex h-[87vh] bg-gray-200">
+        <div className="flex h-[87vh] bg-white">
           <div className="mt-7 mx-20 flex-1 p-5 overflow-y-auto relative text-black">
             <HeaderFields />
             <CommonDetailsFields />
@@ -38,21 +38,21 @@ export default function BasicForm() {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="btn w-48 bg-slate-800 mr-2 text-white p-2 rounded hover:bg-black"
+                className="btn w-48 bg-blue-500 mr-2 text-white p-2 rounded hover:bg-[#0055cc]"
               >
                 Submit
               </button>
               <button
                 type="button"
                 onClick={() => setPreviewVisible(true)}
-                className="btn w-48  text-black mr-2 border-black p-2 rounded"
+                className="btn w-48 text-black mr-2 border-black p-2 rounded"
               >
                 Preview
               </button>
               <button
                 type="button"
                 onClick={() => handleResetForm()}
-                className="btn w-48  text-black border-black p-2 rounded"
+                className="btn w-48 text-black border-black p-2 rounded"
               >
                 Reset
               </button>

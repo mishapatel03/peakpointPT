@@ -387,99 +387,177 @@ const sharedActivities = {
 
 };
 
+const difficultyLevels = [
+  { value: 100, label: "Severe difficulty" },
+  { value: 85, label: "Severe to Moderate difficulty" },
+  { value: 75, label: "Moderate to Severe difficulty" },
+  { value: 60, label: "Moderate difficulty" },
+  { value: 50, label: "Moderate to Minimal difficulty" },
+  { value: 35, label: "Minimal to Moderate difficulty" },
+  { value: 25, label: "Minimal difficulty" },
+  { value: 15, label: "Occasional difficulty" },
+  { value: 0, label: "No difficulty" },
+];
+
 export const aromRelatedTitles = {
   bodyPartCategories: {
     "Lower Mid Back, Low Back, Hip, Knee, Ankle": {
       activities: [
         {
           title: "Bed Mobility",
-          details: sharedActivities["Bed Mobility"]
+          details: sharedActivities["Bed Mobility"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Transfers",
           details: ["Getting on/off the chair", "Getting on/off the bed",
-            "Getting on/off from the toilet", "Getting in/out of the car", "Getting on/off of the bus"]
+            "Getting on/off from the toilet", "Getting in/out of the car", "Getting on/off of the bus"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Toileting",
-          details: sharedActivities["Toileting"]
+          details: sharedActivities["Toileting"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Walking short distance",
           details: ["Walking from bed to bathroom in the morning", "Walking in between rooms",
-            "Walking in- between adjacent corridor", "Moving around in wheel chair"]
+            "Walking in- between adjacent corridor", "Moving around in wheel chair"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Bathing",
-          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back"]
+          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Dressing",
-          details: ["Bending forward/ Stooping to tie shoe lashes", "Bending forward/ Stooping to don/doff shoes", "Bending forward to dress legs/put on pants"]
+          details: ["Bending forward/ Stooping to tie shoe lashes", "Bending forward/ Stooping to don/doff shoes", "Bending forward to dress legs/put on pants"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Grooming",
-          details: sharedActivities["Grooming"]
+          details: sharedActivities["Grooming"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "High level activities",
-          details: ["Running", "Jumping", "Brisk walking", "Jogging", "Taking sharp turns while running", "Shoveling the snow", "Mowing Lawn", "Gardening/Outdoor domestic"]
+          details: ["Running", "Jumping", "Brisk walking", "Jogging", "Taking sharp turns while running", "Shoveling the snow", "Mowing Lawn", "Gardening/Outdoor domestic"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Sitting",
-          details: ["Sitting to watch TV", "Sitting at dinner table", "Sitting in doctors waiting area"]
+          details: ["Sitting to watch TV", "Sitting at dinner table", "Sitting in doctors waiting area"],
+          currentStatus: 20,
+          type: "number",
+          unit: "minutes"
         },
         {
           title: "Standing",
-          details: ["Standing in kitchen to prepare meal", "Standing at the bus stop", "Standing at the bus stop", "Waiting in post office queue", "Standing in kitchen sink to wash dishes"]
+          details: ["Standing in kitchen to prepare meal", "Standing at the bus stop", "Standing at the bus stop", "Waiting in post office queue", "Standing in kitchen sink to wash dishes"],
+          currentStatus: 10,
+          type: "number",
+          unit: "minutes"
         },
         {
           title: "Walking",
-          details: ["Walking around the community", "Walking uphill", "Walking inside grocery store to get essential items", "Walking on uneven ground"]
+          details: ["Walking around the community", "Walking uphill", "Walking inside grocery store to get essential items", "Walking on uneven ground"],
+          currentStatus: "1+",
+          type: "text",
+          unit: "block"
         },
         {
           title: "Bending forward",
-          details: ["Bending forward to pick up item from floor", "Bending forward /Stooping to load the washer/dryer", "Bending forward while playing with kids"]
+          details: ["Bending forward to pick up item from floor", "Bending forward /Stooping to load the washer/dryer", "Bending forward while playing with kids"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Bending and lifting",
-          details: sharedActivities["Bending and lifting"]
+          details: sharedActivities["Bending and lifting"],
+          currentStatus: "2-3",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Lifting and/carrying",
-          details: sharedActivities["Lifting and/carrying"]
+          details: sharedActivities["Lifting and/carrying"],
+          currentStatus: "5-6",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Squatting",
-          details: ["Squatting to pick up grocery bag from floor", "Squatting to pick up the laundry bag", "Squatting to pick up the box", "Squatting to pick up an item from floor"]
+          details: ["Squatting to pick up grocery bag from floor", "Squatting to pick up the laundry bag", "Squatting to pick up the box", "Squatting to pick up an item from floor"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Negotiating stairs",
-          details: ["Going upstairs", "Going downstairs"]
+          details: ["Going upstairs", "Going downstairs"],
+          currentStatus: "1/2",
+          type: "text",
+          unit: "flight"
         },
         {
           title: "Household chores",
-          details: sharedActivities["Household chores"]
+          details: sharedActivities["Household chores"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Twisting/Turning",
-          details: sharedActivities["Twisting/Turning"]
+          details: sharedActivities["Twisting/Turning"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Front Carry",
-          details: sharedActivities["Front Carry"]
+          details: sharedActivities["Front Carry"],
+          currentStatus: "3-4",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Driving",
-          details: sharedActivities["Driving"]
+          details: sharedActivities["Driving"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Pushing/pulling",
-          details: sharedActivities["Pushing/pulling"]
+          details: sharedActivities["Pushing/pulling"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Sleeping",
-          details: sharedActivities["Sleeping"]
+          details: sharedActivities["Sleeping"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         }
       ]
     },
@@ -487,79 +565,136 @@ export const aromRelatedTitles = {
       activities: [
         {
           title: "Bed Mobility",
-          details: sharedActivities["Bed Mobility"]
+          details: sharedActivities["Bed Mobility"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Transfers",
-          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"]
+          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Toileting",
-          details: sharedActivities["Toileting"]
+          details: sharedActivities["Toileting"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Bathing",
-          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back", "Using hair dryer"]
+          details: ["Transfer in and out of the tub/shower", "Taking full bath /shower", "Washing head/hair", "Washing back", "Using hair dryer"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Dressing",
-          details: ["Don on/off Jacket or shirt", "Put on the tshirt or top", "Don on/off bra"]
+          details: ["Don on/off Jacket or shirt", "Put on the tshirt or top", "Don on/off bra"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Grooming",
-          details: sharedActivities["Grooming"]
+          details: sharedActivities["Grooming"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "High level activities",
-          details: ["Throw and object", "Open tight jar"]
+          details: ["Throw and object", "Open tight jar"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Bending and lifting",
-          details: sharedActivities["Bending and lifting"]
+          details: sharedActivities["Bending and lifting"],
+          currentStatus: "2-3",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Lifting and/carrying",
-          details: sharedActivities["Lifting and/carrying"]
+          details: sharedActivities["Lifting and/carrying"],
+          currentStatus: "5-6",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Household chores",
-          details: sharedActivities["Household chores"]
+          details: sharedActivities["Household chores"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Twisting/Turning",
-          details: sharedActivities["Twisting/Turning"]
+          details: sharedActivities["Twisting/Turning"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Front Carry",
-          details: sharedActivities["Front Carry"]
+          details: sharedActivities["Front Carry"],
+          currentStatus: "3-4",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Driving",
-          details: sharedActivities["Driving"]
+          details: sharedActivities["Driving"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Pushing/pulling",
-          details: sharedActivities["Pushing/pulling"]
+          details: sharedActivities["Pushing/pulling"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Sleeping",
-          details: sharedActivities["Sleeping"]
+          details: sharedActivities["Sleeping"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Locomotion",
-          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"]
+          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Overhead lifting",
-          details: []
+          details: ["Overhead lifting"],
+          currentStatus: "1-2",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Overhead activities",
-          details: []
+          details: ["Overhead activities"],
+          currentStatus: "1st",
+          type: "text",
+          unit: "shelf"
         },
         {
           title: "Hand behind back activities",
-          details: ["Reaching for back pocket", "Applying lotion", "Adjusting a belt", "Tuck in a shirt", "Washing back", "Fastening a bra"]
+          details: ["Reaching for back pocket", "Applying lotion", "Adjusting a belt", "Tuck in a shirt", "Washing back", "Fastening a bra"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         }
       ]
     },
@@ -567,63 +702,108 @@ export const aromRelatedTitles = {
       activities: [
         {
           title: "Bed Mobility",
-          details: sharedActivities["Bed Mobility"]
+          details: sharedActivities["Bed Mobility"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Transfers",
-          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"]
+          details: ["Pushing off from the bed/chair", "Pushing off from the toilet", "Pushing off from the wheelchair"],
+          type: "select",
+          currentStatus: difficultyLevels,
+          unit: ''
         },
         {
           title: "Toileting",
-          details: sharedActivities["Toileting"]
+          details: sharedActivities["Toileting"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Bathing",
-          details: ["Taking full body bath using soap bar"]
+          details: ["Taking full body bath using soap bar"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Dressing",
-          details: ["Buttoning shirt", "Donning/doffing tie", "Donning/doffing socks", "Donning/doffing shoes lashes", "Zip/unzip the clothes"]
+          details: ["Buttoning shirt", "Donning/doffing tie", "Donning/doffing socks", "Donning/doffing shoes lashes", "Zip/unzip the clothes"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Grooming",
-          details: ["Shaving", "Applying make up", "Combing hair", "Brushing teeth", "Flossing teeth", "Washing and drying face, hands"]
+          details: ["Shaving", "Applying make up", "Combing hair", "Brushing teeth", "Flossing teeth", "Washing and drying face, hands"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Lifting and/carrying",
-          details: sharedActivities["Lifting and/carrying"]
+          details: sharedActivities["Lifting and/carrying"],
+          currentStatus: "5-6",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Household chores",
-          details: sharedActivities["Household chores"]
+          details: sharedActivities["Household chores"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Front Carry",
-          details: sharedActivities["Front Carry"]
+          details: sharedActivities["Front Carry"],
+          currentStatus: "3-4",
+          type: "text",
+          unit: "lbs"
         },
         {
           title: "Pushing/pulling",
-          details: sharedActivities["Pushing/pulling"]
+          details: sharedActivities["Pushing/pulling"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Locomotion",
-          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"]
+          details: ["Pushing wheel chair", "Using RW during ambulation", "Using SC during ambulation", "Using staircase railing"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Eating and drinking",
-          details: ["Holding a coffee mug", "Drinking water from a cup", "Using spoon/fork/knife", "Holding a heavy dinner plate"]
+          details: ["Holding a coffee mug", "Drinking water from a cup", "Using spoon/fork/knife", "Holding a heavy dinner plate"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Gripping",
-          details: ["Holding pen/pencil", "Using a door knob", "Turning key", "Opening/closing faucet at kitchen sink", "Open tight jar"]
+          details: ["Holding pen/pencil", "Using a door knob", "Turning key", "Opening/closing faucet at kitchen sink", "Open tight jar"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Grasping",
-          details: ["Shacking hands", "Holding big spoon during cooking", "Holding on to hand rail in the bus/subway"]
+          details: ["Shacking hands", "Holding big spoon during cooking", "Holding on to hand rail in the bus/subway"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         },
         {
           title: "Fine motor activities",
-          details: ["Writing", "Kneading", "Using scissors", "Twisting nuts on off bolts", "Typing on a keyboard", "Opening and closing small bottles", "Tying shoes lashes", "Playing a piano/musical instrument", "Using/operating cellphone", "Turning pages in a book", "Using a can opener", "Using bottle opener"]
+          details: ["Writing", "Kneading", "Using scissors", "Twisting nuts on off bolts", "Typing on a keyboard", "Opening and closing small bottles", "Tying shoes lashes", "Playing a piano/musical instrument", "Using/operating cellphone", "Turning pages in a book", "Using a can opener", "Using bottle opener"],
+          currentStatus: difficultyLevels,
+          type: "select",
+          unit: ''
         }
       ]
     }

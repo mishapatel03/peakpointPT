@@ -158,22 +158,46 @@ export default function CommonDetailsFields() {
         <div className="mt-7">
           <div className="text-lg font-bold mb-2 ">DX</div>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            <div className="items-center border-2 rounded-[5px]">
+            <div className="items-center">
               <CreatableSelect
                 isMulti
-                placeholder={"Select or Add new DX"}
+                placeholder="Select or Add new DX"
                 options={DX.map((option) => ({
                   label: option,
                   value: option,
                 }))}
+                styles={{
+                  control: (provided) => ({ ...provided, cursor: "pointer" }),
+                  option: (provided) => ({ ...provided, cursor: "pointer" }),
+                  dropdownIndicator: (provided) => ({ ...provided, cursor: "pointer" }),
+                  clearIndicator: (provided) => ({ ...provided, cursor: "pointer" }),
+                  multiValue: (provided) => ({
+                    ...provided,
+                    backgroundColor: "#f1f2f4",
+                    color: "black",
+                  }),
+                  multiValueLabel: (provided) => ({
+                    ...provided,
+                    color: "black",
+                  }),
+                  multiValueRemove: (provided) => ({
+                    ...provided,
+                    color: "black",
+                    ":hover": {
+                      backgroundColor: "#ffd5d2",
+                      color: "#ae2e24",
+                    },
+                  }),
+                }}
                 value={selectedDXOptions}
                 onChange={handleDXChange}
               />
+
               {selectedDXOptions && selectedDXOptions.length < 2 && isChange && (<p style={{ color: "red" }}>Please select at least 2 DX</p>)}
             </div>
           </div>
         </div>
-        <div className="mt-7 border-2 rounded-lg p-4 bg-white shadow-md">
+        <div className="mt-7 border-2 rounded-lg p-4 bg-white">
           <PatientHistory />
           {/* // <div className="mt-2 text-lg">{formData?.patientHistoryValue}</div> */}
         </div>
@@ -227,7 +251,7 @@ export default function CommonDetailsFields() {
           </div>
         </div>
         <div className="mt-7 bg-white">
-          <div className="mt-7  p-4 shadow-md">
+          <div className="mt-7 border-2 rounded-lg p-4 bg-white">
             <SocialForm
               handleClose={handleClose}
               GENDER={GENDER}

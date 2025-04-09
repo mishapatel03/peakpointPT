@@ -4,7 +4,7 @@ import logo from "../../assets/peak-point-pt-logo-landscape-min.png"
 export default function AppHeader() {
    return (
     <React.Fragment>
-      <div className="navbar bg-black text-white">
+      <div className="navbar bg-[#0b66e4] text-white">
         <div className="flex-1">
             <img className="w-56" src={logo}></img>
         </div>

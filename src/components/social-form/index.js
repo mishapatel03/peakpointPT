@@ -110,13 +110,13 @@ const SocialForm = ({ handleClose, GENDER, HTYPE }) => {
   return (
     <>
       <div className="flex items-center space-x-2">
-        <button
+      <button
           type="button"
           onClick={toggleExpand}
-          className="btn text-black p-2 rounded"
+          className={`btn text-white p-2 rounded ${isExpanded ? "bg-red-500 hover:bg-red-600" : "bg-[#2d9c21] hover:bg-[#237c1a]"}`}
           aria-expanded={isExpanded}
         >
-          {isExpanded ? <FaMinus size={15} /> : <FaPlus size={15} />}
+          {isExpanded ? <FaMinus size={17} /> : <FaPlus size={17} />}
         </button>
         <div className="text-lg font-bold">Social</div>
       </div>
