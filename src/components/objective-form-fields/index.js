@@ -19,8 +19,7 @@ export default function ObjectiveFormFields() {
     const [strengthValues, setStrengthValues] = useState("");
     const [palpationValues, setPalpationValues] = useState("");
     const [toneValue, setToneValue] = useState("");
-    const selectedPlans = useSelector((state) => state.form.formData.plan || []);
-    const [checkedPlans, setCheckedPlans] = useState(selectedPlans);
+    const [checkedPlans, setCheckedPlans] = useState();
     const storedSignature = useSelector((state) => state.form.formData.therapistSignature || null);
     const [preview, setPreview] = useState(storedSignature || "");
     const [selectedParts, setSelectedParts] = useState({});
@@ -95,7 +94,14 @@ export default function ObjectiveFormFields() {
         }));
     }, [selectedDetail]);
 
+    const initialCheckedPlans = PLAN_OPTIONS.filter(
+        (item) => item.serial !== null && item.serial >= 1 && item.serial <= 22
+    ).map((item) => item.label);
 
+    useEffect(() => {
+        setCheckedPlans(initialCheckedPlans);
+        dispatch(setFormField({ field: "plan", value: initialCheckedPlans }));
+    }, []);
 
     useEffect(() => {
         const getMergedActivities = () => {
@@ -315,13 +321,19 @@ export default function ObjectiveFormFields() {
     };
 
     const handleCheckboxChange = (plan) => {
-        let updatedPlans = checkedPlans.includes(plan)
-            ? checkedPlans.filter((item) => item !== plan)
+        const isChecked = checkedPlans.some((item) => item.label === plan.label);
+
+        const updatedPlans = isChecked
+            ? checkedPlans.filter((item) => item.label !== plan.label)
             : [...checkedPlans, plan];
 
-        setCheckedPlans(updatedPlans);
-        dispatch(setFormField({ field: "plan", value: updatedPlans }));
+        // Optional: Always sort based on serial number (to keep it sorted internally too)
+        const sortedPlans = [...updatedPlans].sort((a, b) => a.serial - b.serial);
+
+        setCheckedPlans(sortedPlans);
+        dispatch(setFormField({ field: "plan", value: sortedPlans }));
     };
+
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -875,9 +887,6 @@ export default function ObjectiveFormFields() {
                 </table>
             </div>)}
 
-
-
-
             <div className="mt-5">
                 <GrammarCheckTextarea
                     value={inputs.assessment}
@@ -889,18 +898,19 @@ export default function ObjectiveFormFields() {
             <div className="mt-5">
                 <div className="text-lg font-bold">Plan</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-3">
-                    {PLAN_OPTIONS.map((plan, index) => (
-                        <label key={index} className="flex items-center space-x-2">
+                    {checkedPlans && PLAN_OPTIONS.map((option) => (
+                        <div key={option.label} className="flex items-center gap-2">
                             <input
                                 type="checkbox"
-                                checked={checkedPlans.includes(plan)}
-                                onChange={() => handleCheckboxChange(plan)}
-                                className="w-5 h-5"
+                                checked={checkedPlans.includes(option.label)}
+                                onChange={() => handleCheckboxChange(option.label)}
                             />
-                            <span>{plan}</span>
-                        </label>
+                            <label>{option.label}</label>
+                        </div>
                     ))}
+
                 </div>
+
             </div>
 
             <div className='mt-7 mb-2'>
