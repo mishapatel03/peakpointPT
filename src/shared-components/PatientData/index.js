@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
 
 export default function PatientData({ data }) {
   const dxRows = [];
@@ -214,29 +221,29 @@ export default function PatientData({ data }) {
       fontSize: 9,
     },
     observationHeader: {
-      marginLeft: 80
+      marginLeft: 80,
     },
     title: {
       fontSize: 16,
       fontWeight: "bold",
       marginBottom: 5,
       textDecoration: "underline",
-      textAlign: "center"
+      textAlign: "center",
     },
     columnsContainer: {
       marginLeft: 10,
       flexDirection: "row",
       justifyContent: "space-between",
-      flexWrap: "wrap"
+      flexWrap: "wrap",
     },
     column: {
-      width: "48%"
+      width: "48%",
     },
     bulletPoint: {
       marginBottom: 6,
       textAlign: "left",
       flexWrap: "wrap",
-      maxWidth: "100%"
+      maxWidth: "100%",
     },
 
     s_table: {
@@ -256,7 +263,7 @@ export default function PatientData({ data }) {
     },
     s_dateCell: {
       flexDirection: "row",
-      alignItems: "center"
+      alignItems: "center",
     },
     s_dateText: {
       marginLeft: 5,
@@ -314,7 +321,9 @@ export default function PatientData({ data }) {
   const maxFields = Math.max(...filledData.map((item) => item.fields.length));
   // Extract keys with objects containing fields
   const keysWithFields = Object.keys(data.arom).filter(
-    (key) => typeof data.arom[key] === "object" && Object.keys(data.arom[key]).length > 0
+    (key) =>
+      typeof data.arom[key] === "object" &&
+      Object.keys(data.arom[key]).length > 0
   );
 
   const selectedPlans = data.plan || [];
@@ -408,8 +417,9 @@ export default function PatientData({ data }) {
                 {data.pmh?.length > 0
                   ? data.pmh.length === 1
                     ? data.pmh[0]
-                    : `${data.pmh.slice(0, -1).join(", ")} and ${data.pmh[data.pmh.length - 1]
-                    }`
+                    : `${data.pmh.slice(0, -1).join(", ")} and ${
+                        data.pmh[data.pmh.length - 1]
+                      }`
                   : ""}
               </Text>
             </View>
@@ -464,10 +474,12 @@ export default function PatientData({ data }) {
 
           <View style={styles.row}>
             <View style={styles.cellHeader}>
-              <Text style={styles.headerText}>OBSERVATION   Gait:</Text>
+              <Text style={styles.headerText}>OBSERVATION Gait:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{data.gait?.value || data.gait}</Text>
+              <Text style={styles.cellText}>
+                {data.gait?.value || data.gait}
+              </Text>
             </View>
           </View>
 
@@ -528,7 +540,6 @@ export default function PatientData({ data }) {
               )}
             </View>
           </View>
-
 
           <View style={styles.row}>
             <View style={styles.cellHeader}>
@@ -611,6 +622,53 @@ export default function PatientData({ data }) {
             </View>
           </View>
 
+          {Array.isArray(data.functionalActivities) &&
+            data.functionalActivities.length > 0 && (
+              <View style={{ marginTop: 10 }}>
+                <Text style={styles.sectionTitle}>FUNCTIONAL ACTIVITIES</Text>
+
+                {/* Table Header */}
+                <View style={[styles.aromrow, { backgroundColor: "#e5e7eb" }]}>
+                  <View style={styles.aromcell}>
+                    <Text style={styles.aromheader}>Function</Text>
+                  </View>
+                  <View style={styles.aromcell}>
+                    <Text style={styles.aromheader}>Comments</Text>
+                  </View>
+                  <View style={styles.aromcell}>
+                    <Text style={styles.aromheader}>Current status</Text>
+                  </View>
+                  <View style={styles.aromcell}>
+                    <Text style={styles.aromheader}>Goal</Text>
+                  </View>
+                </View>
+
+                {/* Table Rows */}
+                {data.functionalActivities.map((activity, index) => (
+                  <View key={activity.id || index} style={styles.aromrow}>
+                    <View style={styles.aromcell}>
+                      <Text style={styles.aromtext}>{activity.detail}</Text>
+                    </View>
+                    <View style={styles.aromcell}>
+                      <Text style={styles.aromtext}>
+                        {activity.comments || "—"}
+                      </Text>
+                    </View>
+                    <View style={styles.aromcell}>
+                      <Text style={styles.aromtext}>
+                        {activity.value || "—"}
+                      </Text>
+                    </View>
+                    <View style={styles.aromcell}>
+                      <Text style={styles.aromtext}>
+                        {activity.goal || "—"}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
+
           <View style={styles.row}>
             <View style={styles.cellHeader}>
               <Text style={styles.headerText}>ASSESSMENT</Text>
@@ -627,17 +685,22 @@ export default function PatientData({ data }) {
               </View>
               {selectedPlans.length > 0 && (
                 <View style={styles.columnsContainer}>
-
                   <View style={styles.column}>
                     {firstColumn.map((plan, index) => (
-                      <Text key={index} style={[styles.bulletPoint, styles.cellText]}>
+                      <Text
+                        key={index}
+                        style={[styles.bulletPoint, styles.cellText]}
+                      >
                         • {plan}
                       </Text>
                     ))}
                   </View>
                   <View style={styles.column}>
                     {secondColumn.map((plan, index) => (
-                      <Text key={index} style={[styles.bulletPoint, styles.cellText]}>
+                      <Text
+                        key={index}
+                        style={[styles.bulletPoint, styles.cellText]}
+                      >
                         • {plan}
                       </Text>
                     ))}
@@ -653,7 +716,9 @@ export default function PatientData({ data }) {
               <View style={[styles.s_cell, { width: "50%" }]}>
                 <Text style={styles.s_headerCell}>PHYSICIAN CERTIFICATION</Text>
               </View>
-              <View style={[styles.cell, { width: "50%", borderRight: "none" }]}>
+              <View
+                style={[styles.cell, { width: "50%", borderRight: "none" }]}
+              >
                 <Text style={styles.s_headerCell}>THERAPIST'S SIGNATURE</Text>
               </View>
             </View>
@@ -666,16 +731,20 @@ export default function PatientData({ data }) {
                 </View>
               </View>
 
-              <View style={[styles.s_cell, { width: "50%", borderRight: "none" }]}>
+              <View
+                style={[styles.s_cell, { width: "50%", borderRight: "none" }]}
+              >
                 <View style={styles.s_signatureContainer}>
                   {therapistSignature && (
-                    <Image src={therapistSignature} style={styles.s_signatureImage} />
+                    <Image
+                      src={therapistSignature}
+                      style={styles.s_signatureImage}
+                    />
                   )}
                 </View>
               </View>
             </View>
           </View>
-
         </View>
       </Page>
     </Document>
